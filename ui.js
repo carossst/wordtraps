@@ -1648,58 +1648,32 @@ void function () {
     if (this.modalEl && !this._wtBoundModalActions) {
       this._wtBoundModalActions = true;
 
-      const modalActionHandler = (e) => {
-        const t = e && e.target ? e.target : null;
-        if (!t) return false;
+      this.modalEl.addEventListener("click", (e) => {
+        const t = e.target;
+        if (!t) return;
 
-        // Backdrop click/tap: close modal even if overlay has no data-action
+        // Backdrop click: close modal even if overlay has no data-action
         if (t === self.modalEl) {
           e.preventDefault();
           self.closeModal();
-          return true;
+          return;
         }
 
         // Only trigger actions from explicit buttons/links inside the modal
-        const btn = t.closest ? t.closest("button[data-action], a[data-action]") : null;
-        if (!btn) return false;
+        const btn = t.closest("button[data-action], a[data-action]");
+        if (!btn) return;
 
         const action = String(btn.getAttribute("data-action") || "").trim();
-        if (!action) return false;
+        if (!action) return;
 
         e.preventDefault();
         dispatchAction(action, e);
-        return true;
-      };
-
-      const modalPointerEvt = ("PointerEvent" in window) ? "pointerup" : "click";
-      this.modalEl.addEventListener(modalPointerEvt, modalActionHandler);
-
-      if (modalPointerEvt !== "click") {
-        let lastHandledTs = 0;
-        const modalDedupHandler = (e) => {
-          const now = e.timeStamp || Date.now();
-          if (now - lastHandledTs < 400) return;
-          modalActionHandler(e);
-        };
-
-        this.modalEl.removeEventListener(modalPointerEvt, modalActionHandler);
-        this.modalEl.addEventListener("click", modalDedupHandler);
-        this.modalEl.addEventListener(modalPointerEvt, (e) => {
-          const handled = modalActionHandler(e);
-          if (handled) {
-            lastHandledTs = e.timeStamp || Date.now();
-          }
-        });
-      }
+      });
     }
 
 
-    // App-level actions should not fire on touchstart/pointerdown:
-    // on mobile, that steals gestures before the browser can decide between
-    // tap and scroll, which makes END harder to scroll and top-right icon
-    // taps feel unreliable. Use pointerup, keep click as iOS fallback below.
     const pointerEvt = ("PointerEvent" in window)
-      ? "pointerup"
+      ? (shouldTapToContinue() ? "pointerdown" : "pointerup")
       : "click";
 
     // Main app event delegation (LANDING / PLAYING / END / PAYWALL)
@@ -4627,6 +4601,7 @@ void function () {
     if (String(lastRun.mode || "RUN").trim() !== "RUN") return "";
 
     const scoreFP = clampInt(lastRun.scoreFP, 0, 99999);
+    const bestScoreFP = clampInt(lastRun.bestScoreFP, 0, 99999);
 
     // Curiosity-gap share: "Can you guess?" framing (nudge psychology).
     // Priority: pick a false friend (trap) for maximum surprise.
@@ -4698,6 +4673,7 @@ void function () {
       .replaceAll("{poolSize}", String(poolSize))
       .replaceAll("{maxChances}", String(maxChances))
       .replaceAll("{score}", String(scoreFP))
+      .replaceAll("{bestScore}", String(bestScoreFP))
       .replaceAll("{funFact}", funFact);
 
     this._runtime = this._runtime || {};
@@ -5288,36 +5264,7 @@ void function () {
     // If an update is ready, user intent = apply it now.
     if (window.__WT_SW_UPDATE_READY__ === true) {
       try { window.__WT_SW_UPDATE_READY__ = false; } catch (_) { }
-
-      const regPromise = ("serviceWorker" in navigator && navigator.serviceWorker.getRegistration)
-        ? navigator.serviceWorker.getRegistration()
-        : Promise.resolve(null);
-
-      regPromise
-        .then((registration) => {
-          const waiting = registration && registration.waiting ? registration.waiting : null;
-
-          // Fail-closed: no waiting worker => just hide the toast, no blind reload.
-          if (!waiting) {
-            node.classList.remove("wt-toast--visible");
-            return;
-          }
-
-          let reloaded = false;
-          const onControllerChange = () => {
-            if (reloaded) return;
-            reloaded = true;
-            navigator.serviceWorker.removeEventListener("controllerchange", onControllerChange);
-            location.reload();
-          };
-
-          navigator.serviceWorker.addEventListener("controllerchange", onControllerChange);
-          waiting.postMessage({ type: "SKIP_WAITING" });
-        })
-        .catch(() => {
-          node.classList.remove("wt-toast--visible");
-        });
-
+      location.reload();
       return;
     }
 
@@ -7046,7 +6993,23 @@ ${(() => {
       }
     }
 
+    const poolCompleteCelebration = isRun && !!lastRun.poolCompleteCelebration;
+
     const shareEnabled = isRun && !!(cfg.share && cfg.share.enabled);
+    const bestScoreFP = clampInt(lastRun.bestScoreFP, 0, 99999);
+    const nearBest =
+      isRun &&
+      bestScoreFP > scoreFP &&
+      (bestScoreFP - scoreFP) <= 2;
+    const shouldPromoteShare =
+      shareEnabled &&
+      (
+        newBest ||
+        nearBest ||
+        poolCompleteCelebration ||
+        runVerdictKey === "elite" ||
+        runVerdictKey === "legendary"
+      );
 
     let canPractice = isRun && !!(cfg.mistakesOnly && cfg.mistakesOnly.enabled);
     if (canPractice) {
@@ -7082,9 +7045,6 @@ ${(() => {
       >\u2302</button>
     `
       : ``;
-
-    const poolCompleteCelebration = isRun && !!lastRun.poolCompleteCelebration;
-
     const endTitle =
       isBonus ? String(bonusW.endTitle || "").trim()
         : isPractice ? String(practiceW.endTitle || "").trim()
@@ -7660,9 +7620,11 @@ ${(() => {
 
   ${paywallBridgeHtml}
 
+  ${shouldPromoteShare ? shareHtml : ``}
+
   ${mistakesRecapHtml}
 
-  ${shareHtml}
+  ${shouldPromoteShare ? `` : shareHtml}
 
   ${moreAccordionHtml}
 </div>

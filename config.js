@@ -44,7 +44,7 @@
   window.WT_CONFIG = {
 
     // Product version (UI display, logs)
-    version: "2.3",
+    version: "2.2",
 
     // Storage schema version (localStorage).
     // Change ONLY if you accept a migration/wipe.
@@ -169,11 +169,7 @@
       cheatSheetOrderBump: {
         enabled: true,
         convertKitUid: "ed7df33449",
-        convertKitEmbedScriptSrc: "https://f.convertkit.com/ckjs/ck.5.js",
-        convertKitFormId: "9074664",
-        convertKitFormAction: "https://app.kit.com/forms/9074664/subscriptions",
-        convertKitRedirectUrl: "https://testyourfrench.com/your-cheat-sheet-is-ready/",
-        submitLabel: "Send me the Wordtraps Cheat Sheet"
+        convertKitScriptSrc: "https://onlinenewsletter.kit.com/ed7df33449/index.js"
       }
     },
 
@@ -540,7 +536,6 @@
       loadingSlowHint: "Still loading... Check your connection if this takes too long.",
       updateAvailable: "Update available.",
       dismiss: "Dismiss",
-      reload: "Update",
       closeIcon: "✕",
 
       offlinePayment: "Payment requires an internet connection.",
@@ -575,10 +570,10 @@
 
     success: {
       title: "Payment successful",
-      subtitle: "Your activation code is ready. Save it, then use it to unlock full access on this device.",
+      subtitle: "Your activation code is ready. Save it, then activate it in the game.",
 
       codeLabel: "Your activation code",
-      clearDataWarning: "If you clear site data or switch device or browser, you will need this code again.",
+      clearDataWarning: "If you clear site data or switch device/browser, you will need this code again.",
 
       howToActivateTitle: "How to activate",
       howToActivateStep1: "Return to the game.",
@@ -592,11 +587,11 @@
       benefitFullAccessPrefix: "Full access to all",
       benefitFullAccessStrongSuffix: " word traps",
       benefitFullAccessSuffix: " in this game.",
-      benefitUnlimited: "Unlimited play after activation on this device.",
+      benefitUnlimited: "Unlimited play after code activation.",
 
       ctaBackToGame: "Back to game",
       ctaDownload: "Download code (.txt)",
-      shortcutHint: "Shortcut: How to play -> Activate with a code.",
+      shortcutHint: "Shortcut: How to play - Activate with a code.",
 
       thankYouLine: "Thank you for supporting an independent game 🇫🇷",
       supportLabel: "Need help?",
@@ -610,15 +605,14 @@
 
       cheatSheetTitle: "Cheat Sheet (PDF)",
       cheatSheetBody: "If you added the Cheat Sheet to your order, enter your email below to receive the download link.",
-      cheatSheetLinkCta: "Open the Cheat Sheet form",
 
     },
     landing: {
       title: "Word Traps",
       tagline: "",
-      subtitle: "Same meaning or different meaning?\n200 French-English word traps to test your judgment.",
+      subtitle: "Faux amis or true friends?\n200 French-English words to train your brain.",
       microFun: "No signup · Quick games · Free to try",
-      microTrust: "Practice meaning, not just vocabulary recall.",
+      microTrust: "Spot the traps. Think in French.",
 
       runsLabel: "",
       runsFreeMode: "",
@@ -631,7 +625,7 @@
 
       // Before completion (goal gradient) 
       statsSeenSummaryTemplate: "Seen: {seen}/{poolSize} word traps",
-      statsPaceSummaryTemplate: "About {runsLeft} more game{pluralS} to see all {poolSize} word traps.",
+      statsPaceSummaryTemplate: "About {runsLeft} more game{pluralS} to see all {poolSize} traps.",
       statsPhaseBadgeDiscovery: "Phase 1/3: Discovery",
       statsPhaseBadgeCorrection: "Phase 2/3: Integrating",
       statsPhaseBadgeConsolidation: "Phase 3/3: Consolidating",
@@ -642,7 +636,7 @@
       statsMistakesSummaryTemplate: "{mistakes}",
       statsMasterySummaryTemplate: "{mastered}/{poolSize} traps mastered",
 
-      postPaywallTitle: "Free games used. Keep going?",
+      postPaywallTitle: "Free games completed. Ready for more?",
       postPaywallBody: "Unlock unlimited games anytime and keep your progress on this device.",
       practiceCtaTemplate: "Fix your {count} mistake{pluralS}",
       postPaywallCta: "Unlock full access",
@@ -842,7 +836,7 @@
       descUnlocked: "Only items you previously got wrong.",
 
       freeLimitReachedTitle: "End of Free Games.",
-      freeLimitReachedBody: "You've used your {limit} free Mistakes Mode games.\n\nFull access unlocks unlimited Mistakes Mode. Keep fixing your mistakes without limits.",
+      freeLimitReachedBody: "You've used your {limit} free mistakes games.\n\nFull access unlocks unlimited Mistakes mode. Keep fixing your mistakes without limits.",
       freeLimitReachedCta: "Keep playing",
       freeLimitReachedClose: "Not now",
 
@@ -942,7 +936,7 @@
 
 
       // Pool complete (one-shot celebration when 200/200 reached)
-      poolCompleteTitle: "All 200 word traps complete.",
+      poolCompleteTitle: "Bravo ! All 200 word traps complete.",
       poolCompleteLine1: "This isn't about streaks. It's about whether you're actually improving. By the end of this set, you'll know.",
       poolCompleteLine2: "Now we find out what you actually know. Come back in a few weeks. See if it still holds.",
       poolCompleteScoreLine: "This game: {score} {fpShort}",
@@ -1036,7 +1030,7 @@
       // Post-completion routing (pool exhausted + mistakes)
       // Vars: {backlog}
       practiceCtaCountPremium: "Fix your {backlog} remaining mistakes",
-      shareTitle: "Share with friends"
+      shareTitle: "Share"
     },
 
     paywall: {
@@ -1044,7 +1038,7 @@
       headline: "Think in French. Master all 200 traps.",
 
       // LAST FREE RUN - stronger but factual
-      headlineLastFree: "You've started spotting the traps. Keep going.",
+      headlineLastFree: "You've started spotting the traps. Finish the set.",
 
       // Projection personnalisée (PAYWALL only)
       // Vars: {seen} {poolSize} {remaining}
@@ -1101,7 +1095,7 @@
       deviceNote: "Full access stays unlocked on this device. No account needed.",
 
       // PW2: EARLY visual badge (copy visible)
-      earlyBadgeLabel: "Early price",
+      earlyBadgeLabel: "Early bird",
 
       earlyLabel: "Early price",
       standardLabel: "Standard price",
@@ -1117,12 +1111,12 @@
     howto: {
       title: "How to play",
       howToPlayLine1: "You see a French word or expression.",
-      howToPlayLine2: "Do the French and English words mean the same thing?",
+      howToPlayLine2: "Is it a faux ami or a true friend?",
       howToPlayLine3: "Choose Same meaning or Different meaning.",
 
       modesTitle: "Game modes",
       modesBullets: [
-        "Normal game: a full game across the word pool. Build your best score.",
+        "Normal Mode: a full game across the word pool. Build your best score.",
         "High Focus Mode: faster and more demanding. Uses only words you've already seen.",
         "Mistakes Mode: replay your active mistakes (up to 10 words)."
       ],
@@ -1171,15 +1165,15 @@
     },
 
     houseAd: {
-      eyebrow: "Keep going with another game",
-      title: "Want another French game?",
+      eyebrow: "After {poolSize} word traps",
+      title: "You've seen all {poolSize} word traps.",
       bodyLine1: "Word Traps is a mini-game by Test Your French.",
       bodyLine2: "We have other games.",
       ctaPrimary: "Try a new game by Test Your French",
       ctaRemindLater: "Remind later",
 
       // Landing presence (same meaning, same tone)
-      landingTitle: "Want another French game?",
+      landingTitle: "You've seen all {poolSize} word traps.",
       landingBodyLine1: "Word Traps is a mini-game by Test Your French.",
       landingBodyLine2: "We have other games.",
       landingCtaPrimary: "Try Daily French",
@@ -1214,14 +1208,17 @@ Thanks!`
 
 
     share: {
-      ctaLabel: "Copy message",
-      emailLabel: "Send to a friend",
+      ctaLabel: "Copy text",
+      emailLabel: "Send email",
       emailSubject: "Word Traps",
       previewLabel: "Preview message",
       toastCopied: "Copied.",
-      template: `I just played Word Traps.
+      template: `Hey!
+I've been playing this word traps game.
+This made me think of you.
+Best score yet: {bestScore}
 {funFact}
-Try it here:
+Think you'd get it right?
 {url}`,
 
       teaserTrap: "Looks obvious... until it isn't.",
@@ -1230,7 +1227,7 @@ Try it here:
         `Can you guess? Does "{termFr}" (FR) really mean "{termEn}"? 🤔`
       ],
       funFactTemplatesTrue: [
-        `Can you guess? Do "{termFr}" (FR) and "{termEn}" (EN) mean the same thing?`
+        `Can you guess? "{termFr}" (FR) and "{termEn}" (EN) : same meaning or trap? 🤔`
       ],
 
 
@@ -1254,7 +1251,7 @@ Try it here:
       promptTitle: "Help improve Word Traps",
       promptBodyTemplate: "You have reached {thresholdPct}% of the pool (unique words). Share anonymous stats to help improve the game. You can review everything before sending.",
       promptBodyLastFree: "That was your last free game. Share anonymous stats to help improve the game. You can review everything before sending.",
-      promptBodyPowerUser: "You've spent real time with the game. Share anonymous stats to help improve it. You can review everything before sending.",
+      promptBodyPowerUser: "You're clearly a power player. Share anonymous stats to help improve the game. You can review everything before sending.",
       promptCtaPrimary: "Preview & share",
       promptCtaSecondary: "Not now",
 
