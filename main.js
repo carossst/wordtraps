@@ -275,11 +275,12 @@
     if (!sys) return;
 
     const title = String(sys.loadingTitle || "").trim();
+    const icon = String(sys.loadingIcon || "●").trim();
     const hint = String(sys.loadingHint || "").trim();
 
     root.innerHTML = `
     <div class="wt-loading">
-      <div class="wt-loading-icon">🇫🇷</div>
+      <div class="wt-loading-icon">${escapeHtmlSafe(icon)}</div>
       <div class="wt-loading-spinner"></div>
       <h2 class="wt-h2">${escapeHtmlSafe(title)}</h2>
       <p class="wt-muted">${escapeHtmlSafe(hint)}</p>

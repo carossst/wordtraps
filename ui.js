@@ -6856,6 +6856,30 @@ ${(() => {
 
     vars.backlog = clampInt(backlog, 0, 99999);
 
+    const runPracticePrimaryMinRaw = Number(cfg?.routing?.practicePrimaryMinWrong);
+    const runPracticePrimaryMin =
+      (Number.isFinite(runPracticePrimaryMinRaw) && runPracticePrimaryMinRaw >= 1)
+        ? Math.floor(runPracticePrimaryMinRaw)
+        : null;
+    const runShouldPromotePractice =
+      isRun &&
+      runPracticePrimaryMin != null &&
+      canPractice &&
+      vars.backlog >= runPracticePrimaryMin;
+    const runBonusEnabled = (cfg?.secretBonus?.enabled === true);
+    const runStrongOrMore =
+      (runVerdictKey === "strong" || runVerdictKey === "elite" || runVerdictKey === "legendary");
+    const runBonusPrimaryLabel = String(end.bonusCtaPrimary || "").trim();
+    const runBonusBacklogOk = (runPracticePrimaryMin != null) ? (vars.backlog < runPracticePrimaryMin) : true;
+    const runShouldPromoteBonus =
+      isRun &&
+      !runShouldPromotePractice &&
+      !!runBonusEnabled &&
+      runStrongOrMore &&
+      runBonusBacklogOk &&
+      !!runBonusPrimaryLabel;
+    const runLensBonusPrimaryTpl = String(end.lensBonusPrimary || "").trim();
+
     // Pool remaining (RUN context only)
     if (isRun && !Number.isFinite(Number(vars.remaining))) {
       vars.remaining = clampInt(poolSize - totalPresented, 0, poolSize);
@@ -7482,31 +7506,16 @@ ${(() => {
 
         } else {
           if (isRun) {
-            // Routing: if active backlog >= practicePrimaryMinWrong, swap CTAs (Practice = primary).
-            const ppMinRaw = Number(cfg?.routing?.practicePrimaryMinWrong);
-            const ppMin = (Number.isFinite(ppMinRaw) && ppMinRaw >= 1) ? Math.floor(ppMinRaw) : null;
-            const shouldPromotePractice = (ppMin != null && canPractice && vars.backlog >= ppMin);
-
-            const bonusEnabled = (cfg?.secretBonus?.enabled === true);
-            const strongOrMore =
-              (runVerdictKey === "strong" || runVerdictKey === "elite" || runVerdictKey === "legendary");
-
-            const bonusPrimaryLabel = String(end.bonusCtaPrimary || "").trim();
-
-            // Option C: promote BONUS only if strong+ AND backlog is below the Practice-push threshold.
-            const bonusBacklogOk = (ppMin != null) ? (vars.backlog < ppMin) : true;
-            const shouldPromoteBonus = (!!bonusEnabled && strongOrMore && bonusBacklogOk && !!bonusPrimaryLabel);
-
-            if (shouldPromotePractice) {
+            if (runShouldPromotePractice) {
               primaryAction = "start-practice";
               primaryLabel = String(practiceCta || "").trim();
 
               secondaryAction = runsExhausted ? "open-paywall" : "start-run";
               secondaryLabel = runsExhausted ? String(upgradeCta || "").trim() : String(runPlayAgain || "").trim();
 
-            } else if (shouldPromoteBonus) {
+            } else if (runShouldPromoteBonus) {
               primaryAction = "start-secret-bonus";
-              primaryLabel = bonusPrimaryLabel;
+              primaryLabel = runBonusPrimaryLabel;
 
               secondaryAction = runsExhausted ? "open-paywall" : "start-run";
               secondaryLabel = runsExhausted ? String(upgradeCta || "").trim() : String(runPlayAgain || "").trim();
@@ -7538,14 +7547,14 @@ ${(() => {
               secondaryLabel = String(end.playAgain || "").trim();
             }
           } else if (isBonus) {
-            // CTA override: low accuracy + small deck → primary = go to RUN
-            const lowSmallOverride = String(bonusW?.ctaLowSmallOverride || "").trim();
-            const lowSmallAction = String(cfg?.secretBonus?.ctaLowSmallAction || "").trim();
-            const isLowSmall = (bonusLevel === "low" && bonusDeckTier === "small" && lowSmallOverride && lowSmallAction);
+            const expandDeckLabel = String(bonusW?.ctaExpandDeck || "").trim();
+            const shouldExpandDeck =
+              (bonusDeckTier === "small") &&
+              !!expandDeckLabel;
 
-            if (isLowSmall) {
-              primaryAction = lowSmallAction;
-              primaryLabel = lowSmallOverride;
+            if (shouldExpandDeck) {
+              primaryAction = "start-run";
+              primaryLabel = expandDeckLabel;
 
               secondaryAction = "start-secret-bonus";
               secondaryLabel = String(bonusAgain || "").trim();
@@ -7578,8 +7587,15 @@ ${(() => {
             : ``;
 
         const runLensHtml =
-          (isRun && runLensTpl)
-            ? `<p class="wt-muted">${escapeHtml(fillTemplate(runLensTpl, vars))}</p>`
+          (isRun && !poolCompleteCelebration)
+            ? (() => {
+              const lensText = runShouldPromoteBonus && runLensBonusPrimaryTpl
+                ? runLensBonusPrimaryTpl
+                : (runLensTpl ? fillTemplate(runLensTpl, vars) : "");
+              return lensText
+                ? `<p class="wt-muted">${escapeHtml(lensText)}</p>`
+                : ``;
+            })()
             : ``;
 
         let installBtn = ``;

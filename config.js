@@ -110,7 +110,7 @@
     routing: {
       // If backlog >= this threshold, END (after RUN) promotes PRACTICE as primary CTA.
       // Backlog model: number of items with wrongCount > 0.
-      practicePrimaryMinWrong: 9,
+      practicePrimaryMinWrong: 7,
 
       // PRACTICE repeat guidance tiers (based on remaining backlog after PRACTICE).
       // UI picks the FIRST matching tier in the array (top-down).
@@ -368,8 +368,8 @@
       // Evaluated top-down: first match wins. Key must match WT_WORDING keys.
       endTiers: [
         { key: "perfect", minAccuracy: 1.0 },
-        { key: "high", minAccuracy: 0.75 },
-        { key: "medium", minAccuracy: 0.40 },
+        { key: "high", minAccuracy: 0.85 },
+        { key: "medium", minAccuracy: 0.55 },
         { key: "low", minAccuracy: 0 }
       ],
 
@@ -380,13 +380,6 @@
         { key: "small", minSeen: 0 }
       ],
 
-      // CTA override action when accuracy=low + deck=small (technical routing)
-      ctaLowSmallAction: "start-run"
-
-
-
-
-
     },
 
 
@@ -395,7 +388,7 @@
       enabled: true,
 
       // Unlock threshold (unique seen items)
-      minUniqueSeenToShow: 120,
+      minUniqueSeenToShow: 100,
 
       // UI routing:
       // - END: can appear when pool is exhausted (first reveal)
@@ -419,8 +412,8 @@
       houseAdEnabled: true,
 
       // Milestones (% of unique pool coverage)
-      // UI must not hardcode 50% / 100%.
-      milestoneThresholds: [0.5, 1.0]
+      // UI must not hardcode 25% / 50% / 75% / 100%.
+      milestoneThresholds: [0.25, 0.5, 0.75, 1.0]
     },
 
 
@@ -532,6 +525,7 @@
       versionPrefix: "",
 
       loadingTitle: "Loading Word Traps...",
+      loadingIcon: "🔤",
       loadingHint: "Preparing your French word challenge",
       loadingSlowHint: "Still loading... Check your connection if this takes too long.",
       updateAvailable: "Update available.",
@@ -570,16 +564,16 @@
 
     success: {
       title: "Payment successful",
-      subtitle: "Your activation code is ready. Save it, then activate it in the game.",
+      subtitle: "Your device unlock code is ready. Save it, then use it in the game.",
 
-      codeLabel: "Your activation code",
+      codeLabel: "Your device unlock code",
       clearDataWarning: "If you clear site data or switch device/browser, you will need this code again.",
 
       howToActivateTitle: "How to activate",
       howToActivateStep1: "Return to the game.",
       howToActivateStep2Prefix: "Tap",
       howToPlayLabel: "How to play",
-      activateWithCodeLabel: "Activate with a code",
+      activateWithCodeLabel: "Use a device unlock code",
       howToActivateStep3Prefix: "Paste your code and tap",
       activateLabel: "Activate",
 
@@ -591,7 +585,7 @@
 
       ctaBackToGame: "Back to game",
       ctaDownload: "Download code (.txt)",
-      shortcutHint: "Shortcut: How to play - Activate with a code.",
+      shortcutHint: "Shortcut: How to play - Use a device unlock code.",
 
       thankYouLine: "Thank you for supporting an independent game 🇫🇷",
       supportLabel: "Need help?",
@@ -599,7 +593,7 @@
       copyCta: "Copy code",
       copyAgainCta: "Copy code again",
       tipNoRecover: "Tip: keep this code somewhere safe. It can't be recovered from a server.",
-      txtTitle: "Your Word Traps activation code",
+      txtTitle: "Your Word Traps device unlock code",
       txtSaveLine: "Tip: keep this code somewhere safe.",
       txtNoRecoverLine: "It can't be recovered from a server.",
 
@@ -766,19 +760,19 @@
       // END BONUS — personalized recommendation (accuracy × deck size)
       // Keys: "{accuracyTier}_{deckTier}" — must cover all combinations
       endRecoByTier: {
-        perfect_small: "Play normal games to grow your High Focus deck.",
+        perfect_small: "Expand your deck to unlock more High Focus words.",
         perfect_medium: "Replay to keep that edge.",
         perfect_large: "Your High Focus deck is deep: push further.",
 
-        high_small: "A few more normal games will expand your deck.",
+        high_small: "Expand your deck to unlock more High Focus words.",
         high_medium: "Try again to lock in the ones you missed.",
         high_large: "Stay in High Focus: you're close to flawless.",
 
-        medium_small: "Build your deck first: play normal games to strengthen your base.",
+        medium_small: "Expand your deck first. More seen words will make High Focus stronger.",
         medium_medium: "Try another High Focus game to sharpen your reflexes.",
         medium_large: "Keep going. Speed and accuracy will come with repetition.",
 
-        low_small: "Normal games will help build the muscle memory you need here.",
+        low_small: "Expand your deck first. More seen words will make High Focus stronger.",
         low_medium: "Take a normal game to rebuild confidence before coming back.",
         low_large: "Try again: speed comes with practice."
       },
@@ -791,8 +785,7 @@
         low: "Try High Focus again"
       },
 
-      // CTA override: when accuracy is low AND deck is small, primary = go to RUN
-      ctaLowSmallOverride: "Play a normal game",
+      ctaExpandDeck: "Expand your deck",
 
       // Start overlay (same component as FREE runs)
       startOverlayLine1: "High focus mode. Faster pace.",
@@ -974,6 +967,8 @@
         legendary: "{seen}/{poolSize} mastered. These traps rarely fool you now.",
       },
 
+      lensBonusPrimary: "You're ready for High Focus.",
+
 
       ctaByVerdict: {
         none: "Play again",
@@ -1125,10 +1120,10 @@
       ruleSentence: "Each correct answer adds +1 point. A wrong answer adds one mistake.",
       premiumTitle: "Full access",
       alreadyPremium: "Full access is already enabled on this device.",
-      activateTitle: "Activate with a code",
-      activateLine1: "Already have an activation code? Activate it here.",
+      activateTitle: "Use a device unlock code",
+      activateLine1: "Already have a device unlock code? Use it here.",
       activateLine2: "No account needed. Your code stays on this device.",
-      activationCodeLabel: "Activation code",
+      activationCodeLabel: "Device unlock code",
       activationCodePlaceholder: "WT-XXXX-XXXX",
       enterCode: "Enter a code.",
       codeRejected: "Code rejected.",
@@ -1138,8 +1133,8 @@
       codeOk: "Full access enabled on this device.",
 
 
-      autoActivateTitle: "Activation code ready",
-      autoActivateLine1: "Your activation code is already saved on this device.",
+      autoActivateTitle: "Device unlock code ready",
+      autoActivateLine1: "Your device unlock code is already saved on this device.",
       autoActivateLine2: "Unlock full access now?",
       autoActivateCta: "Unlock now",
       autoActivateLater: "Not now"
