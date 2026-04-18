@@ -269,9 +269,9 @@
     --fs-md: 16px;
     --fs-sm: 15px;
 
-    /* Branding desktop boost */
-    --wt-title-size: 56px;
-    --wt-logo-scale: 2.2;
+    /* Desktop branding stays legible without dominating the screen */
+    --wt-title-size: 44px;
+    --wt-logo-scale: 1.6;
   }
 }
 
@@ -1120,7 +1120,7 @@ body.wt-state--playing .wt-main .wt-container>.wt-card:last-child {
   border-radius: var(--r-btn);
   padding: clamp(var(--gap-2), 2vh, var(--space-14)) var(--gap-2);
   min-height: 48px;
-  font-size: clamp(var(--fs-md), 2.5vw, var(--fs-lg));
+  font-size: clamp(16px, 2.4vw, 17px);
   font-weight: 700;
   color: rgb(var(--text-strong));
   box-shadow: var(--shadow-1);
@@ -1471,7 +1471,8 @@ body.wt-state--playing .wt-main .wt-container>.wt-card:last-child {
 .wt-question-prompt {
   margin: 0 0 8px;
   text-align: center;
-  font-size: var(--fs-md);
+  font-size: clamp(17px, 3vw, 18px);
+  line-height: 1.35;
   font-weight: 700;
 }
 

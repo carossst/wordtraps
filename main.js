@@ -146,6 +146,35 @@
       node.classList.add("wt-toast--visible");
     }
 
+    function setWaitingWorker(worker) {
+      if (!worker) return;
+      window.__WT_SW_WAITING__ = worker;
+      window.__WT_SW_UPDATE_READY__ = true;
+    }
+
+    window.__WT_APPLY_SW_UPDATE__ = function () {
+      const waiting = window.__WT_SW_WAITING__ || null;
+      if (!waiting || typeof waiting.postMessage !== "function") {
+        location.reload();
+        return;
+      }
+
+      try { window.__WT_SW_RELOAD_ON_CONTROLLERCHANGE__ = true; } catch (_) { }
+
+      try {
+        waiting.postMessage({ type: "SKIP_WAITING" });
+      } catch (_) {
+        try { window.__WT_SW_RELOAD_ON_CONTROLLERCHANGE__ = false; } catch (_) { }
+        location.reload();
+      }
+    };
+
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (window.__WT_SW_RELOAD_ON_CONTROLLERCHANGE__ !== true) return;
+      try { window.__WT_SW_RELOAD_ON_CONTROLLERCHANGE__ = false; } catch (_) { }
+      location.reload();
+    });
+
 
     window.addEventListener("load", () => {
       const version = String(cfg.version || "").trim();
@@ -162,8 +191,9 @@
         .then((registration) => {
           Logger.log("✅ Service Worker registered:", registration.scope);
 
-          // Boot check: update already waiting (missed by updatefound)
-          if (cfg.serviceWorker.showUpdateNotifications && registration.waiting) {
+          // Update already waiting from a previous page session: surface it immediately.
+          if (cfg.serviceWorker.showUpdateNotifications && registration.waiting && navigator.serviceWorker.controller) {
+            setWaitingWorker(registration.waiting);
             const msg = String(window.WT_WORDING?.system?.updateAvailable || "").trim();
             if (msg) showUpdateToast(msg);
           }
@@ -189,6 +219,7 @@
               newWorker.addEventListener("statechange", () => {
                 // Only notify when updating an already-controlled page
                 if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+                  setWaitingWorker(newWorker);
                   const msg = String(window.WT_WORDING?.system?.updateAvailable || "").trim();
                   if (msg) showUpdateToast(msg);
                 }

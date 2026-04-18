@@ -1604,8 +1604,8 @@ void function () {
           self.promptInstall();
           break;
 
-        case "dismiss-update":
-          self.dismissUpdateToast();
+        case "apply-update":
+          self.applyUpdateToast();
           break;
 
         case "dismiss-house-ad": // legacy alias
@@ -2362,7 +2362,7 @@ void function () {
     this.modalContentEl.innerHTML = `
   <div class="wt-modal-header">
     <div class="wt-row wt-row--spaced">
-      <h2 class="wt-h2">${t}</h2>
+      <h2 id="wt-modal-title" class="wt-h2">${t}</h2>
       <button class="wt-btn wt-btn--ghost" data-action="close-modal" aria-label="${closeLabel}">&times;</button>
     </div>
   </div>
@@ -5264,14 +5264,18 @@ void function () {
 
 
 
-  UI.prototype.dismissUpdateToast = function () {
+  UI.prototype.applyUpdateToast = function () {
     const node = el("update-toast");
     if (!node) return;
 
     // If an update is ready, user intent = apply it now.
     if (window.__WT_SW_UPDATE_READY__ === true) {
       try { window.__WT_SW_UPDATE_READY__ = false; } catch (_) { }
-      location.reload();
+      if (typeof window.__WT_APPLY_SW_UPDATE__ === "function") {
+        window.__WT_APPLY_SW_UPDATE__();
+      } else {
+        location.reload();
+      }
       return;
     }
 
