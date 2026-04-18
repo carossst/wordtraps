@@ -44,7 +44,7 @@
   window.WT_CONFIG = {
 
     // Product version (UI display, logs)
-    version: "2.3",
+    version: "2.4",
 
     // Storage schema version (localStorage).
     // Change ONLY if you accept a migration/wipe.
@@ -620,8 +620,8 @@
       statsSeenSummaryTemplate: "Seen: {seen}/{poolSize} word traps",
       statsPaceSummaryTemplate: "About {runsLeft} more game{pluralS} to see all {poolSize} traps.",
       statsPhaseBadgeDiscovery: "Phase 1/3: Discovery",
-      statsPhaseBadgeCorrection: "Phase 2/3: Integrating",
-      statsPhaseBadgeConsolidation: "Phase 3/3: Consolidating",
+      statsPhaseBadgeCorrection: "Phase 2/3: Fixing mistakes",
+      statsPhaseBadgeConsolidation: "Phase 3/3: Locked in",
 
       // After completion (fail-closed: required for the post-200 line)
       statsSeenCompleteLabel: "French-English Faux Amis Mastery",
