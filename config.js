@@ -330,7 +330,7 @@
 
       // Gesture: single tap (simple, no “secret handshake”)
       tapWindowMs: 900,
-      tapsRequired: 0,
+      tapsRequired: 1,
 
 
 
@@ -983,21 +983,10 @@
       // Definition: longest sequence of consecutive correct answers within the run
       bestStreakLine: "Best sequence: {bestStreak} correct answers in a row.",
 
-      // RUN progress surfacing (RUN only)
-      // Vars: {seen} {poolSize} {remaining}
-      progressLine: "Seen: {seen}/{poolSize}. {remaining} left.",
-
       // False friends identified (RUN only)
       // Definition: distinct items with tag === "false_friend" and correctCount > 0
       // Vars: {count}
       falseFriendsIdentifiedLine: "{count} false friends identified so far.",
-
-
-      // END secondary content toggles
-      statsToggle: "Stats & games history",
-
-      // Fallback for non-RUN modes (PRACTICE, BONUS)
-      effortLine: "Well played.",
 
       scoreLine: "Score: {score} {fpLong}",
 

@@ -1249,7 +1249,7 @@ void function () {
       // Pool reshuffle toast guard (UI-only, once per RUN)
       poolReshuffleToastShown: false,
 
-      // Secret chest (END screen): tap x3 window + one-shot poetic hint
+      // Secret chest (END/LANDING): tap window + one-shot hint
       secretChest: {
         tapCount: 0,
         lastTapAt: 0
@@ -3117,6 +3117,7 @@ void function () {
 
   UI.prototype.startRun = function (mistakesOnly) {
     const cfg = this.config || {};
+    const moCfg = cfg.mistakesOnly || {};
     const premium = (this.storage && typeof this.storage.isPremium === "function") ? this.storage.isPremium() : false;
 
     // Hook for live stats refresh during run (deck rebuild)
@@ -3139,6 +3140,12 @@ void function () {
     } catch (_) { practiceBacklogAtStart = null; }
 
     if (mistakesOnly === true && practiceBacklogAtStart === 0) {
+      return;
+    }
+
+    if (mistakesOnly === true && moCfg.premiumOnly === true && !premium) {
+      if (this._nav) this._nav.paywallFromState = this.state;
+      this.setState(STATES.PAYWALL);
       return;
     }
 
@@ -6856,6 +6863,23 @@ ${(() => {
 
     vars.backlog = clampInt(backlog, 0, 99999);
 
+    let canPractice = isRun && !!(cfg.mistakesOnly && cfg.mistakesOnly.enabled);
+    if (canPractice) {
+      const minWrong = clampInt(Number(cfg?.mistakesOnly?.minWrongItemsToShowToggle), 1, 9999);
+      const hasEnoughMistakes = clampInt(vars.backlog, 0, 99999) >= minWrong;
+
+      let practiceRunsAvailable = true;
+      if (!premium && this.storage && typeof this.storage.getPracticeRunsRemaining === "function") {
+        try {
+          practiceRunsAvailable = Number(this.storage.getPracticeRunsRemaining()) > 0;
+        } catch (_) {
+          practiceRunsAvailable = false;
+        }
+      }
+
+      canPractice = hasEnoughMistakes && practiceRunsAvailable;
+    }
+
     const runPracticePrimaryMinRaw = Number(cfg?.routing?.practicePrimaryMinWrong);
     const runPracticePrimaryMin =
       (Number.isFinite(runPracticePrimaryMinRaw) && runPracticePrimaryMinRaw >= 1)
@@ -7035,23 +7059,6 @@ ${(() => {
         runVerdictKey === "legendary"
       );
 
-    let canPractice = isRun && !!(cfg.mistakesOnly && cfg.mistakesOnly.enabled);
-    if (canPractice) {
-      const minWrong = clampInt(Number(cfg?.mistakesOnly?.minWrongItemsToShowToggle), 1, 9999);
-      const hasEnoughMistakes = clampInt(vars.backlog, 0, 99999) >= minWrong;
-
-      let practiceRunsAvailable = true;
-      if (!premium && this.storage && typeof this.storage.getPracticeRunsRemaining === "function") {
-        try {
-          practiceRunsAvailable = Number(this.storage.getPracticeRunsRemaining()) > 0;
-        } catch (_) {
-          practiceRunsAvailable = false;
-        }
-      }
-
-      canPractice = hasEnoughMistakes && practiceRunsAvailable;
-    }
-
     const runsExhausted = (isRun && !premium && Number.isFinite(remaining) && remaining <= 0);
 
     const howToPlayAria = String(w.system?.more || "").trim();
@@ -7112,8 +7119,6 @@ ${(() => {
       console.warn("[WT_UI] Missing required copy: WT_WORDING.secretBonus.ctaByLevel[level]");
     }
 
-    const playAriaRun = String(w.system?.playAria || "").trim();
-
     const practiceCtaRaw = poolCompleteCelebration
       ? String(end.poolCompleteCtaPractice || "").trim()
       : premium
@@ -7140,7 +7145,6 @@ ${(() => {
 
     // Secret chest visibility gate:
     const windowMs = Number(cfg?.secretBonus?.tapWindowMs);
-    const tapsRequired = Number(cfg?.secretBonus?.tapsRequired);
 
     const endAfterRunsRaw = Number(cfg?.secretBonus?.gates?.endAfterRuns);
     const endAfterRuns = (Number.isFinite(endAfterRunsRaw) && endAfterRunsRaw >= 0) ? Math.floor(endAfterRunsRaw) : null;
@@ -7244,6 +7248,10 @@ ${(() => {
       microLines.push(`<p class="wt-meta wt-truncate">${escapeHtml(bestStreakLine)}</p>`);
     }
 
+    if (isRun && !poolCompleteCelebration && runIdentityTpl) {
+      microLines.push(`<p class="wt-meta wt-truncate">${escapeHtml(fillTemplate(runIdentityTpl, vars))}</p>`);
+    }
+
     // Record moment: if active, surface the celebration line explicitly.
     if (recordActive && newBestLine) {
       microLines.push(`<p class="wt-meta wt-truncate">${escapeHtml(newBestLine)}</p>`);
@@ -7252,6 +7260,10 @@ ${(() => {
     // Personal best (RUN + premium only)
     if (pbLine) {
       microLines.push(`<p class="wt-meta wt-truncate">${escapeHtml(pbLine)}</p>`);
+    }
+
+    if (pbPremiumHint) {
+      microLines.push(`<p class="wt-meta wt-truncate">${escapeHtml(pbPremiumHint)}</p>`);
     }
 
     // Runs left (FREE + RUN only) — keep existing copy
@@ -7266,9 +7278,6 @@ ${(() => {
     </div>
   `
       : "";
-    // Stats & runs history (END) intentionally removed (too low value, adds density).
-    const statsAccordionHtml = "";
-
     // Paywall bridge block (FREE exhausted): make it visible, not buried
     const paywallBridgeHtml =
       (runsExhausted && (paywallBridgeTitle || paywallBridgeBody))
@@ -7635,6 +7644,8 @@ ${(() => {
   </div>
 
   ${paywallBridgeHtml}
+
+  ${chestHintText ? `<p class="wt-muted">${escapeHtml(chestHintText)}</p>` : ``}
 
   ${shouldPromoteShare ? shareHtml : ``}
 
