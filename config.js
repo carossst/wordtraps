@@ -68,7 +68,7 @@
       parentUrl: "https://www.testyourfrench.com",
 
       // UI signature icon (in-card). Single source of truth for in-app branding.
-      uiLogoUrl: "./icons/icon512x512-rond.png"
+      uiLogoUrl: "./icons/brand-logo-512.png"
     },
 
     // Storage (single source of truth)
@@ -398,8 +398,11 @@
       afterPoolExhaustedOnly: false,
       showModalOneShot: false,
 
-      // Obfuscated email (anti-scraping)
-      toEmailObfuscated: "bonjour&#64;testyourfrench&#46;com",
+      // Email stored as XOR-obfuscated char codes.
+      toEmailCipher: {
+        key: 23,
+        codes: [117, 120, 121, 125, 120, 98, 101, 87, 99, 114, 100, 99, 110, 120, 98, 101, 113, 101, 114, 121, 116, 127, 57, 116, 120, 122]
+      },
       // IMPORTANT: keep this as a pure prefix (UI/email helpers may append details)
       subjectPrefix: "[Word Traps][Waitlist]"
 
@@ -447,7 +450,10 @@
 
     // Support
     support: {
-      emailObfuscated: "bonjour&#64;testyourfrench&#46;com",
+      emailCipher: {
+        key: 23,
+        codes: [117, 120, 121, 125, 120, 98, 101, 87, 99, 114, 100, 99, 110, 120, 98, 101, 113, 101, 114, 121, 116, 127, 57, 116, 120, 122]
+      },
       subjectPrefix: "[Word Traps][Contact]"
     },
 
@@ -602,7 +608,7 @@
     },
     landing: {
       title: "Word Traps",
-      tagline: "",
+      tagline: "**Think you know French? Prove it.**",
       subtitle: "Faux amis or true friends?\n200 French-English words to train your brain.",
       microFun: "No signup · Quick games · Free to try",
       microTrust: "Spot the traps. Think in French.",
@@ -635,7 +641,7 @@
       postPaywallCta: "Unlock full access",
 
       postPaywallSbTitle: "Before you decide...",
-      postPaywallSbBody: "You still have High Focus mode to try. Tap 🎯."
+      postPaywallSbBody: "You still have High Focus mode to try. Tap the target."
     },
     firstRun: {
       titleRun2: "Quick reminder",
@@ -981,6 +987,8 @@
       // Explicit best sequence surfacing (RUN only)
       // Definition: longest sequence of consecutive correct answers within the run
       bestStreakLine: "Best sequence: {bestStreak} correct answers in a row.",
+      strongestTagLine: "Strongest category this game: {tag}.",
+      weakestTagLine: "Most missed category this game: {tag}.",
 
       // False friends identified (RUN only)
       // Definition: distinct items with tag === "false_friend" and correctCount > 0
@@ -1033,17 +1041,17 @@
       trustTitle: "No surprises",
 
       valueBullets: [
-        "200 hand-picked traps with explanations after each answer",
-        "Fix your mistakes in a dedicated practice mode",
-        "Train your speed in High Focus Mode",
-        "Unlimited games, reshuffled every time"
+        "**The full set** of 200 hand-picked traps",
+        "**Explanations after every answer**",
+        "**Mistakes Mode** to fix what you missed",
+        "**High Focus Mode** and unlimited reshuffled games"
       ],
 
       // Shared bridge copy (LANDING post-paywall + END runs exhausted)
       bridgeTitle: "Keep spotting the traps.",
       bridgeBody: "Practice your mistakes, train your focus, and master all 200 French word traps.",
 
-      trustLine: "One-time unlock",
+      trustLine: "**One-time unlock**",
       trustBullets: [
         "Lifetime access, no recurring fees",
         "Works offline after first load",
@@ -1453,14 +1461,14 @@ Thanks!`
 
 
 
-      // Waitlist email (obfuscated)
-      if (cfg.waitlist && cfg.waitlist.enabled && !cfg.waitlist.toEmailObfuscated) {
-        warn("waitlist.enabled true but toEmailObfuscated missing");
+      // Waitlist email (ciphered)
+      if (cfg.waitlist && cfg.waitlist.enabled && !cfg.waitlist.toEmailCipher) {
+        warn("waitlist.enabled true but toEmailCipher missing");
       }
 
-      // Support email (obfuscated)
-      if (cfg.support && !cfg.support.emailObfuscated) {
-        warn("support.emailObfuscated missing");
+      // Support email (ciphered)
+      if (cfg.support && !cfg.support.emailCipher) {
+        warn("support.emailCipher missing");
       }
     }
   }

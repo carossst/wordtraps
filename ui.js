@@ -127,6 +127,37 @@ void function () {
 
 
   const escapeHtml = window.WT_UTILS.escapeHtml;
+  function renderIcon(name, options) {
+    if (!window.WT_ICONS || typeof window.WT_ICONS.renderIcon !== "function") return "";
+    return window.WT_ICONS.renderIcon(name, options);
+  }
+
+  function renderTextWithStrong(value) {
+    const text = String(value || "");
+    if (!text) return "";
+
+    return text
+      .split(/(\*\*[^*]+\*\*)/g)
+      .filter(Boolean)
+      .map((part) => {
+        if (part.startsWith("**") && part.endsWith("**") && part.length > 4) {
+          return `<strong>${escapeHtml(part.slice(2, -2))}</strong>`;
+        }
+        return escapeHtml(part);
+      })
+      .join("");
+  }
+
+  function formatTagLabel(tag) {
+    const raw = String(tag || "").trim();
+    if (!raw) return "";
+    return raw
+      .replace(/[_-]+/g, " ")
+      .split(/\s+/)
+      .filter(Boolean)
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
+  }
 
   function clampInt(n, min, max) {
     const x = Number(n);
@@ -6385,7 +6416,7 @@ void function () {
               ? `${mistakesLabel}: ${fillTemplate(mistakesTpl, { mistakes })}`
               : "";
 
-          const displayLine = [masteryLine, mistakesLine].filter(Boolean).join(" ");
+          const displayLine = (mistakes > 0) ? mistakesLine : masteryLine;
 
           if (title || displayLine || phaseBadge) {
             welcomeBackHtml = `
@@ -6520,7 +6551,7 @@ void function () {
   <div class="wt-landing-header">
     <div class="wt-landing-header__brand">
       ${renderBrandingRow(cfg, true)}
-      ${tagline ? `<p class="wt-meta wt-landing-header__tagline">${escapeHtml(tagline)}</p>` : ``}
+      ${tagline ? `<p class="wt-meta wt-landing-header__tagline">${renderTextWithStrong(tagline)}</p>` : ``}
     </div>
    <div class="wt-landing-top-right">
       ${chestHintTextLanding ? `<div class="wt-chest-hint-inline">${escapeHtml(chestHintTextLanding)}</div>` : ``}
@@ -6529,7 +6560,7 @@ void function () {
         data-action="open-howto"
         aria-label="${escapeHtml(howToPlayAria)}"
         title="${escapeHtml(howToPlayTitle)}"
-      >?</button>
+      >${renderIcon("help-circle")}</button>
       ${canShowChest ? `
         <button
           type="button"
@@ -6537,7 +6568,7 @@ void function () {
           class="wt-btn-icon${chestTeaseClass}"
           aria-label="${escapeHtml(chestAria)}"
           title="${escapeHtml(chestAria)}"
-        >🎯</button>
+        >${renderIcon("target")}</button>
       ` : ``}
     </div>
   </div>
@@ -7148,7 +7179,7 @@ ${(() => {
         data-action="go-home"
         aria-label="${escapeHtml(homeLabel)}"
         title="${escapeHtml(homeLabel)}"
-      >\u2302</button>
+      >${renderIcon("home")}</button>
     `
       : ``;
     const endTitle =
@@ -7264,7 +7295,7 @@ ${(() => {
           data-action="open-howto"
           aria-label="${escapeHtml(howToPlayAria)}"
           title="${escapeHtml(howToPlayTitle)}"
-        >?</button>
+        >${renderIcon("help-circle")}</button>
       ` : ``}
 
       ${canShowChest ? `
@@ -7274,7 +7305,7 @@ ${(() => {
           class="wt-btn-icon${chestTeaseClass}"
           aria-label="${escapeHtml(chestAria)}"
           title="${escapeHtml(chestAria)}"
-        >🎯</button>
+        >${renderIcon("target")}</button>
       ` : ``}
     </div>
   </div>
@@ -7289,6 +7320,68 @@ ${(() => {
     // False friends identified (RUN-only): tag === "false_friend" AND correctCount > 0
     if (isRun) {
       const ffTpl = String(end.falseFriendsIdentifiedLine || "").trim();
+      const strongestTagTpl = String(end.strongestTagLine || "").trim();
+      const weakestTagTpl = String(end.weakestTagLine || "").trim();
+      const runMistakeIds = Array.isArray(lastRun?.mistakeIds) ? lastRun.mistakeIds : [];
+      const runItemIds = Array.isArray(lastRun?.runItemIds) ? lastRun.runItemIds : [];
+      const ignored = new Set(["easy", "medium", "hard", "singles", "doubles", "tournament", "both", "singles only", "doubles only"]);
+
+      if (runItemIds.length > 0 && (strongestTagTpl || weakestTagTpl)) {
+        const servedCounts = Object.create(null);
+        const mistakeCounts = Object.create(null);
+
+        for (const rawId of runItemIds) {
+          const item = byId[String(rawId)] || byId[rawId] || null;
+          const tag = String(item?.tag || "").trim();
+          if (!tag || ignored.has(tag.toLowerCase())) continue;
+          servedCounts[tag] = clampInt(Number(servedCounts[tag] || 0) + 1, 0, 9999);
+        }
+
+        for (const rawId of runMistakeIds) {
+          const item = byId[String(rawId)] || byId[rawId] || null;
+          const tag = String(item?.tag || "").trim();
+          if (!tag || ignored.has(tag.toLowerCase())) continue;
+          mistakeCounts[tag] = clampInt(Number(mistakeCounts[tag] || 0) + 1, 0, 9999);
+        }
+
+        let strongestTag = "";
+        let strongestCount = 0;
+        let strongestTie = false;
+        let weakestTag = "";
+        let weakestCount = 0;
+        let weakestTie = false;
+
+        for (const tag in servedCounts) {
+          const served = clampInt(Number(servedCounts[tag] || 0), 0, 9999);
+          const missed = clampInt(Number(mistakeCounts[tag] || 0), 0, 9999);
+          const correct = clampInt(served - missed, 0, 9999);
+
+          if (correct > strongestCount) {
+            strongestTag = tag;
+            strongestCount = correct;
+            strongestTie = false;
+          } else if (correct > 0 && correct === strongestCount) {
+            strongestTie = true;
+          }
+
+          if (missed > weakestCount) {
+            weakestTag = tag;
+            weakestCount = missed;
+            weakestTie = false;
+          } else if (missed > 0 && missed === weakestCount) {
+            weakestTie = true;
+          }
+        }
+
+        if (!strongestTie && strongestCount > 0 && strongestTag && strongestTagTpl) {
+          microLines.push(`<p class="wt-meta wt-truncate">${escapeHtml(fillTemplate(strongestTagTpl, { tag: formatTagLabel(strongestTag) }))}</p>`);
+        }
+
+        if (!weakestTie && weakestCount > 0 && weakestTag && weakestTagTpl) {
+          microLines.push(`<p class="wt-meta wt-truncate">${escapeHtml(fillTemplate(weakestTagTpl, { tag: formatTagLabel(weakestTag) }))}</p>`);
+        }
+      }
+
       if (ffTpl && this.storage && typeof this.storage.getStatsByItem === "function") {
         let statsByItem = {};
         try { statsByItem = this.storage.getStatsByItem() || {}; } catch (_) { statsByItem = {}; }
@@ -8403,7 +8496,7 @@ ${questionPrompt ? `
       const items = arr
         .map(x => String(x || "").trim())
         .filter(Boolean)
-        .map(x => `<li>${escapeHtml(x)}</li>`)
+        .map(x => `<li>${renderTextWithStrong(x)}</li>`)
         .join("");
       return `<ul class="${cls}">${items}</ul>`;
     };
@@ -8523,7 +8616,7 @@ ${questionPrompt ? `
       ${(hasValueSection && hasTrustSection) ? `<div class="wt-divider"></div>` : ``}
 
       ${hasTrustSection ? `
-       ${trustLine ? `<div class="wt-meta wt-meta--strong" style="margin-top:6px">${escapeHtml(trustLine)}</div>` : ``}
+       ${trustLine ? `<div class="wt-meta wt-meta--strong" style="margin-top:6px">${renderTextWithStrong(trustLine)}</div>` : ``}
         ${trustBullets.length ? `<div style="margin-top:var(--gap-1)">${renderBullets(trustBullets, true)}</div>` : ``}
       ` : ``}
 

@@ -35,6 +35,7 @@ const ASSETS_TO_CACHE = [
   "./config.js",
   "./storage.js",
   "./game.js",
+  "./icons.js",
   "./ui.js",
   "./pwa.js",
   "./email.js",
@@ -46,7 +47,11 @@ const ASSETS_TO_CACHE = [
   "./icons/icon-192x192-maskable.png",
   "./icons/icon-512x512.png",
   "./icons/icon-512x512-maskable.png",
-  "./icons/icon512x512-rond.png"
+  "./icons/icon512x512-rond.png",
+  "./icons/brand-logo-512.png",
+  "./icons/favicon-32x32.png",
+  "./icons/favicon-16x16.png",
+  "./icons/favicon.ico"
 ];
 
 // Critical assets: if any of these fail to pre-cache, do NOT force-activate immediately.

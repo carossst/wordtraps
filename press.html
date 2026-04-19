@@ -6,13 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="description" content="Press - Word Traps and Daily French by Test Your French.">
     <title>Press - Word Traps</title>
+    <link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="./icons/favicon-16x16.png">
+    <link rel="shortcut icon" href="./icons/favicon.ico">
     <link rel="stylesheet" href="./style.css">
 </head>
 
 <body>
     <div class="wt-app">
         <main class="wt-main">
-            <div class="wt-container">
+            <div class="wt-container wt-container--doc">
                 <div class="wt-card">
                     <nav style="margin-bottom:var(--gap-3)">
                         <a href="./" class="wt-btn wt-btn--ghost">Home</a>
@@ -202,15 +205,6 @@
                 }
             }
 
-            function applyVersion() {
-                try {
-                    const version = String(window.WT_CONFIG?.version || "").trim();
-                    const prefix = String(window.WT_WORDING?.system?.versionPrefix || "").trim();
-                    const el = document.querySelector(".wt-footer-version");
-                    if (el) el.textContent = version ? `${prefix}${version}` : "";
-                } catch (_) { }
-            }
-
             document.addEventListener("DOMContentLoaded", () => {
                 const a = document.getElementById("wt-press-contact");
                 if (a) {
@@ -219,8 +213,6 @@
                         openSupportEmail();
                     });
                 }
-
-                applyVersion();
             });
         })();
     </script>
