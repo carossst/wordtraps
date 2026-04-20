@@ -6796,6 +6796,25 @@ ${(() => {
         shown: String(shown)
       });
     })();
+    const bonusStatsLine = (() => {
+      if (!isBonus) return "";
+
+      const shown = clampInt(totalPresented, 0, 99999);
+      if (shown <= 0) return "";
+
+      const cleared = clampInt(scoreFP, 0, shown);
+      const count = clampInt(seen, 0, 99999);
+      const oneTpl = String(bonusW.endStatsLineOne || "").trim();
+      const manyTpl = String(bonusW.endStatsLine || "").trim();
+      const tpl = (count === 1 && oneTpl) ? oneTpl : manyTpl;
+      if (!tpl) return "";
+
+      return fillTemplate(tpl, {
+        cleared: String(cleared),
+        shown: String(shown),
+        count: String(count)
+      });
+    })();
 
     let endLineTpl = "";
 
@@ -7008,6 +7027,14 @@ ${(() => {
     const scoreLine = scoreLineTpl ? fillTemplate(scoreLineTpl, vars) : "";
     const newBestLine = newBestTpl ? fillTemplate(newBestTpl, vars) : "";
     const endLine = endLineTpl ? fillTemplate(endLineTpl, vars) : "";
+    const runStatsLine = (() => {
+      if (!isRun || !!lastRun.poolCompleteCelebration) return "";
+
+      const tpl = String(end.endStatsLine || "").trim();
+      if (!tpl) return "";
+
+      return fillTemplate(tpl, vars);
+    })();
 
     // bonusDecisionLine replaced by bonusRecoLine (computed in bonus tier block above)
     const bonusDecisionLine = isBonus ? bonusRecoLine : "";
@@ -7394,10 +7421,6 @@ ${(() => {
       microLines.push(`<p class="wt-meta wt-truncate">${escapeHtml(bestStreakLine)}</p>`);
     }
 
-    if (isRun && !poolCompleteCelebration && runIdentityTpl) {
-      microLines.push(`<p class="wt-meta wt-truncate">${escapeHtml(fillTemplate(runIdentityTpl, vars))}</p>`);
-    }
-
     // Record moment: if active, surface the celebration line explicitly.
     if (recordActive && newBestLine) {
       microLines.push(`<p class="wt-meta wt-truncate">${escapeHtml(newBestLine)}</p>`);
@@ -7588,24 +7611,30 @@ ${(() => {
           const statsLine = practiceStatsLineTpl ? fillTemplate(practiceStatsLineTpl, vars) : "";
           const repeatLine = practiceRepeatNoteTpl ? fillTemplate(practiceRepeatNoteTpl, vars) : "";
           return [
-            endLine ? `<p class="wt-meta">${escapeHtml(endLine)}</p>` : ``,
             statsLine ? `<p class="wt-muted">${escapeHtml(statsLine)}</p>` : ``,
+            endLine ? `<p class="wt-meta">${escapeHtml(endLine)}</p>` : ``,
             repeatLine ? `<p class="wt-muted">${escapeHtml(repeatLine)}</p>` : ``
           ].join("");
         }
         if (isBonus) {
-          return endLine ? `<p class="wt-meta">${escapeHtml(endLine)}</p>` : ``;
+          return [
+            bonusStatsLine ? `<p class="wt-muted">${escapeHtml(bonusStatsLine)}</p>` : ``,
+            endLine ? `<p class="wt-meta">${escapeHtml(endLine)}</p>` : ``,
+            bonusDecisionLine ? `<p class="wt-muted">${escapeHtml(bonusDecisionLine)}</p>` : ``
+          ].join("");
+        }
+        if (isRun) {
+          return [
+            runStatsLine ? `<p class="wt-muted">${escapeHtml(runStatsLine)}</p>` : ``,
+            endLine ? `<p class="wt-meta">${escapeHtml(endLine)}</p>` : ``,
+            runIdentityTpl ? `<p class="wt-meta">${escapeHtml(fillTemplate(runIdentityTpl, vars))}</p>` : ``,
+            runLensTpl ? `<p class="wt-muted">${escapeHtml(fillTemplate(runLensTpl, vars))}</p>` : ``
+          ].join("");
         }
         return endLine ? `<p class="wt-meta">${escapeHtml(endLine)}</p>` : ``;
       })()}
 
     ${(isRun && runPoolCompleteLine2Tpl) ? `<p class="wt-meta">${escapeHtml(fillTemplate(runPoolCompleteLine2Tpl, vars))}</p>` : ``}
-
-  ${(isBonus && bonusIdentityTpl) ? `<p class="wt-muted">${escapeHtml(bonusIdentityTpl)}</p>` : ``}
-  ${(isBonus && bonusLensTpl) ? `<p class="wt-muted">${escapeHtml(bonusLensTpl)}</p>` : ``}
-  ${(isBonus && bonusDeckSizeLine) ? `<p class="wt-muted">${escapeHtml(bonusDeckSizeLine)}</p>` : ``}
-  ${(isBonus && bonusPoolProgressLine) ? `<p class="wt-muted">${escapeHtml(bonusPoolProgressLine)}</p>` : ``}
-  ${(isBonus && bonusDecisionLine) ? `<p class="wt-meta">${escapeHtml(bonusDecisionLine)}</p>` : ``}
 
   ${``}
 
@@ -7945,6 +7974,7 @@ ${(() => {
 
     // HUD logo (fail-closed): only show if explicitly configured.
     const hudLogoUrl = String(cfg?.identity?.uiLogoUrl || "").trim();
+    const practiceBadge = String(this.wording?.practice?.title || "").trim();
     const deckSizeRaw = Number(gameState?.deckSize);
 
     const secretBonusDeckCount =
@@ -8037,6 +8067,11 @@ ${(() => {
 	          <div class="wt-pill wt-pill--chances${mistakeTierClass}${pulseOn ? " wt-pill--danger-pulse" : ""}"
 	           aria-label="${escapeHtml(mistakesLabel)}: ${mistakesCount}/${mcInt}">
 	            <span>${escapeHtml(mistakesLabel)}: ${mistakesCount}/${mcInt}</span>${mistakeDeltaHtml}${mistakesVisual}
+	          </div>
+	        ` : ``}
+          ${(modeNow === "PRACTICE" && practiceBadge) ? `
+	          <div class="wt-pill" aria-label="${escapeHtml(practiceBadge)}">
+	            <span>${escapeHtml(practiceBadge)}</span>
 	          </div>
 	        ` : ``}
 

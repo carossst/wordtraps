@@ -44,7 +44,7 @@
   window.WT_CONFIG = {
 
     // Product version (UI display, logs)
-    version: "2.4",
+    version: "2.5",
 
     // Storage schema version (localStorage).
     // Change ONLY if you accept a migration/wipe.
@@ -733,6 +733,8 @@
 
       // END screen (BONUS)
       endTitle: "",
+      endStatsLine: "You got {cleared} out of {shown} right.",
+      endStatsLineOne: "You got {cleared} out of {shown} right.",
       endDeckSizeLine: "High Focus pool: {count} words.",
       endDeckSizeLineOne: "High Focus pool: 1 word.",
       endPoolProgressTemplate: "{cleared} out of {shown} correct this round.",
@@ -840,21 +842,21 @@
 
       // END screen (PRACTICE)
       endTitle: "",
-      endLine: "Good work. You tightened the weak spots.",
+      endLine: "Good recovery.",
       // Tier-aware override (keyed on practiceRepeatTierKey). Fallback: endLine.
       endLineByTier: {
         last: "Nice recovery.",
-        light: "Nice recovery.",
-        firm: "Good progress.",
-        direct: "You tightened some weak spots."
+        light: "Good recovery.",
+        firm: "That's progress.",
+        direct: "You're making progress."
       },
-      endStatsLine: "Mistakes fixed: {fixed}. Mistakes remaining: {remaining}.",
+      endStatsLine: "You fixed {fixed}. You still have {remaining} left.",
 
       // Repeat guidance by tier (selected via WT_CONFIG.routing.practiceRepeatTiers)
       // Fail-closed: missing tier key => no note
       endRepeatNoteByTier: {
         last: "One trap left. Clear it now.",
-        light: "Only a few traps left to clear.",
+        light: "",
         firm: "A few traps still need another pass.",
         direct: "Stay in Mistakes mode. These are the ones that need the work."
       },
@@ -948,6 +950,7 @@
 
       // No redundancy: do not mention chances on END (player already knows).
       endLine: "",
+      endStatsLine: "You got {score} out of {total} right. You've now seen {seen}/{poolSize} words.",
 
 
       // (verdict grid removed — identityByVerdict is now the primary END signal)
