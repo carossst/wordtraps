@@ -2799,8 +2799,15 @@ void function () {
       runsUsed = Number(this.storage.getRunsUsed() || 0);
     }
 
-    const framingLines = Array.isArray(fr.framingLines) ? fr.framingLines : [];
-    const trustLines = Array.isArray(fr.trustLines) ? fr.trustLines : [];
+    const run1Lines = Array.isArray(fr.run1Lines) ? fr.run1Lines : [];
+    const run2Lines = Array.isArray(fr.run2Lines) ? fr.run2Lines : [];
+    const run3Lines = Array.isArray(fr.run3Lines) ? fr.run3Lines : [];
+    const lines =
+      runsUsed === 1
+        ? run2Lines
+        : runsUsed === 2
+          ? run3Lines
+          : run1Lines;
 
     const renderLines = (arr) => {
       return arr
@@ -2811,9 +2818,7 @@ void function () {
     };
 
     const html = `
-      ${renderLines(framingLines)}
-      ${trustLines.length ? `<div class="wt-divider"></div>` : ``}
-      ${renderLines(trustLines)}
+      ${renderLines(lines)}
           <div class="wt-actions">
                      <button class="wt-btn wt-btn--primary" data-action="start-run" aria-label="${escapeHtml(String(fr.ctaLabel || "").trim())}">
            ${escapeHtml(String(fr.ctaLabel || "").trim())}
@@ -2823,7 +2828,7 @@ void function () {
 
     `;
 
-    let modalTitle = String(w.system?.more || "").trim();
+    let modalTitle = String(fr.titleRun1 || "").trim() || String(w.system?.more || "").trim();
     if (runsUsed === 1 && String(fr.titleRun2 || "").trim()) {
       modalTitle = String(fr.titleRun2 || "").trim();
     } else if (runsUsed === 2 && String(fr.titleRun3 || "").trim()) {
@@ -4463,7 +4468,6 @@ void function () {
       chancesLeft,
       newBest,
       bestScoreFP,
-      bestStreak: clampInt(this._runtime.microPics?.maxCorrectStreak, 0, 9999),
       mistakeIds: Array.isArray(this._runtime.runMistakeIds) ? this._runtime.runMistakeIds.slice() : [],
       runItemIds: Array.isArray(this._runtime.runItemIds) ? this._runtime.runItemIds.slice() : [],
       poolCompleteCelebration: !!this._runtime?.poolCompleteCelebrationPending
@@ -5355,18 +5359,15 @@ void function () {
     const node = el("update-toast");
     if (!node) return;
 
-    // If an update is ready, user intent = apply it now.
     if (window.__WT_SW_UPDATE_READY__ === true) {
-      try { window.__WT_SW_UPDATE_READY__ = false; } catch (_) { }
       if (typeof window.__WT_APPLY_SW_UPDATE__ === "function") {
         window.__WT_APPLY_SW_UPDATE__();
       } else {
-        location.reload();
+        window.location.reload();
       }
       return;
     }
 
-    // Otherwise just hide it.
     node.classList.remove("wt-toast--visible");
   };
 
@@ -6000,7 +6001,9 @@ void function () {
     // Screen-scoped body class (CSS can react without DOM branching)
     try {
       const playing = (this.state === STATES.PLAYING);
+      const ending = (this.state === STATES.END);
       document.body.classList.toggle("wt-state--playing", playing);
+      document.body.classList.toggle("wt-state--end", ending);
     } catch (_) { /* silent */ }
 
     try {
@@ -6281,12 +6284,10 @@ void function () {
       const statsCfg = cfg?.landingStats || {};
       const enabled = (statsCfg?.enabled === true);
 
-      const paceNRaw = Number(statsCfg?.paceRunsCount);
-      const minRunsToShow = (Number.isFinite(paceNRaw) && paceNRaw >= 1 && paceNRaw <= 999) ? Math.floor(paceNRaw) : null;
+      const minRunsRaw = Number(statsCfg?.minCompletedRuns ?? statsCfg?.paceRunsCount);
+      const minRunsToShow = (Number.isFinite(minRunsRaw) && minRunsRaw >= 1 && minRunsRaw <= 999) ? Math.floor(minRunsRaw) : null;
       if (enabled && minRunsToShow != null && Number.isFinite(runCompletes) && runCompletes >= 1) {
         const seenTpl = String(landing.statsSeenSummaryTemplate || "").trim();
-        const paceTpl = String(landing.statsPaceSummaryTemplate || "").trim();
-
         const poolSizeSafe = clampInt(cfg?.game?.poolSize, 1, 9999);
 
         // Unique seen count
@@ -6343,95 +6344,44 @@ void function () {
           : 0;
         const progressClass = isComplete ? " wt-progress--mastery" : "";
 
-        const completeLabelTpl = String(landing.statsSeenCompleteLabel || "").trim();
-        const mistakesLabel = String(landing.statsMistakesLabel || "").trim();
-        const mistakesTpl = String(landing.statsMistakesSummaryTemplate || "").trim();
-        const phaseBadgeDiscovery = String(landing.statsPhaseBadgeDiscovery || "").trim();
-        const phaseBadgeCorrection = String(landing.statsPhaseBadgeCorrection || "").trim();
-        const phaseBadgeConsolidation = String(landing.statsPhaseBadgeConsolidation || "").trim();
+        const phaseCtx = getRuleKnowledgePhaseContext({
+          w,
+          storage: this.storage,
+          poolSize: poolSizeSafe,
+          seen,
+          mistakes
+        });
 
         let title = "";
         let sub = "";
 
         if (!isComplete) {
-          title = "";
-
-          const seenLine = fillTemplate(seenTpl, { seen, poolSize: poolSizeSafe });
-          const phaseBadge = phaseBadgeDiscovery;
-
-          let paceLine = "";
-          try {
-            if (
-              seen < poolSizeSafe &&
-              paceTpl &&
-              this.storage &&
-              typeof this.storage.getRunPaceTotals === "function"
-            ) {
-              const totals = this.storage.getRunPaceTotals();
-              const totalRunCount = clampInt(Number(totals?.runCount), 0, 999999);
-              const totalNewSeen = clampInt(Number(totals?.totalNewSeen), 0, 999999);
-
-              if (totalRunCount >= minRunsToShow && totalRunCount >= 1) {
-                const avgNewSeen = totalNewSeen / totalRunCount;
-                if (avgNewSeen >= 1 && remaining > 0) {
-                  const runsLeft = Math.ceil(remaining / avgNewSeen);
-                  paceLine = fillTemplate(paceTpl, {
-                    poolSize: poolSizeSafe,
-                    remaining,
-                    runsLeft,
-                    pluralS: runsLeft === 1 ? "" : "s"
-                  });
-                }
-              }
-            }
-          } catch (_) { paceLine = ""; }
-
-          sub = seenLine;
-
-          const detailsLine = [paceLine].filter(Boolean).join(" ");
-
-          if (sub || phaseBadge) {
-            welcomeBackHtml = `
-              <div class="wt-landing-stats">
-                ${phaseBadge ? `<div class="wt-landing-stat__badge"><span class="wt-badge">${escapeHtml(phaseBadge)}</span></div>` : ``}
-                <div class="wt-landing-stat">
-                  ${sub ? `<div class="wt-landing-stat__title">${escapeHtml(sub)}</div>` : ``}
-                  ${detailsLine ? `<div class="wt-meta wt-landing-stat__sub">${escapeHtml(detailsLine)}</div>` : ``}
-                    <div class="wt-progress${progressClass}" aria-hidden="true">
-                    <div class="wt-progress__fill" data-pct="${pct}" style="width:${pct}%"></div>
-                  </div>
-                </div>
-              </div>
-            `;
-          }
-
+          title = phaseCtx.landingSummaryTemplate
+            ? fillTemplate(phaseCtx.landingSummaryTemplate || seenTpl, { seen, poolSize: poolSizeSafe, remaining, mistakes, mastered })
+            : fillTemplate(seenTpl, { seen, poolSize: poolSizeSafe });
+          sub = phaseCtx.landingDetailTemplate
+            ? fillTemplate(phaseCtx.landingDetailTemplate, { seen, poolSize: poolSizeSafe, remaining, mistakes, mastered })
+            : String(phaseCtx.landingDetail || "").trim();
         } else {
-          // Fail-closed: after completion, do not fall back to other labels/lines.
-          const phaseBadge = (mistakes > 0) ? phaseBadgeCorrection : phaseBadgeConsolidation;
-          title = (completeLabelTpl ? fillTemplate(completeLabelTpl, { poolSize: poolSizeSafe }) : "");
+          title = phaseCtx.landingSummaryTemplate
+            ? fillTemplate(phaseCtx.landingSummaryTemplate, { seen, poolSize: poolSizeSafe, remaining, mistakes, mastered })
+            : `${mastered}/${poolSizeSafe} traps mastered`;
+          sub = String(phaseCtx.landingDetail || "").trim();
+        }
 
-          const masteryLine = `${mastered}/${poolSizeSafe} traps mastered`;
-          const mistakesLine =
-            (mistakes > 0 && practiceAvailable && mistakesLabel && mistakesTpl)
-              ? `${mistakesLabel}: ${fillTemplate(mistakesTpl, { mistakes })}`
-              : "";
-
-          const displayLine = (mistakes > 0) ? mistakesLine : masteryLine;
-
-          if (title || displayLine || phaseBadge) {
-            welcomeBackHtml = `
-              <div class="wt-landing-stats">
-                ${phaseBadge ? `<div class="wt-landing-stat__badge"><span class="wt-badge">${escapeHtml(phaseBadge)}</span></div>` : ``}
-                <div class="wt-landing-stat">
-                  ${title ? `<div class="wt-landing-stat__title">${escapeHtml(title)}</div>` : ``}
-                  ${displayLine ? `<div class="wt-meta wt-landing-stat__sub">${escapeHtml(displayLine)}</div>` : ``}
-                  <div class="wt-progress${progressClass}" aria-hidden="true">
-                    <div class="wt-progress__fill" data-pct="${pct}" style="width:${pct}%"></div>
-                  </div>
+        if (title || sub || phaseCtx.badge) {
+          welcomeBackHtml = `
+            <div class="wt-landing-stats">
+              ${phaseCtx.badge ? `<div class="wt-landing-stat__badge"><span class="wt-badge">${escapeHtml(phaseCtx.badge)}</span></div>` : ``}
+              <div class="wt-landing-stat">
+                ${title ? `<div class="wt-landing-stat__title">${escapeHtml(title)}</div>` : ``}
+                ${sub ? `<div class="wt-meta wt-landing-stat__sub">${escapeHtml(sub)}</div>` : ``}
+                <div class="wt-progress${progressClass}" aria-hidden="true">
+                  <div class="wt-progress__fill" data-pct="${pct}" style="width:${pct}%"></div>
                 </div>
               </div>
-            `;
-          }
+            </div>
+          `;
         }
 
       }
@@ -6689,6 +6639,46 @@ ${(() => {
 
   };
 
+  function getRuleKnowledgePhaseContext(input) {
+    const w = input && input.w ? input.w : {};
+    const storage = input && input.storage ? input.storage : null;
+    const landing = w.landing || {};
+    const poolSize = clampInt(input?.poolSize, 0, 99999);
+    let seen = clampInt(input?.seen, 0, 99999);
+    let mistakes = clampInt(input?.mistakes, 0, 99999);
+
+    if (!seen && storage && typeof storage.getUniqueSeenCount === "function") {
+      try { seen = clampInt(storage.getUniqueSeenCount(), 0, 99999); } catch (_) { seen = 0; }
+    }
+    if (input?.mistakes == null && storage && typeof storage.getActiveMistakesCount === "function") {
+      try { mistakes = clampInt(storage.getActiveMistakesCount(), 0, 99999); } catch (_) { mistakes = 0; }
+    }
+
+    const isComplete = poolSize > 0 && seen >= poolSize;
+    const mastered = clampInt(poolSize - mistakes, 0, poolSize);
+    const key = !isComplete ? "discovery" : (mistakes > 0 ? "correction" : "consolidation");
+    const phaseW = (w.phaseJourney && typeof w.phaseJourney === "object") ? (w.phaseJourney[key] || {}) : {};
+    const fallbackBadge =
+      key === "discovery"
+        ? String(landing.statsPhaseBadgeDiscovery || "").trim()
+        : key === "correction"
+          ? String(landing.statsPhaseBadgeCorrection || "").trim()
+          : String(landing.statsPhaseBadgeConsolidation || "").trim();
+
+    return {
+      key,
+      seen,
+      mistakes,
+      mastered,
+      isComplete,
+      badge: String(phaseW.badge || fallbackBadge || "").trim(),
+      landingSummaryTemplate: String(phaseW.landingSummaryTemplate || "").trim(),
+      landingDetail: String(phaseW.landingDetail || "").trim(),
+      landingDetailTemplate: String(phaseW.landingDetailTemplate || "").trim(),
+      endLens: String(phaseW.endLens || "").trim(),
+      micropics: (phaseW.micropics && typeof phaseW.micropics === "object") ? phaseW.micropics : {}
+    };
+  }
 
 
   UI.prototype._renderEnd = function () {
@@ -6729,8 +6719,6 @@ ${(() => {
 
     const totalPresented = Array.isArray(this._runtime?.runItemIds) ? this._runtime.runItemIds.length : 0;
 
-    const bestStreakNum = clampInt(lastRun.bestStreak, 0, 9999);
-
     const poolSize = clampInt(cfg?.game?.poolSize, 0, 99999);
 
     let seen = null;
@@ -6745,7 +6733,6 @@ ${(() => {
       score: scoreFP,
       total: clampInt(totalPresented, 0, 99999),
       best: clampInt(lastRun.bestScoreFP, 0, 99999),
-      bestStreak: bestStreakNum,
 
       // UI choice: do not show FP unit on END (keep templates, remove unit)
       fpLong: "",
@@ -6966,7 +6953,14 @@ ${(() => {
       runVerdictKey = getRunVerdictKeyFromScore(cfg, scoreFP);
 
       runIdentityTpl = String(end?.identityByVerdict?.[runVerdictKey] || "").trim();
-      runLensTpl = String(end?.lensByVerdict?.[runVerdictKey] || "").trim();
+      const phaseCtx = getRuleKnowledgePhaseContext({
+        w,
+        storage: this.storage,
+        poolSize,
+        seen: totalPresented,
+        mistakes: vars.backlog
+      });
+      runLensTpl = String(phaseCtx.endLens || "").trim();
     }
 
     // Backlog (active mistakes): source of truth = StorageManager.getActiveMistakesCount()
@@ -7045,9 +7039,6 @@ ${(() => {
 
     // Always show the score (requested), never replace it.
     const displayScoreLine = scoreLine;
-
-    const bestStreakTpl = String(end.bestStreakLine || "").trim();
-    const bestStreakLine = (isRun && bestStreakTpl) ? fillTemplate(bestStreakTpl, vars) : "";
 
     const pbLineTpl = String(end.personalBestLine || "").trim();
     const nearBestTpl = String(end.nearBestLine || "").trim();
@@ -7295,12 +7286,12 @@ ${(() => {
 
     const endActionsClass = `wt-actions wt-actions--stack${isPractice ? " wt-actions--grid" : ""}`;
     const endHeaderRowHtml = `
-  <div class="wt-row wt-row--spaced">
-    <div style="min-width:0">
+  <div class="wt-row wt-row--spaced wt-end-header">
+    <div class="wt-end-header__brand">
       ${renderBrandingRow(cfg, true)}
     </div>
 
-    <div class="wt-row wt-row--tight" style="flex-shrink:0">
+    <div class="wt-row wt-row--tight wt-end-header__actions">
       ${homeBtnHtml}
 
       ${canShowChest ? `
@@ -7411,14 +7402,6 @@ ${(() => {
         const msg = fillTemplate(ffTpl, { count: String(clampInt(count, 0, 99999)) });
         if (msg) microLines.push(`<p class="wt-meta wt-truncate">${escapeHtml(msg)}</p>`);
       }
-    }
-
-    // Best streak (RUN-only): keep it in the same "scoreboard" block
-    const rawMin = Number(cfg?.routing?.bestStreakLineMin);
-    const bestStreakLineMin = (Number.isFinite(rawMin) && rawMin >= 1) ? Math.floor(rawMin) : null;
-
-    if (bestStreakLineMin != null && isRun && bestStreakNum >= bestStreakLineMin && bestStreakLine) {
-      microLines.push(`<p class="wt-meta wt-truncate">${escapeHtml(bestStreakLine)}</p>`);
     }
 
     // Record moment: if active, surface the celebration line explicitly.
@@ -7612,7 +7595,9 @@ ${(() => {
           const repeatLine = practiceRepeatNoteTpl ? fillTemplate(practiceRepeatNoteTpl, vars) : "";
           return [
             statsLine ? `<p class="wt-muted">${escapeHtml(statsLine)}</p>` : ``,
-            endLine ? `<p class="wt-meta">${escapeHtml(endLine)}</p>` : ``,
+            (clampInt(vars.remaining, 0, 99999) === 0 && String(practiceW.allFixedLine || "").trim())
+              ? `<p class="wt-meta">${escapeHtml(String(practiceW.allFixedLine || "").trim())}</p>`
+              : (endLine ? `<p class="wt-meta">${escapeHtml(endLine)}</p>` : ``),
             repeatLine ? `<p class="wt-muted">${escapeHtml(repeatLine)}</p>` : ``
           ].join("");
         }
@@ -7624,9 +7609,15 @@ ${(() => {
           ].join("");
         }
         if (isRun) {
+          const directToConsolidation =
+            !!(poolCompleteCelebration && clampInt(vars.backlog, 0, 99999) === 0);
+          const directToConsolidationLine = directToConsolidation
+            ? String(end.directToConsolidationLine || "").trim()
+            : "";
           return [
             runStatsLine ? `<p class="wt-muted">${escapeHtml(runStatsLine)}</p>` : ``,
             endLine ? `<p class="wt-meta">${escapeHtml(endLine)}</p>` : ``,
+            directToConsolidationLine ? `<p class="wt-meta">${escapeHtml(directToConsolidationLine)}</p>` : ``,
             runIdentityTpl ? `<p class="wt-meta">${escapeHtml(fillTemplate(runIdentityTpl, vars))}</p>` : ``,
             runLensTpl ? `<p class="wt-muted">${escapeHtml(fillTemplate(runLensTpl, vars))}</p>` : ``
           ].join("");
@@ -7634,7 +7625,7 @@ ${(() => {
         return endLine ? `<p class="wt-meta">${escapeHtml(endLine)}</p>` : ``;
       })()}
 
-    ${(isRun && runPoolCompleteLine2Tpl) ? `<p class="wt-meta">${escapeHtml(fillTemplate(runPoolCompleteLine2Tpl, vars))}</p>` : ``}
+    ${(isRun && runPoolCompleteLine2Tpl && !(poolCompleteCelebration && clampInt(vars.backlog, 0, 99999) === 0)) ? `<p class="wt-meta">${escapeHtml(fillTemplate(runPoolCompleteLine2Tpl, vars))}</p>` : ``}
 
   ${``}
 
@@ -7859,6 +7850,7 @@ ${(() => {
         .join("")
       : "";
 
+    const modeNow = String(this._runtime?.runMode || "RUN").trim();
     const chancesLabel = String(ui.chancesLabel || "").trim();
     const scoreLabel = String(ui.scoreLabel || "").trim();
 
@@ -7871,7 +7863,7 @@ ${(() => {
       ? fillTemplate(scoreAriaTpl, { scoreLabel, score: scoreFP, fpShort: "" }).replace(/\s+/g, " ").trim()
       : "";
 
-    // Personal best (HUD anchor): show only if explicitly enabled + Premium + best exists
+    // Personal best (HUD anchor): show for everyone if enabled and a best exists
     const bestLabel = String(ui?.bestScoreLabel || "").trim();
     const bestAriaTpl = String(ui?.bestScoreAriaTemplate || "").trim();
 
@@ -7879,11 +7871,17 @@ ${(() => {
     const pbEnabled = !!(pbCfg && pbCfg.enabled === true);
 
     let bestScoreFP = null;
-    if (pbEnabled && premium && this.storage && typeof this.storage.getPersonalBest === "function") {
+    if (pbEnabled && this.storage) {
       try {
-        const pb = this.storage.getPersonalBest() || null;
-        const b = Number(pb?.bestScoreFP);
-        if (Number.isFinite(b) && b > 0) bestScoreFP = Math.floor(b);
+        if (modeNow === "BONUS" && typeof this.storage.getBonusBest === "function") {
+          const bb = this.storage.getBonusBest() || null;
+          const b = Number(bb?.bestScoreFP);
+          if (Number.isFinite(b) && b > 0) bestScoreFP = Math.floor(b);
+        } else if (typeof this.storage.getPersonalBest === "function") {
+          const pb = this.storage.getPersonalBest() || null;
+          const b = Number(pb?.bestScoreFP);
+          if (Number.isFinite(b) && b > 0) bestScoreFP = Math.floor(b);
+        }
       } catch (_) { bestScoreFP = null; }
     }
 
@@ -7931,7 +7929,7 @@ ${(() => {
     // Copy visible => WT_WORDING.ui (pas WT_CONFIG)
     const scoreDeltaText = String(ui?.scoreGainedDeltaText || "").trim();
     const scoreDeltaHtml = (scoreFlashOn && scoreDeltaText)
-      ? `<span class="wt-pill__delta" aria-hidden="true">${escapeHtml(scoreDeltaText)}</span>`
+      ? `<span class="wt-pill__delta wt-pill__delta--score" aria-hidden="true">${escapeHtml(scoreDeltaText)}</span>`
       : "";
 
     const mistakeDeltaText = String(ui?.mistakeGainedDeltaText || "").trim();
@@ -7939,7 +7937,6 @@ ${(() => {
       ? `<span class="wt-pill__delta wt-pill__delta--minus" aria-hidden="true">${escapeHtml(mistakeDeltaText)}</span>`
       : "";
 
-    const modeNow = String(this._runtime?.runMode || "RUN").trim();
     const bonusBadge = String(this.wording?.secretBonus?.badge || "").trim();
 
     // At-best (RUN + premium): one-shot pulse when you REACH the best during PLAYING.

@@ -44,7 +44,7 @@
   window.WT_CONFIG = {
 
     // Product version (UI display, logs)
-    version: "2.5",
+    version: "2.6",
 
     // Storage schema version (localStorage).
     // Change ONLY if you accept a migration/wipe.
@@ -132,8 +132,6 @@
         legendary: 20
       },
 
-      // END: show best-streak line only if bestStreakNum >= this threshold.
-      bestStreakLineMin: 2
     },
 
     // Personal best (premium history)
@@ -151,7 +149,7 @@
     currency: "USD",
     earlyPriceCents: 499,
     standardPriceCents: 699,
-    earlyPriceWindowMs: 20 * 60 * 1000, // 20 minutes
+    earlyPriceWindowMs: 15 * 60 * 1000, // 15 minutes
     stripeEarlyPaymentUrl: "https://buy.stripe.com/14AaEX17VeVwaei7Ig2Nq04",
     stripeStandardPaymentUrl: "https://buy.stripe.com/7sY3cv8AnfZAgCG3s02Nq05",
     successRedirectUrl: "./success.html",
@@ -623,9 +621,8 @@
       statsSeenLabel: "Words seen",
 
       // Before completion (goal gradient) 
-      statsSeenSummaryTemplate: "Seen: {seen}/{poolSize} word traps",
-      statsPaceSummaryTemplate: "About {runsLeft} more game{pluralS} to see all {poolSize} traps.",
-      statsPhaseBadgeDiscovery: "Phase 1/3: Discovery",
+      statsSeenSummaryTemplate: "{seen}/{poolSize} word traps seen.",
+      statsPhaseBadgeDiscovery: "Phase 1/3: First pass",
       statsPhaseBadgeCorrection: "Phase 2/3: Fixing mistakes",
       statsPhaseBadgeConsolidation: "Phase 3/3: Locked in",
 
@@ -644,18 +641,28 @@
       postPaywallSbBody: "You still have High Focus mode to try. Tap the target."
     },
     firstRun: {
+      titleRun1: "How to play",
       titleRun2: "Quick reminder",
       titleRun3: "Last tip before you play",
-
-      framingLines: [
-        "This isn't about streaks.",
-        "It's about whether you're actually improving.",
-        "Explore 200 French-English word traps.",
+      run1Lines: [
+        "Correct answer: +1 point.",
+        "Wrong answer: +1 mistake.",
+        "After {maxChances} mistakes, the game ends.",
+        "Read carefully. Go with what you know.",
+        "Spot the traps. Think in French."
       ],
-
-      trustLines: [
-        "No ads. No tricks.",
-        "Spot the traps. Think in French.",
+      run2Lines: [
+        "Correct answer: +1 point.",
+        "Wrong answer: +1 mistake.",
+        "After {maxChances} mistakes, the game ends.",
+        "Read carefully.",
+        "Spot the traps. Think in French."
+      ],
+      run3Lines: [
+        "Game ends after {maxChances} mistakes.",
+        "Read carefully.",
+        "Go with what you know.",
+        "Spot the traps. Think in French."
       ],
 
       ctaLabel: "Play"
@@ -670,6 +677,54 @@
           "Keep going. This is where mastery starts."
         ],
         cta: "Next"
+      }
+    },
+
+    phaseJourney: {
+      discovery: {
+        badge: "Phase 1/3: First pass",
+        landingSummaryTemplate: "{seen}/{poolSize} word traps seen.",
+        landingDetailTemplate: "{remaining} traps left to see.",
+        endLens: "You're still on your first pass through the word traps.",
+        micropics: {
+          streakStart: "3 in a row. Good read.",
+          streakBuilding: "6 in a row. Good read.",
+          streakStrong: "10 in a row. Clear reads.",
+          streakElite: "15 in a row. You know these.",
+          streakLegendary: "20 in a row. Strong run.",
+          streakAgainTemplate: "{streak} again.",
+          recovery: "There you go."
+        }
+      },
+      correction: {
+        badge: "Phase 2/3: Fixing mistakes",
+        landingSummaryTemplate: "Mistakes left: {mistakes}",
+        landingDetail: "You've seen the full set. Now clear up the traps that still catch you.",
+        endLens: "You've seen the full set. Now clear up the traps that still catch you.",
+        micropics: {
+          streakStart: "3 in a row. Better.",
+          streakBuilding: "6 in a row. Clearing up.",
+          streakStrong: "10 in a row. Better now.",
+          streakElite: "15 in a row. Traps fading.",
+          streakLegendary: "20 in a row. Strong correction.",
+          streakAgainTemplate: "{streak} again.",
+          recovery: "Back on it."
+        }
+      },
+      consolidation: {
+        badge: "Phase 3/3: Locked in",
+        landingSummaryTemplate: "{mastered}/{poolSize} traps mastered.",
+        landingDetail: "You've cleared the mistakes. Now keep the traps clear.",
+        endLens: "You've cleared the mistakes. Now keep the traps clear.",
+        micropics: {
+          streakStart: "3 in a row. Still clear.",
+          streakBuilding: "6 in a row. Still clear.",
+          streakStrong: "10 in a row. Holding up.",
+          streakElite: "15 in a row. Very clear.",
+          streakLegendary: "20 in a row. Still clear.",
+          streakAgainTemplate: "{streak} again.",
+          recovery: "Back on it."
+        }
       }
     },
 
@@ -702,10 +757,11 @@
 
       // Start-of-run overlay (education)
       // Ligne unique, lien mental avec le HUD
-      startRunChancesOverlay: "Up to {maxChances} mistakes.",
+      startRunChancesOverlay: "Correct: +1 point.\nWrong: +1 mistake.\nGame ends after {maxChances} mistakes.",
+      startOverlayTapAnywhere: "Tap anywhere to start",
 
       // Chance state overlays (no \"-1\" text)
-      lastChanceOverlay: "One mistake left. Choose carefully.",
+      lastChanceOverlay: "One mistake left.",
       gameOverOverlay: "Game over.",
 
       // HUD deltas (PLAYING)
@@ -850,6 +906,7 @@
         firm: "That's progress.",
         direct: "You're making progress."
       },
+      allFixedLine: "You cleared them all.",
       endStatsLine: "You fixed {fixed}. You still have {remaining} left.",
 
       // Repeat guidance by tier (selected via WT_CONFIG.routing.practiceRepeatTiers)
@@ -867,7 +924,7 @@
       playingProgressLine: "{current}/{total}",
 
       // Start overlay (PRACTICE): explain the mode (2 lines shown via typeLine + msg)
-      startRunChancesOverlayPractice: "Mistakes mode focuses on your active mistakes.\nUp to 10 words per game.\nFix a word and it leaves the list.\nMake a mistake again, and it comes back.",
+      startRunChancesOverlayPractice: "Only words you missed.\nUp to 10 per game.\nFix one and it drops out. Miss it again and it comes back.",
       startOverlayTapAnywhere: "Tap anywhere to start",
       // Fallback CTA when no repeat tier is selected
       ctaPracticeAgain: "Practice again",
@@ -915,7 +972,7 @@
 
       // First time reaching the tier in this game
       streakStart: "3 in a row. You're seeing the traps.",
-      streakBuilding: "6 in a row. The pattern is starting to click.",
+      streakBuilding: "6 in a row. Good read.",
       streakStrong: "10 in a row. Sharp reading.",
       streakElite: "15 in a row. Very little gets past you now.",
       streakLegendary: "20 in a row. You read the traps before they land.",
@@ -966,15 +1023,6 @@
         legendary: ""
       },
 
-      lensByVerdict: {
-        none: "You have {backlog} traps to revisit. Fix your mistakes.",
-        start: "Good start. Try to reach 6+ in your next game.",
-        building: "{seen}/{poolSize} words seen. The pattern is becoming clearer.",
-        strong: "{seen}/{poolSize} words covered. You're reading these faster now.",
-        elite: "{seen}/{poolSize} words covered. More of this is becoming automatic.",
-        legendary: "{seen}/{poolSize} mastered. These traps rarely fool you now.",
-      },
-
       lensBonusPrimary: "You're ready for High Focus.",
 
 
@@ -989,7 +1037,6 @@
 
       // Explicit best sequence surfacing (RUN only)
       // Definition: longest sequence of consecutive correct answers within the run
-      bestStreakLine: "Best sequence: {bestStreak} correct answers in a row.",
       strongestTagLine: "Strongest category this game: {tag}.",
       weakestTagLine: "Most missed category this game: {tag}.",
 
@@ -1010,6 +1057,7 @@
       mistakesTitle: "You missed these traps",
       mistakesNone: "No mistakes.",
       mistakesToggle: "{count} mistakes",
+      directToConsolidationLine: "You finished the full set with no active mistakes, so you move straight to phase 3.",
 
       newBest: "NEW PERSONAL BEST",
       houseAdSummaryLabel: "Keep going with another game",
@@ -1029,10 +1077,10 @@
 
     paywall: {
       // Default headline
-      headline: "Think in French. Master all 200 traps.",
+      headline: "Unlock the full French word traps deck.",
 
       // LAST FREE RUN - stronger but factual
-      headlineLastFree: "You've started spotting the traps. Finish the set.",
+      headlineLastFree: "That was your last free game. Unlock all 200 French word traps and keep going.",
 
       // Projection personnalisée (PAYWALL only)
       // Vars: {seen} {poolSize} {remaining}
@@ -1044,23 +1092,24 @@
       trustTitle: "No surprises",
 
       valueBullets: [
-        "**The full set** of 200 hand-picked traps",
+        "**All 200 French word traps**",
         "**Explanations after every answer**",
         "**Mistakes Mode** to fix what you missed",
-        "**High Focus Mode** and unlimited reshuffled games"
+        "**High Focus Mode** and unlimited reshuffled games",
+        "A mix of easy, intermediate, and hard traps"
       ],
 
       // Shared bridge copy (LANDING post-paywall + END runs exhausted)
-      bridgeTitle: "Keep spotting the traps.",
-      bridgeBody: "Practice your mistakes, train your focus, and master all 200 French word traps.",
+      bridgeTitle: "Know these French word traps better.",
+      bridgeBody: "Unlock all 200 traps, fix what you missed, and keep playing with every mode open.",
 
       trustLine: "**One-time unlock**",
       trustBullets: [
-        "Lifetime access, no recurring fees",
-        "Works offline after first load",
-        "No subscription",
-        "No signup needed, ever",
-        "Secure payment through Stripe"
+        "**Pay once**, no recurring fees",
+        "**Works offline** after first load",
+        "**No subscription**",
+        "**No signup** needed",
+        "**Secure payment** through Stripe"
       ],
 
 
@@ -1068,8 +1117,8 @@
       // If all are empty, nothing is rendered.
       socialProofTitle: "What players say",
       socialProofQuotes: [
-        { quote: "Great for self-learning. The explanations after each answer make it even better.", author: "Babé, Educational Coordinator" },
-        { quote: "I kept confusing librairie and library. After a few rounds, it just clicked.", author: "Tom, preparing for life in France" }
+        { quote: "★★★★★\nGreat for self-learning. The explanations after each answer make it even better.", author: "Babé, Educational Coordinator" },
+        { quote: "★★★★★\nI kept confusing librairie and library. After a few rounds, it became much clearer.", author: "Tom, preparing for life in France" }
       ],
 
       // EARLY-only conversion bump (no fallback; shown only if template is provided)
