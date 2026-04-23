@@ -44,7 +44,7 @@
   window.WT_CONFIG = {
 
     // Product version (UI display, logs)
-    version: "2.6",
+    version: "2.8",
 
     // Storage schema version (localStorage).
     // Change ONLY if you accept a migration/wipe.
@@ -876,7 +876,7 @@
       // End toasts (BONUS ends by returning to END screen)
       // Keep existing (even if you later stop using the modal)
       modalTitle: "High Focus Mode",
-      modalBody: "You unlocked High Focus mode. It is faster and more demanding, using only words you've already seen. It tests speed and precision.",
+      modalBody: "High Focus Mode is faster and more demanding.\nIt uses only words you've already seen in regular games.\nTest your French word traps under pressure.",
       modalCta: "Play High Focus mode"
     },
 

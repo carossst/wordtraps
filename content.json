@@ -979,7 +979,7 @@
       "termFr": "physicien",
       "termEn": "physician",
       "correctAnswer": false,
-      "explanationShort": "physicien (FR) = a physicist, a scientist who studies physics.\nphysician (EN) = a medical doctor.\nBoth trace back to Greek 'physis' (nature), but one studies nature's laws and the other heals nature's body.",
+      "explanationShort": "physicien (FR) = a physicist, a scientist who studies physics.\nphysician (EN) = a medical doctor.\nSame root, different worlds: physics in French, medicine in English.",
       "tag": "false_friend"
     },
     {
