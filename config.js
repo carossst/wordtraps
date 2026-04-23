@@ -44,7 +44,7 @@
   window.WT_CONFIG = {
 
     // Product version (UI display, logs)
-    version: "2.8",
+    version: "2.9",
 
     // Storage schema version (localStorage).
     // Change ONLY if you accept a migration/wipe.
@@ -532,8 +532,8 @@
       loadingIcon: "🔤",
       loadingHint: "Preparing your French word challenge",
       loadingSlowHint: "Still loading... Check your connection if this takes too long.",
-      updateAvailable: "Update ready. Reload to apply it.",
-      updateNow: "Reload",
+      updateAvailable: "New version available.",
+      updateNow: "Refresh app",
 
       offlinePayment: "Payment requires an internet connection.",
       copied: "Copied",
@@ -798,6 +798,7 @@
 
       // BONUS new best label (END)
       newBest: "NEW BEST SCORE.",
+      celebrationPerfect: "PERFECT RUN",
 
       // END BONUS — cognitive mirror by accuracy tier
       // Contract: arrays MUST contain exactly 2 sentences each. No fallback in UI.
@@ -906,8 +907,11 @@
         firm: "That's progress.",
         direct: "You're making progress."
       },
-      allFixedLine: "You cleared them all.",
+      allFixedLine: "You closed it out.",
+      celebrationAllCleared: "STRONG FINISH",
+      endLineAllFixed: "You closed it out.",
       endStatsLine: "You fixed {fixed}. You still have {remaining} left.",
+      endStatsLineAllFixed: "You fixed {fixed}.",
 
       // Repeat guidance by tier (selected via WT_CONFIG.routing.practiceRepeatTiers)
       // Fail-closed: missing tier key => no note
@@ -918,7 +922,7 @@
         direct: "Stay in Mistakes mode. These are the ones that need the work."
       },
 
-      scoreLine: "{total} words reviewed.",
+      scoreLine: "{total} words reviewed",
 
       // PLAYING: calm progress line (replaces assertion in PRACTICE)
       playingProgressLine: "{current}/{total}",
@@ -1096,7 +1100,7 @@
         "**Explanations after every answer**",
         "**Mistakes Mode** to fix what you missed",
         "**High Focus Mode** and unlimited reshuffled games",
-        "A mix of easy, intermediate, and hard traps"
+        "**A mix of easy, intermediate, and hard traps**"
       ],
 
       // Shared bridge copy (LANDING post-paywall + END runs exhausted)
@@ -1280,7 +1284,8 @@ Think you'd get it right?
 
     installPrompt: {
       title: "Install Word Traps",
-      body: "Play instantly. Available offline after your first load. No browser tabs. On iPhone: Share > Add to Home Screen.",
+      body: "Play instantly.\nAvailable offline after your first load.\nNo browser tabs.",
+      bodyIOS: "This will not install automatically on iPhone.\nTap Share, then Add to Home Screen.",
       ctaPrimary: "Add to home screen",
       ctaSecondary: "Later"
     },
