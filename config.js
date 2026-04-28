@@ -44,7 +44,7 @@
   window.WT_CONFIG = {
 
     // Product version (UI display, logs)
-    version: "2.9",
+    version: "3.0",
 
     // Storage schema version (localStorage).
     // Change ONLY if you accept a migration/wipe.
@@ -1041,8 +1041,8 @@
 
       // Explicit best sequence surfacing (RUN only)
       // Definition: longest sequence of consecutive correct answers within the run
-      strongestTagLine: "Strongest category this game: {tag}.",
-      weakestTagLine: "Most missed category this game: {tag}.",
+      strongestTagLine: "Category you handled best: {tag}.",
+      weakestTagLine: "Category that gave you the most trouble: {tag}.",
 
       // False friends identified (RUN only)
       // Definition: distinct items with tag === "false_friend" and correctCount > 0
@@ -1076,7 +1076,7 @@
       // Post-completion routing (pool exhausted + mistakes)
       // Vars: {backlog}
       practiceCtaCountPremium: "Fix your {backlog} remaining mistakes",
-      shareTitle: "Share"
+      shareTitle: "Challenge a friend"
     },
 
     paywall: {
@@ -1255,8 +1255,8 @@ Thanks!`
 
 
     share: {
-      ctaLabel: "Copy text",
-      emailLabel: "Send email",
+      ctaLabel: "Copy challenge text",
+      emailLabel: "Email challenge",
       emailSubject: "Word Traps",
       previewLabel: "Preview message",
       toastCopied: "Copied.",
