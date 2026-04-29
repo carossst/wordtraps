@@ -5617,6 +5617,44 @@ void function () {
       this._runtime.lastChancePulseAt = 0;
     }
 
+    this._scheduleHudPulseCleanup();
+
+    if (chanceLost && Number.isFinite(nowChancesLeft)) {
+      try {
+        const root = this.appEl || document.getElementById("app");
+        const pill = root ? root.querySelector(".wt-pill--chances") : null;
+
+        if (pill) {
+          const uiW = (this.wording && this.wording.ui) ? this.wording.ui : {};
+          const label = String(uiW.mistakesLabel || "").trim();
+
+          const gs = (this.game && typeof this.game.getState === "function") ? (this.game.getState() || {}) : {};
+          const mcRaw = Number(gs.maxChances || this.config?.game?.maxChances);
+          const mc = (Number.isFinite(mcRaw) && mcRaw > 0) ? Math.floor(mcRaw) : 0;
+
+          const left = Math.max(0, Math.floor(Number(nowChancesLeft)));
+          const mistakes = (mc > 0) ? Math.max(0, Math.min(mc, mc - left)) : 0;
+
+          const visual = (mc > 0)
+            ? Array(mc)
+              .fill(null)
+              .map((_, i) => {
+                const isOn = i < mistakes;
+                const isLast = isOn && mistakes > 0 && i === (mistakes - 1);
+                return `<span class="wt-hud-lives__dot${isOn ? "" : " wt-hud-lives__dot--off"}${isLast ? " wt-hud-lives__dot--last" : ""}" aria-hidden="true"></span>`;
+              })
+              .join("")
+            : "";
+
+          pill.classList.remove("wt-pill--danger-pulse", "wt-pill--last-chance-pulse");
+          pill.setAttribute("aria-label", label ? `${label}: ${mistakes}/${mc}` : `${mistakes}/${mc}`);
+          pill.innerHTML = `
+            <span>${label ? `${escapeHtml(label)}: ` : ""}${mistakes}/${mc}</span>
+            ${visual ? `<span class="wt-hud-lives" aria-hidden="true">${visual}</span>` : ``}
+          `;
+        }
+      } catch (_) { /* silent */ }
+    }
 
     if (chanceLost && Number.isFinite(nowChancesLeft)) {
       showChanceLostToast(this.config, this.wording, nowChancesLeft);
@@ -5636,7 +5674,13 @@ void function () {
     }
 
     if (Number.isFinite(Number(res.itemId))) {
-      this._runtime.runItemIds.push(Number(res.itemId));
+      const id = Number(res.itemId);
+      this._runtime.runItemIds.push(id);
+
+      if (res.isCorrect !== true) {
+        if (!Array.isArray(this._runtime.runMistakeIds)) this._runtime.runMistakeIds = [];
+        if (this._runtime.runMistakeIds.indexOf(id) === -1) this._runtime.runMistakeIds.push(id);
+      }
     }
 
     // BONUS feedback policy already handled in UI.prototype.answer, but here we enforce the same "none/minimal".
@@ -7545,10 +7589,6 @@ ${(() => {
       microLines.push(`<p class="wt-meta wt-truncate">${escapeHtml(pbPremiumHint)}</p>`);
     }
 
-    // Runs left (FREE + RUN only) — keep existing copy
-    if (isRun && !premium && freeRunMessage) {
-      microLines.push(String(freeRunMessage || ""));
-    }
     // END "table" layout (mobile-safe) — no icons, no new copy, keeps existing lines/CTA intact
     const microLinesHtml = microLines.length
       ? `
@@ -7743,7 +7783,8 @@ ${(() => {
             runStatsLine ? `<p class="wt-muted">${escapeHtml(runStatsLine)}</p>` : ``,
             endLine ? `<p class="wt-meta">${escapeHtml(endLine)}</p>` : ``,
             directToConsolidationLine ? `<p class="wt-meta">${escapeHtml(directToConsolidationLine)}</p>` : ``,
-            runIdentityTpl ? `<p class="wt-meta">${escapeHtml(fillTemplate(runIdentityTpl, vars))}</p>` : ``
+            runIdentityTpl ? `<p class="wt-meta">${escapeHtml(fillTemplate(runIdentityTpl, vars))}</p>` : ``,
+            (!premium && freeRunMessage) ? `<p class="wt-muted">${escapeHtml(freeRunMessage)}</p>` : ``
           ].join("");
         }
         return endLine ? `<p class="wt-meta">${escapeHtml(endLine)}</p>` : ``;

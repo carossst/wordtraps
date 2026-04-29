@@ -44,7 +44,7 @@
   window.WT_CONFIG = {
 
     // Product version (UI display, logs)
-    version: "3.0",
+    version: "3.4",
 
     // Storage schema version (localStorage).
     // Change ONLY if you accept a migration/wipe.
@@ -609,7 +609,7 @@
       tagline: "**Think you know French? Prove it.**",
       subtitle: "Faux amis or true friends?\n200 French-English words to train your brain.",
       microFun: "No signup · Quick games · Free to try",
-      microTrust: "Spot the traps. Think in French.",
+      microTrust: "A few quick rounds show which words you really know.",
 
       runsLabel: "",
       runsFreeMode: "",
@@ -645,10 +645,10 @@
       titleRun2: "Quick reminder",
       titleRun3: "Last tip before you play",
       run1Lines: [
+        "You'll see French word traps one by one.\nDecide whether each one is true or false.",
         "Correct answer: +1 point.",
         "Wrong answer: +1 mistake.",
         "After {maxChances} mistakes, the game ends.",
-        "Read carefully. Go with what you know.",
         "Spot the traps. Think in French."
       ],
       run2Lines: [
@@ -683,9 +683,9 @@
     phaseJourney: {
       discovery: {
         badge: "Phase 1/3: First pass",
-        landingSummaryTemplate: "{seen}/{poolSize} word traps seen.",
-        landingDetailTemplate: "{remaining} traps left to see.",
-        endLens: "You're still on your first pass through the word traps.",
+        landingSummaryTemplate: "{seen}/{poolSize} traps played.",
+        landingDetailTemplate: "{remaining} still to go in your first pass.",
+        endLens: "You're still on your first pass. Right now the goal is to cover more of the set.",
         micropics: {
           streakStart: "3 in a row. Good read.",
           streakBuilding: "6 in a row. Good read.",
@@ -789,6 +789,7 @@
 
       // END screen (BONUS)
       endTitle: "",
+      scoreLine: "Score: {score}",
       endStatsLine: "You got {cleared} out of {shown} right.",
       endStatsLineOne: "You got {cleared} out of {shown} right.",
       endDeckSizeLine: "High Focus pool: {count} words.",
@@ -1121,8 +1122,8 @@
       // If all are empty, nothing is rendered.
       socialProofTitle: "What players say",
       socialProofQuotes: [
-        { quote: "★★★★★\nGreat for self-learning. The explanations after each answer make it even better.", author: "Babé, Educational Coordinator" },
-        { quote: "★★★★★\nI kept confusing librairie and library. After a few rounds, it became much clearer.", author: "Tom, preparing for life in France" }
+        { quote: "★★★★★\nI thought my French was stronger than it was. This showed me exactly where I was still guessing.", author: "Babé, Educational Coordinator" },
+        { quote: "★★★★★\nA few rounds in, I could already tell which words I kept misreading.", author: "Tom, preparing for life in France" }
       ],
 
       // EARLY-only conversion bump (no fallback; shown only if template is provided)
