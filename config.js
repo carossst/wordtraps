@@ -796,6 +796,9 @@
       endDeckSizeLineOne: "High Focus pool: 1 word.",
       endPoolProgressTemplate: "{cleared} out of {shown} correct this round.",
       endDeckExhaustedToast: "All words available played.",
+      mistakesTitle: "Words to revisit",
+      mistakesToggle: "{count} mistakes",
+      mistakesNone: "No mistakes.",
 
       // BONUS new best label (END)
       newBest: "NEW BEST SCORE.",
@@ -900,7 +903,7 @@
 
       // END screen (PRACTICE)
       endTitle: "",
-      endLine: "Good recovery.",
+      endLine: "Keep going.",
       // Tier-aware override (keyed on practiceRepeatTierKey). Fallback: endLine.
       endLineByTier: {
         last: "Nice recovery.",
@@ -1085,7 +1088,7 @@
       headline: "Unlock the full French word traps deck.",
 
       // LAST FREE RUN - stronger but factual
-      headlineLastFree: "That was your last free game. Unlock all 200 French word traps and keep going.",
+      headlineLastFree: "That was your last free game. Keep going with full access.",
 
       // Projection personnalisée (PAYWALL only)
       // Vars: {seen} {poolSize} {remaining}
@@ -1122,7 +1125,7 @@
       // If all are empty, nothing is rendered.
       socialProofTitle: "What players say",
       socialProofQuotes: [
-        { quote: "★★★★★\nI thought my French was stronger than it was. This showed me exactly where I was still guessing.", author: "Babé, Educational Coordinator" },
+        { quote: "★★★★★\nI thought my French was stronger than it was. This showed me exactly where I was still guessing, and the explanations are really clear.", author: "Babé, Educational Coordinator" },
         { quote: "★★★★★\nA few rounds in, I could already tell which words I kept misreading.", author: "Tom, preparing for life in France" }
       ],
 
