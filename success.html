@@ -35,15 +35,15 @@
 
         <!-- Header (landing-like branding) -->
         <div class="wt-card wt-card--hero">
-          <div class="wt-row wt-row--spaced" style="align-items:center; gap:var(--gap-2)">
+          <div class="wt-row wt-row--spaced wt-success-hero-row">
             <a class="wt-branding" href="./index.html" id="wt-success-branding" aria-label="Word Traps home">
-              <img id="wt-success-logo" src="" alt="" class="wt-branding-logo" style="display:none" />
+              <img id="wt-success-logo" src="" alt="" class="wt-branding-logo wt-hidden" />
               <span id="wt-success-name" class="wt-branding-name"></span>
             </a>
             <div class="wt-badge">THIS DEVICE</div>
           </div>
 
-          <div style="margin-top:var(--space-10)">
+          <div class="wt-success-hero-copy">
             <h1 class="wt-h1" data-wt-wording="success.title"></h1>
             <p class="wt-sub" data-wt-wording="success.subtitle"></p>
           </div>
@@ -59,19 +59,18 @@
             </button>
           </div>
 
-          <div class="wt-code" id="code" style="margin-top:var(--gap-2)">WT-XXXX-XXXX</div>
+          <div class="wt-code wt-success-code" id="code">WT-XXXX-XXXX</div>
 
-          <div id="copy-status" class="wt-live wt-hidden" role="status" aria-live="polite"
-            style="margin-top:var(--space-10)">
+          <div id="copy-status" class="wt-live wt-hidden wt-success-status" role="status" aria-live="polite">
           </div>
 
           <div class="wt-divider"></div>
 
-          <p class="wt-muted" style="margin-top:0">
+          <p class="wt-muted wt-success-note--tight">
             <span data-wt-wording="success.txtSaveLine"></span>
             <span data-wt-wording="success.txtNoRecoverLine"></span>
           </p>
-          <p class="wt-muted" style="margin-top:var(--space-6)" data-wt-wording="success.clearDataWarning"></p>
+          <p class="wt-muted wt-success-note--follow" data-wt-wording="success.clearDataWarning"></p>
         </div>
 
         <!-- How to activate -->
@@ -102,13 +101,13 @@
         <!-- Cheat Sheet order bump (serverless trust-by-design via Kit) -->
         <div class="wt-card" id="cheatsheet-card">
           <div class="wt-meta"><strong data-wt-wording="success.cheatSheetTitle"></strong></div>
-          <p class="wt-muted" style="margin-top:var(--space-10)" data-wt-wording="success.cheatSheetBody"></p>
-          <div id="cheatsheet-ck" style="margin-top:var(--gap-2)"></div>
-          <p id="cheatsheet-link-wrap" class="wt-hidden" style="margin-top:var(--space-10)">
+          <p class="wt-muted wt-success-cheatsheet-body" data-wt-wording="success.cheatSheetBody"></p>
+          <div id="cheatsheet-ck" class="wt-success-cheatsheet-mount"></div>
+          <p id="cheatsheet-link-wrap" class="wt-hidden wt-success-cheatsheet-link-wrap">
             <a id="cheatsheet-link" class="wt-btn wt-btn--secondary" href="#" target="_blank" rel="noopener"
               data-wt-wording="success.cheatSheetLinkCta"></a>
           </p>
-          <p class="wt-muted" style="margin-top:var(--space-10); font-size:var(--fs-xs)">
+          <p class="wt-muted wt-success-legal">
             Optional: enter your email to receive this bonus content. The form is handled by our email provider. See our
             <a href="./privacy.html" target="_blank" rel="noopener noreferrer">Privacy Policy</a>.
           </p>
@@ -160,11 +159,11 @@
 
 
         <!-- Footer note -->
-        <p class="wt-muted" style="text-align:center; margin-top:var(--gap-3)" data-wt-wording="success.thankYouLine">
+        <p class="wt-muted wt-success-center-note" data-wt-wording="success.thankYouLine">
         </p>
 
         <!-- Support (single source of truth via WT_Email / WT_CONFIG.support) -->
-        <p class="wt-muted" style="text-align:center; margin-top:var(--gap-2); font-size:var(--fs-xs)">
+        <p class="wt-muted wt-success-support">
           <span data-wt-wording="success.supportLabel"></span>
           <a href="#" id="wt-success-support-link">Contact us</a>
         </p>
@@ -458,7 +457,7 @@
 
           // Fail-closed: no logo => hide the <img> to avoid broken icon.
           if (!logoUrl) {
-            img.style.display = "none";
+            img.classList.add("wt-hidden");
             img.removeAttribute("src");
             img.setAttribute("alt", "");
             return;
@@ -466,7 +465,7 @@
 
           img.src = logoUrl;
           img.setAttribute("alt", appName || "");
-          img.style.display = "";
+          img.classList.remove("wt-hidden");
         } catch (_) { }
       }
 

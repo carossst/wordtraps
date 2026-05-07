@@ -19,8 +19,20 @@ const SW_VERSION = (() => {
   }
 })();
 
-const CACHE_PREFIX = "wt";
-const CACHE_NAME = SW_VERSION ? `${CACHE_PREFIX}-cache-${SW_VERSION}` : "";
+const APP_SCOPE = (() => {
+  try {
+    const v = new URL(self.location.href).searchParams.get("app");
+    if (typeof v !== "string" || !v.trim()) return "";
+    const s = v.trim();
+    if (!/^[a-zA-Z0-9._-]{1,64}$/.test(s)) return "";
+    return s;
+  } catch (_) {
+    return "";
+  }
+})();
+
+const CACHE_PREFIX = APP_SCOPE ? `wt-${APP_SCOPE}` : "";
+const CACHE_NAME = (SW_VERSION && CACHE_PREFIX) ? `${CACHE_PREFIX}-cache-${SW_VERSION}` : "";
 
 // 8.1 Assets to cache (spec section 8.1)
 const ASSETS_TO_CACHE = [
@@ -240,5 +252,3 @@ self.addEventListener("fetch", (event) => {
     })()
   );
 });
-
-// No message-based skipWaiting: SW activates via install skipWaiting().

@@ -48,7 +48,7 @@
 
     // Storage schema version (localStorage).
     // Change ONLY if you accept a migration/wipe.
-    storageSchemaVersion: "2.0.0",
+    storageSchemaVersion: "3.0.0",
 
     // Le cache du Service Worker dérive exclusivement de WT_CONFIG.version via ?v=
     // (source unique de vérité pour le cache)
@@ -94,6 +94,28 @@
     // ============================================
     limits: {
       freeRuns: 2
+    },
+
+    // Progression levels
+    // - No default badge before phase 1 is completed
+    // - Levels are permanent once unlocked
+    // - Unlocks are phase-gated:
+    //   L1: full first pass complete
+    //   L2: all active mistakes cleared
+    //   L3: L2 + High Focus deck >= level3MinSeen + High Focus run >= level3MinAccuracy
+    //   L4: L3 + High Focus deck >= level4MinSeen + High Focus run >= level4MinAccuracy
+    // - Preview is UI-only and fail-closed:
+    //   ?levelPreview=none|level1|level2|level3|level4|unlock1|unlock2|unlock3|unlock4
+    levels: {
+      enabled: true,
+      level3MinSeen: 16,
+      level3MinAccuracy: 0.70,
+      level4MinSeen: 50,
+      level4MinAccuracy: 0.85,
+      preview: {
+        enabled: true,
+        queryParam: "levelPreview"
+      }
     },
 
     // Practice mode (Mistakes only)
@@ -633,12 +655,12 @@
       statsMasterySummaryTemplate: "{mastered}/{poolSize} traps mastered",
 
       postPaywallTitle: "Free games completed. Ready for more?",
-      postPaywallBody: "Unlock unlimited games anytime and keep your progress on this device.",
+      postPaywallBody: "Unlock all 200 traps, unlimited play, Mistakes Mode, and High Focus Mode on this device.",
       practiceCtaTemplate: "Fix your {count} mistake{pluralS}",
       postPaywallCta: "Unlock full access",
 
       postPaywallSbTitle: "Before you decide...",
-      postPaywallSbBody: "You still have High Focus mode to try. Tap the target."
+      postPaywallSbBody: "High Focus Mode is also available from the target icon."
     },
     firstRun: {
       titleRun1: "How to play",
@@ -728,6 +750,43 @@
       }
     },
 
+    levels: {
+      modalTitle: "Levels",
+      placeholder: "",
+      openDetailsAria: "Open level details",
+      unlockKicker: "New level",
+      reachedTemplate: "You reached {label}.",
+      currentLabel: "Current",
+      unlockedByLabel: "",
+      nextLabel: "Next",
+      reachItLabel: "",
+      progressionLabel: "Path",
+      noLevelTitle: "Locked",
+      noLevelBody: "Finish your first full pass.",
+      maxLevelBody: "You reached the top level.",
+      currentPill: "Current",
+      unlockedPill: "Unlocked",
+      lockedPill: "Locked",
+      byLevel: {
+        1: {
+          label: "SHARP LEARNER",
+          unlock: "Finish your first full pass."
+        },
+        2: {
+          label: "CONVERSATIONAL-LEVEL",
+          unlock: "Clear all active mistakes."
+        },
+        3: {
+          label: "FLUENT-LEVEL",
+          unlock: "Build a High Focus deck of 16+ and post a 70%+ run."
+        },
+        4: {
+          label: "NATIVE-LEVEL",
+          unlock: "Build a High Focus deck of 50+ and post an 85%+ run."
+        }
+      }
+    },
+
     ui: {
       chancesLabel: "Chances",
       mistakesLabel: "Mistakes",
@@ -753,7 +812,7 @@
       startRunTypeFree: "Your first free game",
       startRunTypeLastFree: "Last free game. Make it count",
       startRunTypeUnlimited: "",
-      startRunTypePractice: "Mistakes mode",
+      startRunTypePractice: "Mistakes Mode",
 
       // Start-of-run overlay (education)
       // Ligne unique, lien mental avec le HUD
@@ -803,6 +862,12 @@
       // BONUS new best label (END)
       newBest: "NEW BEST SCORE.",
       celebrationPerfect: "PERFECT RUN",
+      labelByTier: {
+        perfect: "INSTANT READ",
+        high: "SHARP FOCUS",
+        medium: "GETTING QUICKER",
+        low: "PACE CHECK"
+      },
 
       // END BONUS — cognitive mirror by accuracy tier
       // Contract: arrays MUST contain exactly 2 sentences each. No fallback in UI.
@@ -876,7 +941,7 @@
       questionPrompt: "Same meaning in French and English?",
       dangerLineLabel: "TIMEOUT LINE",
       dangerLineAria: "Timeout line. If the card reaches this line, the item is lost.",
-      seenOnlyLine: "{count} words in your High Focus deck. Only words you've already seen in regular games.",
+      seenOnlyLine: "{count} seen words in your High Focus deck.",
 
       // End toasts (BONUS ends by returning to END screen)
       // Keep existing (even if you later stop using the modal)
@@ -887,7 +952,7 @@
 
 
     practice: {
-      title: "Mistakes mode",
+      title: "Mistakes Mode",
       on: "On",
       off: "Off",
 
@@ -896,8 +961,8 @@
       valueLine: "Focus on the words that still trip you up.",
       descUnlocked: "Only items you previously got wrong.",
 
-      freeLimitReachedTitle: "End of Free Games.",
-      freeLimitReachedBody: "You've used your {limit} free mistakes games.\n\nFull access unlocks unlimited Mistakes mode. Keep fixing your mistakes without limits.",
+      freeLimitReachedTitle: "That helped.",
+      freeLimitReachedBody: "You've used your {limit} free mistakes games.\n\nFull access unlocks unlimited Mistakes Mode.\nKeep fixing what you missed.\nNo limits.",
       freeLimitReachedCta: "Keep playing",
       freeLimitReachedClose: "Not now",
 
@@ -913,6 +978,12 @@
       },
       allFixedLine: "You closed it out.",
       celebrationAllCleared: "STRONG FINISH",
+      labelByTier: {
+        last: "LAST TRAP",
+        light: "GOOD RECOVERY",
+        firm: "BACK ON TRACK",
+        direct: "STAY WITH IT"
+      },
       endLineAllFixed: "You closed it out.",
       endStatsLine: "You fixed {fixed}. You still have {remaining} left.",
       endStatsLineAllFixed: "You fixed {fixed}.",
@@ -932,7 +1003,7 @@
       playingProgressLine: "{current}/{total}",
 
       // Start overlay (PRACTICE): explain the mode (2 lines shown via typeLine + msg)
-      startRunChancesOverlayPractice: "Only words you missed.\nUp to 10 per game.\nFix one and it drops out. Miss it again and it comes back.",
+      startRunChancesOverlayPractice: "Only words you missed.\nUp to 10 per game.\nFix it and it drops out. Miss it and it comes back.",
       startOverlayTapAnywhere: "Tap anywhere to start",
       // Fallback CTA when no repeat tier is selected
       ctaPracticeAgain: "Practice again",
@@ -1009,7 +1080,7 @@
       poolCompleteCtaPractice: "Fix your mistakes",
 
       freeLimitReachedTitle: "Nice game.",
-      freeLimitReachedBody: "You've used your {limit} free games.\n\nFull access unlocks unlimited normal games. Keep training without limits.",
+      freeLimitReachedBody: "You've used your {limit} free games.\n\nFull access unlocks all 200 traps, unlimited play, Mistakes Mode, and High Focus Mode on this device.",
       freeLimitReachedCta: "Keep playing",
       freeLimitReachedClose: "Not now",
 
@@ -1029,6 +1100,14 @@
         strong: "",
         elite: "",
         legendary: ""
+      },
+      labelByVerdict: {
+        none: "FALSE START",
+        start: "FIRST PASS",
+        building: "GETTING THE FEEL",
+        strong: "SHARPER READS",
+        elite: "TRAP SPOTTER",
+        legendary: "LOCKED IN"
       },
 
       lensBonusPrimary: "You're ready for High Focus.",
@@ -1126,7 +1205,7 @@
       socialProofTitle: "What players say",
       socialProofQuotes: [
         { quote: "★★★★★\nI thought my French was stronger than it was. This showed me exactly where I was still guessing, and the explanations are really clear.", author: "Babé, Educational Coordinator" },
-        { quote: "★★★★★\nA few rounds in, I could already tell which words I kept misreading.", author: "Tom, preparing for life in France" }
+        { quote: "★★★★★\nA few rounds in, I wanted the full set before I built any more bad habits.", author: "Tom, preparing for life in France" }
       ],
 
       // EARLY-only conversion bump (no fallback; shown only if template is provided)

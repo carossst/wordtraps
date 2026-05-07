@@ -1067,12 +1067,13 @@ void function () {
     const bonusLine3 = String(wording?.secretBonus?.startOverlayLine3 || "").trim();
     const bonusLimitLine = String(extra?.bonusLimitLine || "").trim();
     const bonusTapHint = String(wording?.secretBonus?.startOverlayTapAnywhere || "").trim();
+    const messageLines = msg.split("\n").map((line) => String(line || "").trim()).filter(Boolean);
     const bonusLines = [
       bonusLine1,
       bonusLine2,
       bonusLine3,
       bonusLimitLine,
-      ...msg.split("\n").filter(Boolean),
+      ...messageLines,
       bonusTapHint
     ].filter(Boolean);
 
@@ -1084,13 +1085,13 @@ void function () {
       <div class="wt-chance-overlay__content">
         <span class="wt-chance-overlay__text">
           ${isBonus
-        ? bonusLines.map(l => `<span>${escapeHtml(l)}</span>`).join("<br>")
+        ? bonusLines.map((line, index) => `<span${index === 0 ? ` class="wt-chance-overlay__title"` : ``}>${escapeHtml(line)}</span>`).join("<br>")
         : `
-                ${typeLine ? `<span>${escapeHtml(typeLine)}</span><br>` : ``}
+                ${typeLine ? `<span class="wt-chance-overlay__title">${escapeHtml(typeLine)}</span><br>` : ``}
                 ${goalLine1 ? `<span class="wt-muted">${escapeHtml(goalLine1)}</span><br>` : ``}
                 ${goalLine2 ? `<span class="wt-muted">${escapeHtml(goalLine2)}</span><br>` : ``}
-             ${msg.split("\n").filter(Boolean).map(l => `<span>${escapeHtml(l)}</span>`).join("<br>")}
-                ${practiceTapHint ? `<br><span>${escapeHtml(practiceTapHint)}</span>` : ``}
+             ${messageLines.map((line, index) => `<span${isPractice && index === 0 ? ` class="wt-chance-overlay__lead"` : ``}>${escapeHtml(line)}</span>`).join("<br>")}
+                ${practiceTapHint ? `<br><span class="wt-chance-overlay__hint">${escapeHtml(practiceTapHint)}</span>` : ``}
               `
       }
         </span>
@@ -1365,6 +1366,10 @@ void function () {
           self.closeModal();
           break;
 
+        case "open-level-progress":
+          self.openLevelProgressModal();
+          break;
+
         case "enter-secret-bonus":
           self.closeModal();
           if (self._runtime) self._runtime.secretBonusPending = false;
@@ -1421,6 +1426,11 @@ void function () {
 
 
         case "start-practice":
+          if (self.state === STATES.LANDING) {
+            if (self.storage && typeof self.storage.markLandingPracticeClicked === "function") {
+              self.storage.markLandingPracticeClicked();
+            }
+          }
           self.closeModal();
           self.startRun(true);
           break;
@@ -1654,7 +1664,6 @@ void function () {
           self.applyUpdateToast();
           break;
 
-        case "dismiss-house-ad": // legacy alias
         case "remind-house-ad":
           self.remindHouseAdLater();
           break;
@@ -1929,7 +1938,7 @@ void function () {
 
           if (self._runtime) self._runtime.secretBonusPending = true;
           const html = `
-              <p style="white-space:pre-line">${escapeHtml(body)}</p>
+              <p class="wt-text-preline">${escapeHtml(body)}</p>
               <div class="wt-actions">
                 <button class="wt-btn wt-btn--primary" data-action="enter-secret-bonus">${escapeHtml(cta)}</button>
                 ${notNow ? `<button class="wt-btn wt-btn--secondary" data-action="close-modal">${escapeHtml(notNow)}</button>` : ``}
@@ -2229,6 +2238,13 @@ void function () {
     if (prev === STATES.LANDING && next !== STATES.LANDING && next !== STATES.PAYWALL) {
       this._stopPaywallTicker();
     }
+    if (prev === STATES.LANDING && next !== STATES.LANDING) {
+      const enteredAt = Number(this._runtime?.landingEnteredAt || 0);
+      if (enteredAt > 0 && this.storage && typeof this.storage.recordLandingTime === "function") {
+        try { this.storage.recordLandingTime(Date.now() - enteredAt); } catch (_) { /* silent */ }
+      }
+      if (this._runtime) this._runtime.landingEnteredAt = 0;
+    }
 
     // Remember where PAYWALL was opened from (for "Not now" routing)
     if (next === STATES.PAYWALL && prev !== STATES.PAYWALL) {
@@ -2268,6 +2284,9 @@ void function () {
 
     // Entering LANDING: show the EARLY timer only if the window is active (after PAYWALL)
     if (next === STATES.LANDING && prev !== STATES.LANDING) {
+      if (this._runtime) {
+        this._runtime.landingEnteredAt = Date.now();
+      }
       let ep = null;
       if (this.storage && typeof this.storage.getEarlyPriceState === "function") {
         try { ep = this.storage.getEarlyPriceState() || null; } catch (_) { ep = null; }
@@ -2596,7 +2615,7 @@ void function () {
 
       premiumHtml = `
         <div class="wt-divider"></div>
-        <div class="wt-actions" style="gap:8px">
+        <div class="wt-actions wt-actions--compact">
           ${redeemLabel ? `<button class="wt-btn wt-btn--ghost" data-action="redeem-code">${escapeHtml(redeemLabel)}</button>` : ``}
           ${upgradeCta ? `<button class="wt-btn wt-btn--ghost" data-action="open-paywall">${escapeHtml(upgradeCta)}</button>` : ``}
         </div>
@@ -2609,18 +2628,120 @@ void function () {
 
 <div class="wt-divider"></div>
 
-      <p class="wt-question-title" style="margin:0 0 8px 0;">
-        ${escapeHtml(String(how.ruleTitle || "").trim())}
-      </p>
-      <p class="wt-muted" style="margin:0;">
-        ${escapeHtml(fillTemplate(String(how.ruleSentence || "").trim(), vars))}
-      </p>
+      <div class="wt-stack wt-stack--sm">
+        <p class="wt-question-title">
+          ${escapeHtml(String(how.ruleTitle || "").trim())}
+        </p>
+        <p class="wt-muted">
+          ${escapeHtml(fillTemplate(String(how.ruleSentence || "").trim(), vars))}
+        </p>
+      </div>
 
       ${premiumHtml}
     `;
 
 
     this.openModal(html, String(how.title || "").trim());
+  };
+
+  UI.prototype.openLevelProgressModal = function () {
+    const w = this.wording || {};
+    const cfg = this.config || {};
+    const levelsW = (w.levels && typeof w.levels === "object") ? w.levels : {};
+    const model = getWordTrapsLevelModel(this.storage, cfg, w);
+    const currentLevel = clampInt(model.state?.currentLevel, 0, 4);
+    const current = model.current;
+    const next = model.next;
+
+    const currentLabel = String(levelsW.currentLabel || "").trim();
+    const unlockedByLabel = String(levelsW.unlockedByLabel || "").trim();
+    const nextLabel = String(levelsW.nextLabel || "").trim();
+    const reachItLabel = String(levelsW.reachItLabel || "").trim();
+    const progressionLabel = String(levelsW.progressionLabel || "").trim();
+    const noLevelTitle = String(levelsW.noLevelTitle || "").trim();
+    const noLevelBody = String(levelsW.noLevelBody || "").trim();
+    const maxLevelBody = String(levelsW.maxLevelBody || "").trim();
+    const currentPill = String(levelsW.currentPill || "").trim();
+    const unlockedPill = String(levelsW.unlockedPill || "").trim();
+    const lockedPill = String(levelsW.lockedPill || "").trim();
+
+    const currentBlockHtml = (() => {
+      if (!current) {
+        return `
+          <div class="wt-level-sheet__section">
+            ${noLevelTitle ? `<p class="wt-level-sheet__eyebrow">${escapeHtml(noLevelTitle)}</p>` : ``}
+            ${noLevelBody ? `<p class="wt-level-sheet__body">${escapeHtml(noLevelBody)}</p>` : ``}
+          </div>
+        `;
+      }
+
+      return `
+        <div class="wt-level-sheet__section">
+          ${currentLabel ? `<p class="wt-level-sheet__eyebrow">${escapeHtml(currentLabel)}</p>` : ``}
+          <div class="wt-level-chip wt-level-chip--static">
+            <span class="wt-level-chip__dot" aria-hidden="true"></span>
+            <span>${escapeHtml(current.label)}</span>
+          </div>
+          ${unlockedByLabel ? `<p class="wt-level-sheet__eyebrow wt-level-sheet__eyebrow--tight">${escapeHtml(unlockedByLabel)}</p>` : ``}
+          ${current.unlock ? `<p class="wt-level-sheet__body">${escapeHtml(current.unlock)}</p>` : ``}
+        </div>
+      `;
+    })();
+
+    const nextBlockHtml = (() => {
+      if (currentLevel >= 4) {
+        return `
+          <div class="wt-level-sheet__section wt-level-sheet__section--soft">
+            ${maxLevelBody ? `<p class="wt-level-sheet__body">${escapeHtml(maxLevelBody)}</p>` : ``}
+          </div>
+        `;
+      }
+      if (!next) return ``;
+
+      return `
+        <div class="wt-level-sheet__section wt-level-sheet__section--soft">
+          ${nextLabel ? `<p class="wt-level-sheet__eyebrow">${escapeHtml(nextLabel)}</p>` : ``}
+          <div class="wt-level-chip wt-level-chip--static wt-level-chip--muted">
+            <span class="wt-level-chip__dot" aria-hidden="true"></span>
+            <span>${escapeHtml(next.label)}</span>
+          </div>
+          ${reachItLabel ? `<p class="wt-level-sheet__eyebrow wt-level-sheet__eyebrow--tight">${escapeHtml(reachItLabel)}</p>` : ``}
+          <p class="wt-level-sheet__body">${escapeHtml(next.unlock || "")}</p>
+        </div>
+      `;
+    })();
+
+    const progressionHtml = model.defs.map((item) => {
+      const pill = item.current ? currentPill : (item.unlocked ? unlockedPill : lockedPill);
+      const stateClass = item.current ? " wt-level-strip__item--current" : (item.unlocked ? " wt-level-strip__item--done" : "");
+      return `
+        <li class="wt-level-strip__item${stateClass}">
+          <div class="wt-level-strip__main">
+            <span class="wt-level-strip__dot" aria-hidden="true"></span>
+            <div class="wt-level-strip__copy">
+              <strong class="wt-level-strip__label">${escapeHtml(item.label)}</strong>
+              <span class="wt-level-strip__meta">${escapeHtml(item.unlock)}</span>
+            </div>
+          </div>
+          ${pill ? `<span class="wt-level-strip__pill">${escapeHtml(pill)}</span>` : ``}
+        </li>
+      `;
+    }).join("");
+
+    const html = `
+      ${currentBlockHtml}
+      ${nextBlockHtml}
+      <div class="wt-level-sheet__section wt-level-sheet__section--progress">
+        ${progressionLabel ? `<p class="wt-level-sheet__eyebrow">${escapeHtml(progressionLabel)}</p>` : ``}
+        <ul class="wt-level-strip" role="list">
+          ${progressionHtml}
+        </ul>
+      </div>
+    `;
+
+    this.openModal(html, String(levelsW.modalTitle || "").trim(), {
+      modalClass: "wt-modal--sheet wt-modal--levelsheet"
+    });
   };
 
 
@@ -3210,6 +3331,7 @@ void function () {
     const cfg = this.config || {};
     const moCfg = cfg.mistakesOnly || {};
     const premium = (this.storage && typeof this.storage.isPremium === "function") ? this.storage.isPremium() : false;
+    const startedFromLanding = (this.state === STATES.LANDING);
 
     // Hook for live stats refresh during run (deck rebuild)
     // Exposed on the UI instance to avoid scope-related ReferenceError.
@@ -3275,6 +3397,14 @@ void function () {
     }
 
     this._runtime.practiceBacklogAtStart = practiceBacklogAtStart;
+    if (startedFromLanding) {
+      if (this.storage && typeof this.storage.markLandingNextRunStarted === "function") {
+        this.storage.markLandingNextRunStarted();
+      }
+      this._runtime.landingRunCompletionPending = true;
+    } else {
+      this._runtime.landingRunCompletionPending = false;
+    }
 
     // Provide a stable function reference to the engine (no free variable)
     const getStatsByItem = this.getStatsByItem;
@@ -3469,7 +3599,7 @@ void function () {
     if (!title || !body || typeof this.openModal !== "function") return false;
 
     const html = `
-      <p style="white-space:pre-line">${escapeHtml(body)}</p>
+      <p class="wt-text-preline">${escapeHtml(body)}</p>
       <div class="wt-actions">
         ${cta ? `<button class="wt-btn wt-btn--primary" data-action="open-paywall">${escapeHtml(cta)}</button>` : ``}
         ${close ? `<button class="wt-btn wt-btn--secondary" data-action="close-modal">${escapeHtml(close)}</button>` : ``}
@@ -4506,6 +4636,7 @@ void function () {
 
     let newBest = false;
     let bestScoreFP = 0;
+    let levelProgress = { previousLevel: 0, currentLevel: 0, unlockedLevel: 0, justUnlocked: false };
 
     if (mode === "RUN" && this.storage && typeof this.storage.recordRunComplete === "function") {
       const prevRunNumber = (typeof this.storage.getRunNumber === "function")
@@ -4557,6 +4688,23 @@ void function () {
       newBest = !!(res && res.newBest);
       bestScoreFP = Number(res && res.bestScoreFP || 0);
     }
+
+    if (this.storage && typeof this.storage.updateLevelProgression === "function") {
+      try {
+        levelProgress = this.storage.updateLevelProgression({
+          mode,
+          scoreFP,
+          totalPresented: Array.isArray(this._runtime?.runItemIds) ? this._runtime.runItemIds.length : 0
+        }) || levelProgress;
+      } catch (_) { /* silent */ }
+    }
+
+    if (this._runtime?.landingRunCompletionPending) {
+      if (mode !== "BONUS" && this.storage && typeof this.storage.markLandingNextRunCompleted === "function") {
+        try { this.storage.markLandingNextRunCompleted(); } catch (_) { /* silent */ }
+      }
+      this._runtime.landingRunCompletionPending = false;
+    }
     // Store for END screen
     this._runtime.lastRun = {
       mode,
@@ -4567,7 +4715,8 @@ void function () {
       bestScoreFP,
       mistakeIds: Array.isArray(this._runtime.runMistakeIds) ? this._runtime.runMistakeIds.slice() : [],
       runItemIds: Array.isArray(this._runtime.runItemIds) ? this._runtime.runItemIds.slice() : [],
-      poolCompleteCelebration: !!this._runtime?.poolCompleteCelebrationPending
+      poolCompleteCelebration: !!this._runtime?.poolCompleteCelebrationPending,
+      levelProgress
     };
 
     try {
@@ -5035,13 +5184,13 @@ void function () {
       : "";
 
     const html = `
-      ${scoreLine ? `<p class="wt-hero-kpi" style="margin:0 0 10px 0">${escapeHtml(scoreLine)}</p>` : ``}
+      ${scoreLine ? `<p class="wt-hero-kpi wt-m-0 wt-mb-10">${escapeHtml(scoreLine)}</p>` : ``}
       ${line1 ? `<p>${escapeHtml(line1)}</p>` : ``}
       ${line2 ? `<p class="wt-muted">${escapeHtml(line2)}</p>` : ``}
 
       <div class="wt-divider"></div>
 
-      <div class="wt-actions" style="margin-top:14px">
+      <div class="wt-actions wt-mt-14">
         <button class="wt-btn wt-btn--primary" data-action="close-modal">${escapeHtml(cta)}</button>
       </div>
     `;
@@ -5074,7 +5223,7 @@ void function () {
 
     const bodyHtml = lines.map((s) => {
       const line = String(s || "");
-      if (!line) return `<div style="height:8px"></div>`;
+      if (!line) return `<div class="wt-spacer-8"></div>`;
       return `<p>${escapeHtml(line)}</p>`;
     }).join("");
 
@@ -5083,7 +5232,7 @@ void function () {
 
       <div class="wt-divider"></div>
 
-      <div class="wt-actions" style="margin-top:14px">
+      <div class="wt-actions wt-mt-14">
         <button class="wt-btn wt-btn--primary" data-action="close-modal">${escapeHtml(cta)}</button>
       </div>
     `;
@@ -5133,7 +5282,7 @@ void function () {
       <label class="wt-label" for="wt-waitlist-idea">${escapeHtml(label)}</label>
       <textarea id="wt-waitlist-idea" class="wt-input" rows="3"${phAttr}></textarea>
 
-      <div class="wt-actions" style="margin-top:14px">
+      <div class="wt-actions wt-mt-14">
         <button class="wt-btn wt-btn--primary" data-action="send-waitlist-email">${escapeHtml(cta)}</button>
         <button class="wt-btn wt-btn--ghost" data-action="close-modal">${escapeHtml(String(this.wording?.system?.close || "").trim())}</button>
       </div>
@@ -5272,9 +5421,9 @@ void function () {
       <div class="wt-divider"></div>
 
       <strong class="wt-meta">${escapeHtml(String(ss.previewLabel || "").trim())}</strong>
-      <pre class="wt-code" style="text-align:left; font-size:12px; overflow-x:auto; white-space:pre-wrap; word-break:break-all; max-height:200px;">${escapeHtml(jsonStr)}</pre>
+      <pre class="wt-code wt-code--modal">${escapeHtml(jsonStr)}</pre>
 
-      <div class="wt-actions" style="margin-top:16px">
+      <div class="wt-actions wt-mt-16">
         <button class="wt-btn wt-btn--primary" data-action="send-stats-email">${escapeHtml(String(ss.ctaSend || "").trim())}</button>
         <button class="wt-btn wt-btn--secondary" data-action="copy-stats">${escapeHtml(String(ss.ctaCopy || "").trim())}</button>
         <button class="wt-btn wt-btn--ghost" data-action="snooze-stats">${escapeHtml(String(ss.ctaLater || "").trim())}</button>
@@ -5441,7 +5590,7 @@ void function () {
       if (!title || !body || !ctaSecondary) return;
 
       const html = `
-      <p style="white-space:pre-line">${escapeHtml(body)}</p>
+      <p class="wt-text-preline">${escapeHtml(body)}</p>
       <div class="wt-actions">
         <button class="wt-btn wt-btn--secondary" data-action="close-modal">${escapeHtml(ctaSecondary)}</button>
       </div>
@@ -6343,15 +6492,15 @@ void function () {
         postCompletionHtml = `
           <div class="wt-divider"></div>
           ${pcTitle ? `<strong class="wt-meta">${escapeHtml(pcTitle)}</strong>` : ``}
-          ${pcBody ? `<p class="wt-muted" style="margin-top:6px">${escapeHtml(pcBody)}</p>` : ``}
+          ${pcBody ? `<p class="wt-muted wt-mt-6">${escapeHtml(pcBody)}</p>` : ``}
 
           ${(!canOpenFull && canWaitlist) ? `
             ${wlTitle ? `<strong class="wt-meta">${escapeHtml(wlTitle)}</strong>` : ``}
-            ${wlB1 ? `<p class="wt-muted" style="margin-top:6px">${escapeHtml(wlB1)}</p>` : ``}
-            ${wlB2 ? `<p class="wt-muted" style="margin-top:4px">${escapeHtml(wlB2)}</p>` : ``}
+            ${wlB1 ? `<p class="wt-muted wt-mt-6">${escapeHtml(wlB1)}</p>` : ``}
+            ${wlB2 ? `<p class="wt-muted wt-mt-4">${escapeHtml(wlB2)}</p>` : ``}
           ` : ``}
 
-          <div class="wt-actions" style="margin-top:12px">
+          <div class="wt-actions wt-mt-12">
             ${canWaitlist && wlCta ? `
               <button class="wt-btn wt-btn--secondary" data-action="open-waitlist">${escapeHtml(wlCta)}</button>
             ` : ``}
@@ -6361,7 +6510,7 @@ void function () {
             ` : ``}
           </div>
 
-          ${wlDisc ? `<p class="wt-muted" style="margin-top:10px">${escapeHtml(wlDisc)}</p>` : ``}
+          ${wlDisc ? `<p class="wt-muted wt-mt-10">${escapeHtml(wlDisc)}</p>` : ``}
         `;
       }
     } catch (_) { postCompletionHtml = ""; }
@@ -6438,10 +6587,9 @@ void function () {
       const statsCfg = cfg?.landingStats || {};
       const enabled = (statsCfg?.enabled === true);
 
-      const minRunsRaw = Number(statsCfg?.minCompletedRuns ?? statsCfg?.paceRunsCount);
+      const minRunsRaw = Number(statsCfg?.minCompletedRuns);
       const minRunsToShow = (Number.isFinite(minRunsRaw) && minRunsRaw >= 1 && minRunsRaw <= 999) ? Math.floor(minRunsRaw) : null;
-      if (enabled && minRunsToShow != null && Number.isFinite(runCompletes) && runCompletes >= 1) {
-        const seenTpl = String(landing.statsSeenSummaryTemplate || "").trim();
+      if (enabled && minRunsToShow != null && Number.isFinite(runCompletes) && runCompletes >= minRunsToShow) {
         const poolSizeSafe = clampInt(cfg?.game?.poolSize, 1, 9999);
 
         // Unique seen count
@@ -6487,7 +6635,6 @@ void function () {
         }
 
         const isComplete = (seen >= poolSizeSafe);
-        const remaining = clampInt(poolSizeSafe - seen, 0, poolSizeSafe);
 
         // Progress:
         // - before completion: seen progress
@@ -6498,35 +6645,27 @@ void function () {
           : 0;
         const progressClass = isComplete ? " wt-progress--mastery" : "";
 
-        const phaseCtx = getRuleKnowledgePhaseContext({
-          w,
-          storage: this.storage,
-          poolSize: poolSizeSafe,
-          seen,
-          mistakes
-        });
+        const levelModel = getWordTrapsLevelModel(this.storage, cfg, w);
+        const levelDetailsAria = String(levelModel.levelsW?.openDetailsAria || "").trim();
+        const landingLevelBadgeHtml = (levelModel.state.currentLevel > 0 && levelModel.current && levelModel.current.label)
+          ? `
+            <div class="wt-landing-stat__badge">
+              <button type="button" class="wt-badge" data-action="open-level-progress" aria-label="${escapeHtml(levelDetailsAria)}">
+                ${escapeHtml(levelModel.current.label)}
+              </button>
+            </div>
+          `
+          : "";
 
-        let title = "";
-        let sub = "";
+        const title = `${pct}%`;
+        const sub = isComplete
+          ? `${mastered} of ${poolSizeSafe} words answered correctly`
+          : `${seen} of ${poolSizeSafe} words played`;
 
-        if (!isComplete) {
-          title = phaseCtx.landingSummaryTemplate
-            ? fillTemplate(phaseCtx.landingSummaryTemplate || seenTpl, { seen, poolSize: poolSizeSafe, remaining, mistakes, mastered })
-            : fillTemplate(seenTpl, { seen, poolSize: poolSizeSafe });
-          sub = phaseCtx.landingDetailTemplate
-            ? fillTemplate(phaseCtx.landingDetailTemplate, { seen, poolSize: poolSizeSafe, remaining, mistakes, mastered })
-            : String(phaseCtx.landingDetail || "").trim();
-        } else {
-          title = phaseCtx.landingSummaryTemplate
-            ? fillTemplate(phaseCtx.landingSummaryTemplate, { seen, poolSize: poolSizeSafe, remaining, mistakes, mastered })
-            : `${mastered}/${poolSizeSafe} traps mastered`;
-          sub = String(phaseCtx.landingDetail || "").trim();
-        }
-
-        if (title || sub || phaseCtx.badge) {
+        if (title || sub || landingLevelBadgeHtml) {
           welcomeBackHtml = `
             <div class="wt-landing-stats">
-              ${phaseCtx.badge ? `<div class="wt-landing-stat__badge"><span class="wt-badge">${escapeHtml(phaseCtx.badge)}</span></div>` : ``}
+              ${landingLevelBadgeHtml}
               <div class="wt-landing-stat">
                 ${title ? `<div class="wt-landing-stat__title">${escapeHtml(title)}</div>` : ``}
                 ${sub ? `<div class="wt-meta wt-landing-stat__sub">${escapeHtml(sub)}</div>` : ``}
@@ -6772,20 +6911,20 @@ ${(() => {
       ${((this._runtime && this._runtime.contentLoading === true)
         ? (() => {
           const msg = String(this.wording?.ui?.contentLoadingToast || "").trim();
-          return msg ? `<p class="wt-muted" style="margin:0">${escapeHtml(msg)}</p>` : ``;
+          return msg ? `<p class="wt-muted wt-m-0">${escapeHtml(msg)}</p>` : ``;
         })()
         : ``)}
     </div>
 
     ${welcomeBackHtml}
 
-    ${((!premium && landing.microFun) ? `<p class="wt-sub wt-muted" style="margin-top:10px">${escapeHtml(String(landing.microFun || "").trim())}</p>` : ``)}
+    ${((!premium && landing.microFun) ? `<p class="wt-sub wt-muted wt-mt-10">${escapeHtml(String(landing.microFun || "").trim())}</p>` : ``)}
 
     ${postBlock}
 
     ${postCompletionHtml}
 
-    ${microTrust ? `<p class="wt-sub wt-muted" style="margin-top:12px">${escapeHtml(microTrust)}</p>` : ``}
+    ${microTrust ? `<p class="wt-sub wt-muted wt-mt-12">${escapeHtml(microTrust)}</p>` : ``}
 
 </div>
 `;
@@ -6832,6 +6971,570 @@ ${(() => {
       endLens: String(phaseW.endLens || "").trim(),
       micropics: (phaseW.micropics && typeof phaseW.micropics === "object") ? phaseW.micropics : {}
     };
+  }
+
+  function getLevelPreviewState(cfg) {
+    const previewCfg = (cfg?.levels?.preview && typeof cfg.levels.preview === "object") ? cfg.levels.preview : null;
+    if (!previewCfg || previewCfg.enabled !== true) return { currentLevel: null, unlockedLevel: 0, justUnlocked: false };
+
+    const paramName = String(previewCfg.queryParam || "").trim();
+    if (!paramName || typeof window === "undefined" || !window.location) {
+      return { currentLevel: null, unlockedLevel: 0, justUnlocked: false };
+    }
+
+    let raw = "";
+    try {
+      raw = String(new URLSearchParams(window.location.search).get(paramName) || "").trim().toLowerCase();
+    } catch (_) {
+      raw = "";
+    }
+    if (!raw) return { currentLevel: null, unlockedLevel: 0, justUnlocked: false };
+    if (raw === "none") return { currentLevel: 0, unlockedLevel: 0, justUnlocked: false };
+
+    const unlockMatch = raw.match(/^unlock([1-4])$/);
+    if (unlockMatch) {
+      const lvl = clampInt(unlockMatch[1], 0, 4);
+      return { currentLevel: lvl, unlockedLevel: lvl, justUnlocked: true };
+    }
+
+    const levelMatch = raw.match(/^level([1-4])$/);
+    if (levelMatch) {
+      const lvl = clampInt(levelMatch[1], 0, 4);
+      return { currentLevel: lvl, unlockedLevel: 0, justUnlocked: false };
+    }
+
+    return { currentLevel: null, unlockedLevel: 0, justUnlocked: false };
+  }
+
+  function getWordTrapsLevelModel(storage, cfg, w) {
+    const levelsW = (w && w.levels && typeof w.levels === "object") ? w.levels : {};
+    const baseState = (storage && typeof storage.getLevelState === "function")
+      ? storage.getLevelState()
+      : { currentLevel: 0, unlockedAtByLevel: { 1: 0, 2: 0, 3: 0, 4: 0 } };
+    const preview = getLevelPreviewState(cfg);
+    const effectiveLevel = (preview.currentLevel == null) ? clampInt(baseState.currentLevel, 0, 4) : clampInt(preview.currentLevel, 0, 4);
+
+    const defs = [1, 2, 3, 4].map((level) => {
+      const raw = (levelsW.byLevel && typeof levelsW.byLevel === "object") ? (levelsW.byLevel[level] || {}) : {};
+      return {
+        level,
+        label: String(raw.label || "").trim(),
+        unlock: String(raw.unlock || "").trim(),
+        unlocked: effectiveLevel >= level,
+        current: effectiveLevel === level
+      };
+    });
+
+    return {
+      state: {
+        currentLevel: effectiveLevel,
+        unlockedAtByLevel: baseState.unlockedAtByLevel || {}
+      },
+      defs,
+      current: defs.find((item) => item.level === effectiveLevel) || null,
+      next: defs.find((item) => item.level === (effectiveLevel + 1)) || null,
+      levelsW,
+      preview
+    };
+  }
+
+  function buildEndLevelUnlockHtml(ctx) {
+    const { levelModel, levelProgress } = ctx;
+    const levelPreview = levelModel.preview || { unlockedLevel: 0, justUnlocked: false };
+    const unlockedLevel = levelPreview.justUnlocked
+      ? clampInt(levelPreview.unlockedLevel, 0, 4)
+      : clampInt(levelProgress?.unlockedLevel, 0, 4);
+    const unlockDef = levelModel.defs.find((item) => item.level === unlockedLevel) || null;
+    if (!(levelPreview.justUnlocked || levelProgress?.justUnlocked) || !unlockDef) return "";
+
+    return `
+      <div class="wt-level-unlock">
+        <p class="wt-level-unlock__kicker">${escapeHtml(String(levelModel.levelsW?.unlockKicker || "").trim())}</p>
+        <div class="wt-level-unlock__card">
+          <button type="button" class="wt-level-chip" data-action="open-level-progress" aria-label="${escapeHtml(String(levelModel.levelsW?.openDetailsAria || "").trim())}">
+            <span class="wt-level-chip__dot" aria-hidden="true"></span>
+            <span>${escapeHtml(unlockDef.label)}</span>
+          </button>
+          <p class="wt-level-unlock__line">${escapeHtml(fillTemplate(String(levelModel.levelsW?.reachedTemplate || "").trim(), { label: unlockDef.label }))}</p>
+        </div>
+      </div>
+    `;
+  }
+
+  function buildEndMistakesRecap(ctx) {
+    const { isRun, isPractice, isBonus, lastRun, maxChances, bonusW, practiceW, end, runtime, cfg, vars } = ctx;
+    if (!isRun && !isPractice && !isBonus) return "";
+
+    const rawIds = Array.isArray(lastRun.mistakeIds) ? lastRun.mistakeIds : [];
+    const ids = isRun ? rawIds.slice(0, maxChances) : rawIds.slice();
+    const recapW = isBonus ? (bonusW || {}) : (isPractice ? (practiceW || {}) : (end || {}));
+    const noneMsg = String(recapW.mistakesNone || end.mistakesNone || "").trim();
+    const toggleTpl = String(recapW.mistakesToggle || end.mistakesToggle || "").trim();
+    const title = String(recapW.mistakesTitle || end.mistakesTitle || "").trim();
+
+    if (!ids.length) {
+      return noneMsg ? `<p class="wt-muted">${escapeHtml(noneMsg)}</p>` : "";
+    }
+
+    const labelRaw = toggleTpl ? fillTemplate(toggleTpl, { count: String(ids.length) }) : title;
+    const label = String(labelRaw || "").replace(/\(\s*\)/g, "").replace(/\s+/g, " ").trim();
+    if (!label) return "";
+
+    const byId = (runtime && runtime.contentById && typeof runtime.contentById === "object") ? runtime.contentById : {};
+    const items = [];
+
+    for (const rawId of ids) {
+      const id = Number(rawId);
+      if (!Number.isFinite(id)) continue;
+
+      const it = byId[String(id)] || null;
+      const t = extractTermsFromItem(it);
+      const fr = String(t.termFr || "").trim();
+      const en = String(t.termEn || "").trim();
+      if (!fr && !en) continue;
+
+      const rel =
+        (t.correctAnswer === true) ? "=" :
+          (t.correctAnswer === false) ? "≠" :
+            "";
+      if (!rel) continue;
+
+      const expl = String(t.explanationShort || "").trim();
+      const pairHtml = `<span class="wt-mistake-pair">${escapeHtml(fr)} (FR) ${rel} ${escapeHtml(en)} (EN)</span>`;
+      const explHtml = expl ? `<span class="wt-mistake-expl">${formatExplanationForDisplay(expl, cfg)}</span>` : "";
+      items.push(`<div class="wt-mistake-item">${pairHtml}${explHtml}</div>`);
+    }
+
+    const openAttr = (vars && Number(vars.backlog) > 0) ? " open" : "";
+    return `
+  <details class="wt-accordion"${openAttr}>
+    <summary class="wt-accordion-toggle">${escapeHtml(label)}</summary>
+    <div class="wt-accordion-content">${items.join("")}</div>
+  </details>
+`;
+  }
+
+  function buildEndMicroLines(ctx) {
+    const {
+      isRun, end, runtime, storage, lastRun, recordActive, celebrationLabel, pbLine, pbPremiumHint
+    } = ctx;
+
+    const microLines = [];
+
+    if (isRun) {
+      const ffTpl = String(end.falseFriendsIdentifiedLine || "").trim();
+      const strongestTagTpl = String(end.strongestTagLine || "").trim();
+      const weakestTagTpl = String(end.weakestTagLine || "").trim();
+      const runMistakeIds = Array.isArray(lastRun?.mistakeIds) ? lastRun.mistakeIds : [];
+      const runItemIds = Array.isArray(lastRun?.runItemIds) ? lastRun.runItemIds : [];
+      const correctAnswers = clampInt(runItemIds.length - runMistakeIds.length, 0, 99999);
+      const allowCategoryInsights = correctAnswers >= 5;
+      const byId = (runtime && runtime.contentById && typeof runtime.contentById === "object") ? runtime.contentById : {};
+      const ignored = new Set(["easy", "medium", "hard", "singles", "doubles", "tournament", "both", "singles only", "doubles only"]);
+
+      if (allowCategoryInsights && runItemIds.length > 0 && (strongestTagTpl || weakestTagTpl)) {
+        const servedCounts = Object.create(null);
+        const mistakeCounts = Object.create(null);
+
+        for (const rawId of runItemIds) {
+          const item = byId[String(rawId)] || byId[rawId] || null;
+          const tag = String(item?.tag || "").trim();
+          if (!tag || ignored.has(tag.toLowerCase())) continue;
+          servedCounts[tag] = clampInt(Number(servedCounts[tag] || 0) + 1, 0, 9999);
+        }
+
+        for (const rawId of runMistakeIds) {
+          const item = byId[String(rawId)] || byId[rawId] || null;
+          const tag = String(item?.tag || "").trim();
+          if (!tag || ignored.has(tag.toLowerCase())) continue;
+          mistakeCounts[tag] = clampInt(Number(mistakeCounts[tag] || 0) + 1, 0, 9999);
+        }
+
+        let strongestTag = "";
+        let strongestCount = 0;
+        let strongestTie = false;
+        let weakestTag = "";
+        let weakestCount = 0;
+        let weakestTie = false;
+
+        for (const tag in servedCounts) {
+          const served = clampInt(Number(servedCounts[tag] || 0), 0, 9999);
+          const missed = clampInt(Number(mistakeCounts[tag] || 0), 0, 9999);
+          const correct = clampInt(served - missed, 0, 9999);
+
+          if (correct > strongestCount) {
+            strongestTag = tag;
+            strongestCount = correct;
+            strongestTie = false;
+          } else if (correct > 0 && correct === strongestCount) {
+            strongestTie = true;
+          }
+
+          if (missed > weakestCount) {
+            weakestTag = tag;
+            weakestCount = missed;
+            weakestTie = false;
+          } else if (missed > 0 && missed === weakestCount) {
+            weakestTie = true;
+          }
+        }
+
+        if (!strongestTie && strongestCount > 0 && strongestTag && strongestTagTpl) {
+          microLines.push(`<p class="wt-meta wt-truncate">${escapeHtml(fillTemplate(strongestTagTpl, { tag: formatTagLabel(strongestTag) }))}</p>`);
+        }
+
+        if (!weakestTie && weakestCount > 0 && weakestTag && weakestTagTpl) {
+          microLines.push(`<p class="wt-meta wt-truncate">${escapeHtml(fillTemplate(weakestTagTpl, { tag: formatTagLabel(weakestTag) }))}</p>`);
+        }
+      }
+
+      if (ffTpl && storage && typeof storage.getStatsByItem === "function") {
+        let statsByItem = {};
+        try { statsByItem = storage.getStatsByItem() || {}; } catch (_) { statsByItem = {}; }
+
+        let count = 0;
+        for (const k in statsByItem) {
+          const id = Number(k);
+          if (!Number.isFinite(id)) continue;
+          const it = byId[String(id)] || null;
+          const tag = String(it?.tag || "").trim();
+          if (tag !== "false_friend") continue;
+          const cc = clampInt(Number(statsByItem[k]?.correctCount), 0, 999999);
+          if (cc > 0) count += 1;
+        }
+
+        const msg = fillTemplate(ffTpl, { count: String(clampInt(count, 0, 99999)) });
+        if (msg) microLines.push(`<p class="wt-meta wt-truncate">${escapeHtml(msg)}</p>`);
+      }
+    }
+
+    if (recordActive && celebrationLabel) {
+      microLines.push(`<p class="wt-meta wt-truncate">${escapeHtml(celebrationLabel)}</p>`);
+    }
+    if (pbLine) {
+      microLines.push(`<p class="wt-meta wt-truncate">${escapeHtml(pbLine)}</p>`);
+    }
+    if (pbPremiumHint) {
+      microLines.push(`<p class="wt-meta wt-truncate">${escapeHtml(pbPremiumHint)}</p>`);
+    }
+
+    return microLines.length
+      ? `
+    <div class="wt-end-table">
+      ${microLines.map((line) => `<div class="wt-end-table__row">${line}</div>`).join("")}
+    </div>
+  `
+      : "";
+  }
+
+  function buildEndCopyHtml(ctx) {
+    const {
+      isRun, isPractice, isBonus, contextBadgeLabel, practiceStatsLineTpl, practiceRepeatNoteTpl, bonusStatsLine,
+      endLine, bonusDecisionLine, runStatsLine, poolCompleteCelebration, end, vars, runIdentityTpl, premium,
+      freeRunMessage, runPoolCompleteLine2Tpl
+    } = ctx;
+
+    let body = "";
+
+    if (isPractice) {
+      const statsLine = practiceStatsLineTpl ? fillTemplate(practiceStatsLineTpl, vars) : "";
+      const repeatLine = practiceRepeatNoteTpl ? fillTemplate(practiceRepeatNoteTpl, vars) : "";
+      body = [
+        statsLine ? `<p class="wt-end-copy__stats">${escapeHtml(statsLine)}</p>` : ``,
+        endLine ? `<p class="wt-end-copy__verdict">${escapeHtml(endLine)}</p>` : ``,
+        repeatLine ? `<p class="wt-end-copy__note">${escapeHtml(repeatLine)}</p>` : ``
+      ].join("");
+    } else if (isBonus) {
+      body = [
+        bonusStatsLine ? `<p class="wt-end-copy__stats">${escapeHtml(bonusStatsLine)}</p>` : ``,
+        endLine ? `<p class="wt-end-copy__verdict">${escapeHtml(endLine)}</p>` : ``,
+        bonusDecisionLine ? `<p class="wt-end-copy__note">${escapeHtml(bonusDecisionLine)}</p>` : ``
+      ].join("");
+    } else if (isRun) {
+      const directToConsolidation =
+        !!(poolCompleteCelebration && clampInt(vars.backlog, 0, 99999) === 0);
+      const directToConsolidationLine = directToConsolidation
+        ? String(end.directToConsolidationLine || "").trim()
+        : "";
+      body = [
+        runStatsLine ? `<p class="wt-end-copy__stats">${escapeHtml(runStatsLine)}</p>` : ``,
+        endLine ? `<p class="wt-end-copy__verdict">${escapeHtml(endLine)}</p>` : ``,
+        directToConsolidationLine ? `<p class="wt-end-copy__note">${escapeHtml(directToConsolidationLine)}</p>` : ``,
+        runIdentityTpl ? `<p class="wt-end-copy__note">${escapeHtml(fillTemplate(runIdentityTpl, vars))}</p>` : ``,
+        (!premium && freeRunMessage) ? `<p class="wt-end-copy__free">${escapeHtml(freeRunMessage)}</p>` : ``
+      ].join("");
+    } else {
+      body = endLine ? `<p class="wt-end-copy__verdict">${escapeHtml(endLine)}</p>` : ``;
+    }
+
+    return `
+    <div class="wt-end-copy">
+      ${contextBadgeLabel ? `<p class="wt-end-copy__badge">${escapeHtml(contextBadgeLabel)}</p>` : ``}
+      ${body}
+      ${(isRun && runPoolCompleteLine2Tpl && !(poolCompleteCelebration && clampInt(vars.backlog, 0, 99999) === 0)) ? `<p class="wt-end-copy__note">${escapeHtml(fillTemplate(runPoolCompleteLine2Tpl, vars))}</p>` : ``}
+    </div>
+  `;
+  }
+
+  function buildEndShareBlock(ctx) {
+    const { shareEnabled, w, shareTitle, getShareText } = ctx;
+    if (!shareEnabled) return "";
+
+    const share = w.share || {};
+    const title = String(shareTitle || "").trim();
+    const ctaLabel = String(share.ctaLabel || "").trim();
+    const emailLabel = String(share.emailLabel || "").trim();
+    const emailSubject = String(share.emailSubject || "").trim();
+    const shareAria = String(w.system?.shareAria || "").trim();
+    const text = String(getShareText ? getShareText() : "").trim();
+    const canCopy = !!(ctaLabel && text);
+    const canEmail = !!(emailLabel && emailSubject && text);
+
+    if (!title && !text) return "";
+    if (!canCopy && !canEmail && !text) return "";
+
+    return `
+      <details class="wt-accordion">
+        <summary class="wt-accordion-toggle" aria-label="${escapeHtml(shareAria)}">
+          ${escapeHtml(title)}
+        </summary>
+
+        <div class="wt-accordion-content">
+          ${text ? `<p class="wt-muted wt-text-wrap-anywhere">${escapeHtml(text)}</p>` : ``}
+
+          ${(canCopy || canEmail) ? `
+            <div class="wt-actions">
+              ${canCopy ? `
+                <button type="button" class="wt-btn wt-btn--secondary" data-action="copy-share">
+                  ${escapeHtml(ctaLabel)}
+                </button>
+              ` : ``}
+
+              ${canEmail ? `
+                <button type="button" class="wt-btn wt-btn--secondary" data-action="send-share-email">
+                  ${escapeHtml(emailLabel)}
+                </button>
+              ` : ``}
+            </div>
+          ` : ``}
+        </div>
+      </details>
+    `;
+  }
+
+  function buildEndActionsHtml(ctx) {
+    const {
+      storage, w, cfg, vars, premium, end, postW, isRun, isPractice, isBonus,
+      runShouldPromotePractice, practiceCta, runsExhausted, upgradeCta, runPlayAgain,
+      runShouldPromoteBonus, runBonusPrimaryLabel, canPractice, practiceAgain, bonusW,
+      bonusDeckTier, bonusAgain, poolCompleteCelebration, runLensBonusPrimaryTpl, runLensTpl
+    } = ctx;
+
+    const exhausted =
+      !!(storage && typeof storage.isPoolExhausted === "function" && storage.isPoolExhausted() === true);
+    const mastered =
+      !!(storage && typeof storage.isMastered === "function" && storage.isMastered() === true);
+    const hasActiveMistakes = (clampInt(vars.backlog, 0, 99999) > 0);
+
+    const masteredTitle = String(postW.masteredTitle || "").trim();
+    const masteredL1 = String(postW.masteredLine1 || "").trim();
+    const masteredL2 = String(postW.masteredLine2 || "").trim();
+    const masteredHtml =
+      (mastered && (masteredTitle || masteredL1 || masteredL2))
+        ? `
+          <div class="wt-mt-6">
+            ${masteredTitle ? `<p class="wt-meta"><strong>${escapeHtml(masteredTitle)}</strong></p>` : ``}
+            ${masteredL1 ? `<p class="wt-muted">${escapeHtml(masteredL1)}</p>` : ``}
+            ${masteredL2 ? `<p class="wt-muted">${escapeHtml(masteredL2)}</p>` : ``}
+          </div>
+        `
+        : ``;
+
+    let primaryAction = "";
+    let primaryLabel = "";
+    let secondaryAction = "";
+    let secondaryLabel = "";
+
+    if (mastered) {
+      primaryAction = "start-secret-bonus";
+      primaryLabel = String(postW.masteredCtaBonus || "").trim();
+      secondaryAction = "start-run";
+      secondaryLabel = String(postW.masteredCtaReplay || "").trim();
+    } else if (exhausted && hasActiveMistakes) {
+      primaryAction = "start-practice";
+      const tpl = premium ? String(end.practiceCtaCountPremium || "").trim() : String(end.practiceCta || "").trim();
+      primaryLabel = tpl ? fillTemplate(tpl, { backlog: String(vars.backlog) }) : "";
+      secondaryAction = "start-run";
+      secondaryLabel = String(end.playAgain || "").trim();
+    } else if (isRun) {
+      if (runShouldPromotePractice) {
+        primaryAction = "start-practice";
+        primaryLabel = String(practiceCta || "").trim();
+        secondaryAction = runsExhausted ? "open-paywall" : "start-run";
+        secondaryLabel = runsExhausted ? String(upgradeCta || "").trim() : String(runPlayAgain || "").trim();
+      } else if (runShouldPromoteBonus) {
+        primaryAction = "start-secret-bonus";
+        primaryLabel = runBonusPrimaryLabel;
+        secondaryAction = runsExhausted ? "open-paywall" : "start-run";
+        secondaryLabel = runsExhausted ? String(upgradeCta || "").trim() : String(runPlayAgain || "").trim();
+      } else {
+        primaryAction = runsExhausted ? "open-paywall" : "start-run";
+        primaryLabel = runsExhausted ? String(upgradeCta || "").trim() : String(runPlayAgain || "").trim();
+        if (canPractice) {
+          secondaryAction = "start-practice";
+          secondaryLabel = String(practiceCta || "").trim();
+        }
+      }
+    } else if (isPractice) {
+      const remaining = Number(vars.remaining);
+      const isZero = (Number.isFinite(remaining) && remaining <= 0);
+
+      if (isZero) {
+        primaryAction = "start-run";
+        primaryLabel = String(end.playAgain || "").trim();
+      } else {
+        primaryAction = "start-practice";
+        primaryLabel = String(practiceAgain || "").trim();
+        secondaryAction = "start-run";
+        secondaryLabel = String(end.playAgain || "").trim();
+      }
+    } else if (isBonus) {
+      const expandDeckLabel = String(bonusW?.ctaExpandDeck || "").trim();
+      const shouldExpandDeck = (bonusDeckTier === "small") && !!expandDeckLabel;
+
+      if (shouldExpandDeck) {
+        primaryAction = "start-run";
+        primaryLabel = expandDeckLabel;
+        secondaryAction = "start-secret-bonus";
+        secondaryLabel = String(bonusAgain || "").trim();
+      } else {
+        primaryAction = "start-secret-bonus";
+        primaryLabel = String(bonusAgain || "").trim();
+        secondaryAction = "start-run";
+        secondaryLabel = String(end.playAgain || "").trim();
+      }
+    }
+
+    if (!primaryLabel || !primaryAction) return masteredHtml || "";
+
+    const primaryBtn = `
+      <button class="wt-btn wt-btn--primary" data-action="${escapeHtml(primaryAction)}">
+        ${escapeHtml(primaryLabel)}
+      </button>
+    `;
+    const secondaryBtn =
+      (secondaryLabel && secondaryAction)
+        ? `
+          <button class="wt-btn wt-btn--secondary" data-action="${escapeHtml(secondaryAction)}">
+            ${escapeHtml(secondaryLabel)}
+          </button>
+        `
+        : ``;
+
+    const runLensHtml =
+      (isRun && !poolCompleteCelebration)
+        ? (() => {
+          const lensText = runShouldPromoteBonus && runLensBonusPrimaryTpl
+            ? runLensBonusPrimaryTpl
+            : (runLensTpl ? fillTemplate(runLensTpl, vars) : "");
+          return lensText ? `<p class="wt-muted">${escapeHtml(lensText)}</p>` : ``;
+        })()
+        : ``;
+
+    let installBtn = ``;
+    try {
+      const installW = w.installPrompt || {};
+      const installLabel = String(installW.ctaPrimary || "").trim();
+      let runCompletes = 0;
+      if (storage && typeof storage.getCounters === "function") {
+        const counters = storage.getCounters() || {};
+        runCompletes = Number(counters.runCompletes || 0);
+      }
+
+      const shouldShowInstall =
+        isRun &&
+        runCompletes === 1 &&
+        !!installLabel &&
+        !!(window.WT_PWA && typeof window.WT_PWA.canPrompt === "function" && window.WT_PWA.canPrompt(cfg, storage) === true);
+
+      if (shouldShowInstall) {
+        installBtn = `
+          <button class="wt-btn wt-btn--ghost" data-action="install-app">
+            ${escapeHtml(installLabel)}
+          </button>
+        `;
+      }
+    } catch (_) { /* silent */ }
+
+    return `
+  ${masteredHtml}
+  ${runLensHtml}
+  ${primaryBtn}
+  ${secondaryBtn}
+  ${installBtn}
+`;
+  }
+
+  function buildMoreAccordionHtml(ctx) {
+    const { storage, cfg, w, vars } = ctx;
+    const unlocked =
+      !!(storage && typeof storage.hasReachedHouseAdThreshold === "function" && storage.hasReachedHouseAdThreshold() === true);
+    if (!unlocked) return ``;
+
+    const ha = w.houseAd || {};
+    const wl = w.waitlist || {};
+    const haCfg = cfg.houseAd || {};
+    const wlCfg = cfg.waitlist || {};
+
+    const canOpenFull =
+      (haCfg.enabled === true) &&
+      !!String(haCfg.url || "").trim() &&
+      !!(storage && typeof storage.shouldShowHouseAdNow === "function" && storage.shouldShowHouseAdNow({ inRun: false }) === true);
+    const canWaitlist = (wlCfg.enabled === true);
+    if (!canOpenFull && !canWaitlist) return ``;
+
+    const b1 = String(ha.bodyLine1 || "").trim();
+    const b2 = String(ha.bodyLine2 || "").trim();
+    const ctaFull = String(ha.ctaPrimary || "").trim();
+    const haTitle = fillTemplate(String(ha.title || "").trim(), vars);
+    const wlTitle = String(wl.endTitle || wl.title || "").trim();
+    const wlB1 = String(wl.endBodyLine1 || wl.bodyLine1 || "").trim();
+    const wlB2 = String(wl.endBodyLine2 || wl.bodyLine2 || "").trim();
+    const wlCta = String(wl.ctaLabel || "").trim();
+    const wlDisc = String(wl.disclaimer || "").trim();
+    const label = canOpenFull ? haTitle : (wlTitle || "");
+    if (!label) return ``;
+
+    return `
+      <details class="wt-accordion">
+        <summary class="wt-accordion-toggle">${escapeHtml(label)}</summary>
+        <div class="wt-accordion-content">
+          ${canOpenFull ? `
+            ${b1 ? `<p class="wt-muted">${escapeHtml(b1)}</p>` : ``}
+            ${b2 ? `<p class="wt-muted">${escapeHtml(b2)}</p>` : ``}
+          ` : ``}
+
+          ${(!canOpenFull && canWaitlist) ? `
+            ${wlB1 ? `<p class="wt-muted">${escapeHtml(wlB1)}</p>` : ``}
+            ${wlB2 ? `<p class="wt-muted">${escapeHtml(wlB2)}</p>` : ``}
+          ` : ``}
+
+          <div class="wt-actions">
+            ${canWaitlist && wlCta ? `
+              <button class="wt-btn wt-btn--secondary" data-action="open-waitlist">${escapeHtml(wlCta)}</button>
+            ` : ``}
+
+            ${canOpenFull && ctaFull ? `
+              <a class="wt-btn wt-btn--primary" href="${escapeHtml(String((cfg?.houseAd?.url) || "").trim())}" target="_blank" rel="noopener">
+                ${escapeHtml(ctaFull)}
+              </a>
+            ` : ``}
+          </div>
+
+          ${wlDisc ? `<p class="wt-muted">${escapeHtml(wlDisc)}</p>` : ``}
+        </div>
+      </details>
+    `;
   }
 
 
@@ -7212,7 +7915,20 @@ ${(() => {
         : practiceAllCleared ? practiceCelebrateLine
           : bonusPerfect ? bonusCelebrateLine
             : "";
+    const contextBadgeLabel = (() => {
+      if (celebrationLabel) return "";
+      if (isRun) return String(end?.labelByVerdict?.[runVerdictKey] || "").trim();
+      if (isPractice) return String(practiceW?.labelByTier?.[practiceRepeatTierKey] || "").trim();
+      if (isBonus) return String(bonusW?.labelByTier?.[bonusLevel] || "").trim();
+      return "";
+    })();
     const recordActive = (!!celebrationLabel) ? (Date.now() < recordUntil) : false;
+    const levelModel = getWordTrapsLevelModel(this.storage, cfg, w);
+    const levelProgress = (lastRun && typeof lastRun.levelProgress === "object") ? lastRun.levelProgress : null;
+    const levelUnlockHtml = buildEndLevelUnlockHtml({
+      levelModel,
+      levelProgress
+    });
 
     // Always show the score (requested), never replace it.
     const displayScoreLine = scoreLine;
@@ -7262,87 +7978,23 @@ ${(() => {
       });
     }
 
-
-    // END recap: mistakes made during RUN / PRACTICE / BONUS (free + premium)
-    let mistakesRecapHtml = "";
-    if (isRun || isPractice || isBonus) {
-      const rawIds = Array.isArray(lastRun.mistakeIds) ? lastRun.mistakeIds : [];
-      const ids = isRun ? rawIds.slice(0, maxChances) : rawIds.slice();
-      const recapW = isBonus ? (bonusW || {}) : (isPractice ? (practiceW || {}) : (end || {}));
-
-      const noneMsg = String(recapW.mistakesNone || end.mistakesNone || "").trim();
-      const toggleTpl = String(recapW.mistakesToggle || end.mistakesToggle || "").trim();
-      const title = String(recapW.mistakesTitle || end.mistakesTitle || "").trim();
-
-      if (!ids.length) {
-        if (noneMsg) {
-          mistakesRecapHtml = `<p class="wt-muted">${escapeHtml(noneMsg)}</p>`;
-        }
-      } else {
-        const labelRaw =
-          toggleTpl
-            ? fillTemplate(toggleTpl, { count: String(ids.length) })
-            : title;
-
-        const label = String(labelRaw || "")
-          .replace(/\(\s*\)/g, "")
-          .replace(/\s+/g, " ")
-          .trim();
-
-        if (!label) {
-          mistakesRecapHtml = "";
-        } else {
-          const items = [];
-          const byId = (this._runtime && this._runtime.contentById && typeof this._runtime.contentById === "object")
-            ? this._runtime.contentById
-            : {};
-
-          for (const rawId of ids) {
-            const id = Number(rawId);
-            if (!Number.isFinite(id)) continue;
-
-            const it = byId[String(id)] || null;
-            const t = extractTermsFromItem(it);
-
-            const fr = String(t.termFr || "").trim();
-            const en = String(t.termEn || "").trim();
-            if (!fr && !en) continue;
-
-            const rel =
-              (t.correctAnswer === true) ? "=" :
-                (t.correctAnswer === false) ? "≠" :
-                  "";
-
-            if (!rel) continue;
-
-            const expl = String(t.explanationShort || "").trim();
-            const pairHtml = `<span class="wt-mistake-pair">${escapeHtml(fr)} (FR) ${rel} ${escapeHtml(en)} (EN)</span>`;
-            const explHtml = expl ? `<span class="wt-mistake-expl">${formatExplanationForDisplay(expl, cfg)}</span>` : "";
-
-            items.push(`<div class="wt-mistake-item">${pairHtml}${explHtml}</div>`);
-          }
-
-          const body = items.join("");
-          const openAttr = (vars && Number(vars.backlog) > 0) ? " open" : "";
-
-          mistakesRecapHtml = `
-  <details class="wt-accordion"${openAttr} style="margin-top:10px">
-    <summary class="wt-accordion-toggle">${escapeHtml(label)}</summary>
-    <div class="wt-accordion-content">${body}</div>
-  </details>
-`;
-        }
-      }
-    }
+    const mistakesRecapHtml = buildEndMistakesRecap({
+      isRun,
+      isPractice,
+      isBonus,
+      lastRun,
+      maxChances,
+      bonusW,
+      practiceW,
+      end,
+      runtime: this._runtime,
+      cfg,
+      vars
+    });
 
     const poolCompleteCelebration = isRun && !!lastRun.poolCompleteCelebration;
 
     const shareEnabled = isRun && !!(cfg.share && cfg.share.enabled);
-    const bestScoreFP = clampInt(lastRun.bestScoreFP, 0, 99999);
-    const nearBest =
-      isRun &&
-      bestScoreFP > scoreFP &&
-      (bestScoreFP - scoreFP) <= 2;
     const shouldPromoteShare = isRun && shareEnabled;
 
     const runsExhausted = (isRun && !premium && Number.isFinite(remaining) && remaining <= 0);
@@ -7478,128 +8130,17 @@ ${(() => {
   </div>
 `;
 
-    // Micro-lines (RUN-only): keep END sharp, keep status visible (not buried in Stats)
-    const microLines = [];
-
-    // progressHtml: REMOVED (dead code — computed but never injected into HTML).
-    // Seen/poolSize info is now solely in runLensTpl (lens verdict).
-
-    // False friends identified (RUN-only): tag === "false_friend" AND correctCount > 0
-    if (isRun) {
-      const ffTpl = String(end.falseFriendsIdentifiedLine || "").trim();
-      const strongestTagTpl = String(end.strongestTagLine || "").trim();
-      const weakestTagTpl = String(end.weakestTagLine || "").trim();
-      const runMistakeIds = Array.isArray(lastRun?.mistakeIds) ? lastRun.mistakeIds : [];
-      const runItemIds = Array.isArray(lastRun?.runItemIds) ? lastRun.runItemIds : [];
-      const byId = (this._runtime && this._runtime.contentById && typeof this._runtime.contentById === "object")
-        ? this._runtime.contentById
-        : {};
-      const ignored = new Set(["easy", "medium", "hard", "singles", "doubles", "tournament", "both", "singles only", "doubles only"]);
-
-      if (runItemIds.length > 0 && (strongestTagTpl || weakestTagTpl)) {
-        const servedCounts = Object.create(null);
-        const mistakeCounts = Object.create(null);
-
-        for (const rawId of runItemIds) {
-          const item = byId[String(rawId)] || byId[rawId] || null;
-          const tag = String(item?.tag || "").trim();
-          if (!tag || ignored.has(tag.toLowerCase())) continue;
-          servedCounts[tag] = clampInt(Number(servedCounts[tag] || 0) + 1, 0, 9999);
-        }
-
-        for (const rawId of runMistakeIds) {
-          const item = byId[String(rawId)] || byId[rawId] || null;
-          const tag = String(item?.tag || "").trim();
-          if (!tag || ignored.has(tag.toLowerCase())) continue;
-          mistakeCounts[tag] = clampInt(Number(mistakeCounts[tag] || 0) + 1, 0, 9999);
-        }
-
-        let strongestTag = "";
-        let strongestCount = 0;
-        let strongestTie = false;
-        let weakestTag = "";
-        let weakestCount = 0;
-        let weakestTie = false;
-
-        for (const tag in servedCounts) {
-          const served = clampInt(Number(servedCounts[tag] || 0), 0, 9999);
-          const missed = clampInt(Number(mistakeCounts[tag] || 0), 0, 9999);
-          const correct = clampInt(served - missed, 0, 9999);
-
-          if (correct > strongestCount) {
-            strongestTag = tag;
-            strongestCount = correct;
-            strongestTie = false;
-          } else if (correct > 0 && correct === strongestCount) {
-            strongestTie = true;
-          }
-
-          if (missed > weakestCount) {
-            weakestTag = tag;
-            weakestCount = missed;
-            weakestTie = false;
-          } else if (missed > 0 && missed === weakestCount) {
-            weakestTie = true;
-          }
-        }
-
-        if (!strongestTie && strongestCount > 0 && strongestTag && strongestTagTpl) {
-          microLines.push(`<p class="wt-meta wt-truncate">${escapeHtml(fillTemplate(strongestTagTpl, { tag: formatTagLabel(strongestTag) }))}</p>`);
-        }
-
-        if (!weakestTie && weakestCount > 0 && weakestTag && weakestTagTpl) {
-          microLines.push(`<p class="wt-meta wt-truncate">${escapeHtml(fillTemplate(weakestTagTpl, { tag: formatTagLabel(weakestTag) }))}</p>`);
-        }
-      }
-
-      if (ffTpl && this.storage && typeof this.storage.getStatsByItem === "function") {
-        let statsByItem = {};
-        try { statsByItem = this.storage.getStatsByItem() || {}; } catch (_) { statsByItem = {}; }
-
-        const byId = (this._runtime && this._runtime.contentById && typeof this._runtime.contentById === "object")
-          ? this._runtime.contentById
-          : {};
-
-        let count = 0;
-        for (const k in statsByItem) {
-          const id = Number(k);
-          if (!Number.isFinite(id)) continue;
-
-          const it = byId[String(id)] || null;
-          const tag = String(it?.tag || "").trim();
-          if (tag !== "false_friend") continue;
-
-          const cc = clampInt(Number(statsByItem[k]?.correctCount), 0, 999999);
-          if (cc > 0) count += 1;
-        }
-
-        const msg = fillTemplate(ffTpl, { count: String(clampInt(count, 0, 99999)) });
-        if (msg) microLines.push(`<p class="wt-meta wt-truncate">${escapeHtml(msg)}</p>`);
-      }
-    }
-
-    // Record moment: if active, surface the celebration line explicitly.
-    if (recordActive && celebrationLabel) {
-      microLines.push(`<p class="wt-meta wt-truncate">${escapeHtml(celebrationLabel)}</p>`);
-    }
-
-    // Personal best (RUN + premium only)
-    if (pbLine) {
-      microLines.push(`<p class="wt-meta wt-truncate">${escapeHtml(pbLine)}</p>`);
-    }
-
-    if (pbPremiumHint) {
-      microLines.push(`<p class="wt-meta wt-truncate">${escapeHtml(pbPremiumHint)}</p>`);
-    }
-
-    // END "table" layout (mobile-safe) — no icons, no new copy, keeps existing lines/CTA intact
-    const microLinesHtml = microLines.length
-      ? `
-    <div class="wt-end-table">
-      ${microLines.map((line) => `<div class="wt-end-table__row">${line}</div>`).join("")}
-    </div>
-  `
-      : "";
+    const microLinesHtml = buildEndMicroLines({
+      isRun,
+      end,
+      runtime: this._runtime,
+      storage: this.storage,
+      lastRun,
+      recordActive,
+      celebrationLabel,
+      pbLine,
+      pbPremiumHint
+    });
     // Paywall bridge block (FREE exhausted): make it visible, not buried
     const paywallBridgeHtml =
       (runsExhausted && (paywallBridgeTitle || paywallBridgeBody))
@@ -7612,125 +8153,65 @@ ${(() => {
         `
         : "";
 
-    // HouseAd / Waitlist — move into accordion to avoid END scroll fatigue
-    const moreAccordionHtml = (() => {
-      const unlocked =
-        !!(this.storage && typeof this.storage.hasReachedHouseAdThreshold === "function" && this.storage.hasReachedHouseAdThreshold() === true);
+    const moreAccordionHtml = buildMoreAccordionHtml({
+      storage: this.storage,
+      cfg,
+      w,
+      vars
+    });
 
-      if (!unlocked) return ``;
-
-      const ha = w.houseAd || {};
-      const wl = w.waitlist || {};
-      const haCfg = cfg.houseAd || {};
-      const wlCfg = cfg.waitlist || {};
-
-      const canOpenFull =
-        (haCfg.enabled === true) &&
-        !!String(haCfg.url || "").trim() &&
-        !!(this.storage && typeof this.storage.shouldShowHouseAdNow === "function" && this.storage.shouldShowHouseAdNow({ inRun: false }) === true);
-
-      const canWaitlist = (wlCfg.enabled === true);
-
-      if (!canOpenFull && !canWaitlist) return ``;
-
-      const b1 = String(ha.bodyLine1 || "").trim();
-      const b2 = String(ha.bodyLine2 || "").trim();
-      const ctaFull = String(ha.ctaPrimary || "").trim();
-      const haTitle = fillTemplate(String(ha.title || "").trim(), vars);
-
-      const wlTitle = String(wl.endTitle || wl.title || "").trim();
-      const wlB1 = String(wl.endBodyLine1 || wl.bodyLine1 || "").trim();
-      const wlB2 = String(wl.endBodyLine2 || wl.bodyLine2 || "").trim();
-
-      const wlCta = String(wl.ctaLabel || "").trim();
-      const wlDisc = String(wl.disclaimer || "").trim();
-
-      const label = canOpenFull
-        ? haTitle
-        : (wlTitle || "");
-
-      if (!label) return ``;
-
-      return `
-        <details class="wt-accordion" style="margin-top:10px">
-          <summary class="wt-accordion-toggle">${escapeHtml(label)}</summary>
-          <div class="wt-accordion-content">
-            ${canOpenFull ? `
-              ${b1 ? `<p class="wt-muted">${escapeHtml(b1)}</p>` : ``}
-              ${b2 ? `<p class="wt-muted">${escapeHtml(b2)}</p>` : ``}
-            ` : ``}
-
-            ${(!canOpenFull && canWaitlist) ? `
-              ${wlB1 ? `<p class="wt-muted">${escapeHtml(wlB1)}</p>` : ``}
-              ${wlB2 ? `<p class="wt-muted">${escapeHtml(wlB2)}</p>` : ``}
-            ` : ``}
-
-            <div class="wt-actions">
-              ${canWaitlist && wlCta ? `
-                <button class="wt-btn wt-btn--secondary" data-action="open-waitlist">${escapeHtml(wlCta)}</button>
-              ` : ``}
-
-              ${canOpenFull && ctaFull ? `
-                <a class="wt-btn wt-btn--primary"
-   href="${escapeHtml(String((this.config?.houseAd?.url) || '').trim())}"
-   target="_blank"
-   rel="noopener">
-  ${escapeHtml(ctaFull)}
-</a>
-              ` : ``}
-            </div>
-
-            ${wlDisc ? `<p class="wt-muted">${escapeHtml(wlDisc)}</p>` : ``}
-          </div>
-        </details>
-      `;
-    })();
-
-    const shareHtml = shareEnabled ? `
-      ${(() => {
-        const share = w.share || {};
-        const title = String(shareTitle || "").trim();
-        const ctaLabel = String(share.ctaLabel || "").trim();
-        const emailLabel = String(share.emailLabel || "").trim();
-        const emailSubject = String(share.emailSubject || "").trim();
-        const shareAria = String(w.system?.shareAria || "").trim();
-        const text = String(this._getShareText ? this._getShareText() : "").trim();
-
-        const canCopy = !!(ctaLabel && text);
-        const canEmail = !!(emailLabel && emailSubject && text);
-
-        if (!title && !text) return ``;
-        if (!canCopy && !canEmail && !text) return ``;
-
-        return `
-          <details class="wt-accordion" style="margin-top:10px">
-            <summary class="wt-accordion-toggle" aria-label="${escapeHtml(shareAria)}">
-              ${escapeHtml(title)}
-            </summary>
-
-            <div class="wt-accordion-content">
-              ${text ? `<p class="wt-muted" style="white-space: pre-wrap; overflow-wrap: anywhere; word-break: break-word;">${escapeHtml(text)}</p>` : ``}
-
-              ${(canCopy || canEmail) ? `
-                <div class="wt-actions">
-                  ${canCopy ? `
-                    <button type="button" class="wt-btn wt-btn--secondary" data-action="copy-share">
-                      ${escapeHtml(ctaLabel)}
-                    </button>
-                  ` : ``}
-
-                  ${canEmail ? `
-                    <button type="button" class="wt-btn wt-btn--secondary" data-action="send-share-email">
-                      ${escapeHtml(emailLabel)}
-                    </button>
-                  ` : ``}
-                </div>
-              ` : ``}
-            </div>
-          </details>
-        `;
-      })()}
-    ` : ``;
+    const shareHtml = buildEndShareBlock({
+      shareEnabled,
+      w,
+      shareTitle,
+      getShareText: () => this._getShareText ? this._getShareText() : ""
+    });
+    const endCopyHtml = buildEndCopyHtml({
+      isRun,
+      isPractice,
+      isBonus,
+      contextBadgeLabel,
+      practiceStatsLineTpl,
+      practiceRepeatNoteTpl,
+      bonusStatsLine,
+      endLine,
+      bonusDecisionLine,
+      runStatsLine,
+      poolCompleteCelebration,
+      end,
+      vars,
+      runIdentityTpl,
+      premium,
+      freeRunMessage,
+      runPoolCompleteLine2Tpl
+    });
+    const endActionsHtml = buildEndActionsHtml({
+      storage: this.storage,
+      w,
+      cfg,
+      vars,
+      premium,
+      end,
+      postW: w.postCompletion || {},
+      isRun,
+      isPractice,
+      isBonus,
+      runShouldPromotePractice,
+      practiceCta,
+      runsExhausted,
+      upgradeCta,
+      runPlayAgain,
+      runShouldPromoteBonus,
+      runBonusPrimaryLabel,
+      canPractice,
+      practiceAgain,
+      bonusW,
+      bonusDeckTier,
+      bonusAgain,
+      poolCompleteCelebration,
+      runLensBonusPrimaryTpl,
+      runLensTpl
+    });
 
     return `
 <div class="wt-card">
@@ -7758,224 +8239,15 @@ ${(() => {
     </p>
   ` : ``}
 
-  ${microLinesHtml}
+  ${levelUnlockHtml}
 
-  ${(() => {
-        if (isPractice) {
-          const statsLine = practiceStatsLineTpl ? fillTemplate(practiceStatsLineTpl, vars) : "";
-          const repeatLine = practiceRepeatNoteTpl ? fillTemplate(practiceRepeatNoteTpl, vars) : "";
-          return [
-            statsLine ? `<p class="wt-muted">${escapeHtml(statsLine)}</p>` : ``,
-            endLine ? `<p class="wt-meta">${escapeHtml(endLine)}</p>` : ``,
-            repeatLine ? `<p class="wt-muted">${escapeHtml(repeatLine)}</p>` : ``
-          ].join("");
-        }
-        if (isBonus) {
-          return [
-            bonusStatsLine ? `<p class="wt-muted">${escapeHtml(bonusStatsLine)}</p>` : ``,
-            endLine ? `<p class="wt-meta">${escapeHtml(endLine)}</p>` : ``,
-            bonusDecisionLine ? `<p class="wt-muted">${escapeHtml(bonusDecisionLine)}</p>` : ``
-          ].join("");
-        }
-        if (isRun) {
-          const directToConsolidation =
-            !!(poolCompleteCelebration && clampInt(vars.backlog, 0, 99999) === 0);
-          const directToConsolidationLine = directToConsolidation
-            ? String(end.directToConsolidationLine || "").trim()
-            : "";
-          return [
-            runStatsLine ? `<p class="wt-muted">${escapeHtml(runStatsLine)}</p>` : ``,
-            endLine ? `<p class="wt-meta">${escapeHtml(endLine)}</p>` : ``,
-            directToConsolidationLine ? `<p class="wt-meta">${escapeHtml(directToConsolidationLine)}</p>` : ``,
-            runIdentityTpl ? `<p class="wt-meta">${escapeHtml(fillTemplate(runIdentityTpl, vars))}</p>` : ``,
-            (!premium && freeRunMessage) ? `<p class="wt-muted">${escapeHtml(freeRunMessage)}</p>` : ``
-          ].join("");
-        }
-        return endLine ? `<p class="wt-meta">${escapeHtml(endLine)}</p>` : ``;
-      })()}
-
-    ${(isRun && runPoolCompleteLine2Tpl && !(poolCompleteCelebration && clampInt(vars.backlog, 0, 99999) === 0)) ? `<p class="wt-meta">${escapeHtml(fillTemplate(runPoolCompleteLine2Tpl, vars))}</p>` : ``}
-
-  ${``}
+  <div class="wt-end-summary">
+    ${microLinesHtml}
+    ${endCopyHtml}
+  </div>
 
   <div class="${endActionsClass}">
-    ${(() => {
-        const postW = w.postCompletion || {};
-
-        const exhausted =
-          !!(this.storage && typeof this.storage.isPoolExhausted === "function" && this.storage.isPoolExhausted() === true);
-
-        const mastered =
-          !!(this.storage && typeof this.storage.isMastered === "function" && this.storage.isMastered() === true);
-
-        // backlog already computed into vars.backlog
-        const hasActiveMistakes = (clampInt(vars.backlog, 0, 99999) > 0);
-
-        // Mastered block (always visible when mastered)
-        const masteredTitle = String(postW.masteredTitle || "").trim();
-        const masteredL1 = String(postW.masteredLine1 || "").trim();
-        const masteredL2 = String(postW.masteredLine2 || "").trim();
-
-        const masteredHtml =
-          (mastered && (masteredTitle || masteredL1 || masteredL2))
-            ? `
-            <div style="margin-top:6px">
-              ${masteredTitle ? `<p class="wt-meta"><strong>${escapeHtml(masteredTitle)}</strong></p>` : ``}
-              ${masteredL1 ? `<p class="wt-muted">${escapeHtml(masteredL1)}</p>` : ``}
-              ${masteredL2 ? `<p class="wt-muted">${escapeHtml(masteredL2)}</p>` : ``}
-            </div>
-          `
-            : ``;
-
-        // Primary/secondary CTAs (KISS)
-        let primaryAction = "";
-        let primaryLabel = "";
-        let secondaryAction = "";
-        let secondaryLabel = "";
-
-        if (mastered) {
-          primaryAction = "start-secret-bonus";
-          primaryLabel = String(postW.masteredCtaBonus || "").trim();
-
-          secondaryAction = "start-run";
-          secondaryLabel = String(postW.masteredCtaReplay || "").trim();
-
-        } else if (exhausted && hasActiveMistakes) {
-          primaryAction = "start-practice";
-          const tpl = premium ? String(end.practiceCtaCountPremium || "").trim() : String(end.practiceCta || "").trim();
-          primaryLabel = tpl ? fillTemplate(tpl, { backlog: String(vars.backlog) }) : "";
-
-          secondaryAction = "start-run";
-          secondaryLabel = String(end.playAgain || "").trim();
-
-        } else {
-          if (isRun) {
-            if (runShouldPromotePractice) {
-              primaryAction = "start-practice";
-              primaryLabel = String(practiceCta || "").trim();
-
-              secondaryAction = runsExhausted ? "open-paywall" : "start-run";
-              secondaryLabel = runsExhausted ? String(upgradeCta || "").trim() : String(runPlayAgain || "").trim();
-
-            } else if (runShouldPromoteBonus) {
-              primaryAction = "start-secret-bonus";
-              primaryLabel = runBonusPrimaryLabel;
-
-              secondaryAction = runsExhausted ? "open-paywall" : "start-run";
-              secondaryLabel = runsExhausted ? String(upgradeCta || "").trim() : String(runPlayAgain || "").trim();
-
-            } else {
-              primaryAction = runsExhausted ? "open-paywall" : "start-run";
-              primaryLabel = runsExhausted ? String(upgradeCta || "").trim() : String(runPlayAgain || "").trim();
-
-              if (canPractice) {
-                secondaryAction = "start-practice";
-                secondaryLabel = String(practiceCta || "").trim();
-              }
-            }
-          } else if (isPractice) {
-            const remaining = Number(vars.remaining);
-            const isZero = (Number.isFinite(remaining) && remaining <= 0);
-
-            if (isZero) {
-              primaryAction = "start-run";
-              primaryLabel = String(end.playAgain || "").trim();
-
-              secondaryAction = "";
-              secondaryLabel = "";
-            } else {
-              primaryAction = "start-practice";
-              primaryLabel = String(practiceAgain || "").trim();
-
-              secondaryAction = "start-run";
-              secondaryLabel = String(end.playAgain || "").trim();
-            }
-          } else if (isBonus) {
-            const expandDeckLabel = String(bonusW?.ctaExpandDeck || "").trim();
-            const shouldExpandDeck =
-              (bonusDeckTier === "small") &&
-              !!expandDeckLabel;
-
-            if (shouldExpandDeck) {
-              primaryAction = "start-run";
-              primaryLabel = expandDeckLabel;
-
-              secondaryAction = "start-secret-bonus";
-              secondaryLabel = String(bonusAgain || "").trim();
-            } else {
-              primaryAction = "start-secret-bonus";
-              primaryLabel = String(bonusAgain || "").trim();
-
-              secondaryAction = "start-run";
-              secondaryLabel = String(end.playAgain || "").trim();
-            }
-          }
-        }
-
-        // Fail-closed: if primaryLabel missing, do not render broken buttons.
-        if (!primaryLabel || !primaryAction) return masteredHtml || ``;
-
-        const primaryBtn = `
-        <button class="wt-btn wt-btn--primary" data-action="${escapeHtml(primaryAction)}" style="width:100%">
-          ${escapeHtml(primaryLabel)}
-        </button>
-      `;
-
-        const secondaryBtn =
-          (secondaryLabel && secondaryAction)
-            ? `
-            <button class="wt-btn wt-btn--secondary" data-action="${escapeHtml(secondaryAction)}" style="width:100%">
-              ${escapeHtml(secondaryLabel)}
-            </button>
-          `
-            : ``;
-
-        const runLensHtml =
-          (isRun && !poolCompleteCelebration)
-            ? (() => {
-              const lensText = runShouldPromoteBonus && runLensBonusPrimaryTpl
-                ? runLensBonusPrimaryTpl
-                : (runLensTpl ? fillTemplate(runLensTpl, vars) : "");
-              return lensText
-                ? `<p class="wt-muted">${escapeHtml(lensText)}</p>`
-                : ``;
-            })()
-            : ``;
-
-        let installBtn = ``;
-        try {
-          const installW = w.installPrompt || {};
-          const installLabel = String(installW.ctaPrimary || "").trim();
-
-          let runCompletes = 0;
-          if (this.storage && typeof this.storage.getCounters === "function") {
-            const counters = this.storage.getCounters() || {};
-            runCompletes = Number(counters.runCompletes || 0);
-          }
-
-          const shouldShowInstall =
-            isRun &&
-            runCompletes === 1 &&
-            !!installLabel &&
-            !!(window.WT_PWA && typeof window.WT_PWA.canPrompt === "function" && window.WT_PWA.canPrompt(cfg, this.storage) === true);
-
-          if (shouldShowInstall) {
-            installBtn = `
-            <button class="wt-btn wt-btn--ghost" data-action="install-app" style="width:100%">
-              ${escapeHtml(installLabel)}
-            </button>
-          `;
-          }
-        } catch (_) { /* silent */ }
-
-        return `
-  ${masteredHtml}
-  ${runLensHtml}
-  ${primaryBtn}
-  ${secondaryBtn}
-  ${installBtn}
-`;
-      })()}
+    ${endActionsHtml}
   </div>
 
   ${paywallBridgeHtml}
@@ -8161,7 +8433,7 @@ ${(() => {
     const qHeadingTpl = String(w.questionHeadingTemplate || "").trim();
     const qNum = (this._runtime?.feedbackPending === true) ? servedSoFar : (servedSoFar + 1);
     const headingHtml = (qHeadingTpl && Number.isFinite(qNum) && qNum > 0)
-      ? `<p class="wt-muted" style="margin:0 0 4px">${escapeHtml(fillTemplate(qHeadingTpl, { n: qNum }))}</p>`
+      ? `<p class="wt-muted wt-m-0 wt-mb-4">${escapeHtml(fillTemplate(qHeadingTpl, { n: qNum }))}</p>`
       : "";
 
     const showSeenOnlyRule =
@@ -8443,7 +8715,7 @@ ${questionPrompt ? `
 
 
             ${!autoGameOverAfterFeedback ? `
-      <div class="wt-actions" style="margin-top:16px">
+      <div class="wt-actions wt-mt-16">
       <button class="wt-btn wt-btn--primary" data-action="continue">
         ${escapeHtml(continueCta)}
       </button>
@@ -8452,7 +8724,7 @@ ${questionPrompt ? `
 
 
     ${(!autoGameOverAfterFeedback && shouldTapToContinue() && tapToContinue) ? `
-      <p class="wt-muted wt-tap-hint" style="margin-top:8px">
+      <p class="wt-muted wt-tap-hint wt-mt-10">
         ${escapeHtml(tapToContinue)}
       </p>
     ` : ``}
@@ -8708,7 +8980,7 @@ ${questionPrompt ? `
           const qt = String(q?.quote || "").trim();
           const au = String(q?.author || "").trim();
           if (!qt) return "";
-          return `<div style="margin-top:10px"><div style="font-weight:500">&ldquo;${escapeHtml(qt)}&rdquo;</div>${au ? `<div class="wt-muted" style="margin-top:4px">${escapeHtml(au)}</div>` : ``}</div>`;
+          return `<div class="wt-paywall-quote"><div class="wt-paywall-quote-text">&ldquo;${escapeHtml(qt)}&rdquo;</div>${au ? `<div class="wt-muted wt-paywall-quote-author">${escapeHtml(au)}</div>` : ``}</div>`;
         })
         .filter(Boolean)
         .join("");
@@ -8733,7 +9005,7 @@ ${questionPrompt ? `
       return `
         <div class="${cls}" role="status" aria-live="polite">
           <div class="wt-meta">${escapeHtml(label)}</div>
-          <div class="wt-h2${urgencyPulse ? ' wt-pulse' : ''}" style="margin:4px 0 0;color:rgb(var(--primary-dark))">${escapeHtml(timer)}</div>
+          <div class="wt-h2 wt-paywall-timer${urgencyPulse ? ' wt-pulse' : ''}">${escapeHtml(timer)}</div>
         </div>
       `;
     };
@@ -8755,13 +9027,13 @@ ${questionPrompt ? `
       <div class="${wrapClass}">
         <div class="wt-row wt-row--spaced wt-row--top">
           <div>
-            <p class="wt-meta" style="margin:0">
+            <p class="wt-meta wt-paywall-price-value">
               ${escapeHtml(earlyBadge || String(pay.earlyLabel || "").trim())}
             </p>
           </div>
-          <div style="text-align:right">
-            <p class="wt-h2" style="margin:0">${escapeHtml(early)}</p>
-            <p class="wt-muted" style="margin:4px 0 0;text-decoration:line-through">${escapeHtml(standard)}</p>
+          <div class="wt-paywall-price-side">
+            <p class="wt-h2 wt-paywall-price-value">${escapeHtml(early)}</p>
+            <p class="wt-muted wt-paywall-price-note">${escapeHtml(standard)}</p>
           </div>
         </div>
       </div>
@@ -8772,12 +9044,12 @@ ${questionPrompt ? `
       <div class="${wrapClass}">
         <div class="wt-row wt-row--spaced wt-row--top">
           <div>
-            <p class="wt-meta" style="margin:0">${escapeHtml(String(pay.standardLabel || "").trim())}</p>
-            ${post1 ? `<p class="wt-muted" style="margin:4px 0 0">${escapeHtml(post1)}</p>` : ``}
-            ${post2 ? `<p class="wt-muted" style="margin:4px 0 0">${escapeHtml(post2)}</p>` : ``}
+            <p class="wt-meta wt-paywall-price-value">${escapeHtml(String(pay.standardLabel || "").trim())}</p>
+            ${post1 ? `<p class="wt-muted wt-paywall-price-note">${escapeHtml(post1)}</p>` : ``}
+            ${post2 ? `<p class="wt-muted wt-paywall-price-note">${escapeHtml(post2)}</p>` : ``}
           </div>
-          <div style="text-align:right">
-            <p class="wt-h2" style="margin:0">${escapeHtml(standard)}</p>
+          <div class="wt-paywall-price-side">
+            <p class="wt-h2 wt-paywall-price-value">${escapeHtml(standard)}</p>
           </div>
         </div>
       </div>
@@ -8795,19 +9067,19 @@ ${questionPrompt ? `
     <div class="wt-card wt-card--hero">
       <h1 class="wt-h1">${escapeHtml(headline)}</h1>
 
-      ${progressLine1 ? `<p class="wt-muted" style="margin-top:6px">${escapeHtml(progressLine1)}</p>` : ``}
-      ${progressLine2 ? `<p class="wt-muted" style="margin-top:2px">${escapeHtml(progressLine2)}</p>` : ``}
+      ${progressLine1 ? `<p class="wt-muted wt-paywall-progress-line--lead">${escapeHtml(progressLine1)}</p>` : ``}
+      ${progressLine2 ? `<p class="wt-muted wt-paywall-progress-line--follow">${escapeHtml(progressLine2)}</p>` : ``}
 
       ${hasValueSection ? `
-       ${valueTitle ? `<div class="wt-meta wt-meta--strong" style="margin-top:var(--gap-2)">${escapeHtml(valueTitle)}</div>` : ``}
-        ${valueBullets.length ? `<div style="margin-top:var(--gap-1)">${renderBullets(valueBullets, false)}</div>` : ``}
+       ${valueTitle ? `<div class="wt-meta wt-meta--strong wt-paywall-section-title">${escapeHtml(valueTitle)}</div>` : ``}
+        ${valueBullets.length ? `<div class="wt-paywall-list-wrap">${renderBullets(valueBullets, false)}</div>` : ``}
       ` : ``}
 
       ${(hasValueSection && hasTrustSection) ? `<div class="wt-divider"></div>` : ``}
 
       ${hasTrustSection ? `
-       ${trustLine ? `<div class="wt-meta wt-meta--strong" style="margin-top:6px">${renderTextWithStrong(trustLine)}</div>` : ``}
-        ${trustBullets.length ? `<div style="margin-top:var(--gap-1)">${renderBullets(trustBullets, true)}</div>` : ``}
+       ${trustLine ? `<div class="wt-meta wt-meta--strong wt-paywall-trust-line">${renderTextWithStrong(trustLine)}</div>` : ``}
+        ${trustBullets.length ? `<div class="wt-paywall-list-wrap">${renderBullets(trustBullets, true)}</div>` : ``}
       ` : ``}
 
       ${renderSocialProof()}
@@ -8818,7 +9090,7 @@ ${questionPrompt ? `
 
       ${renderPriceBlock()}
 
-      ${savingsLine ? `<p class="wt-muted" style="margin:10px 0 0">${escapeHtml(savingsLine)}</p>` : ``}
+      ${savingsLine ? `<p class="wt-muted wt-paywall-savings">${escapeHtml(savingsLine)}</p>` : ``}
 
       <div class="wt-actions">
         <button
@@ -8832,11 +9104,11 @@ ${questionPrompt ? `
         >${escapeHtml(notNowLabel)}</button>
       </div>
 
-            ${redeemLabel ? `<p class="wt-muted" style="margin-top:10px"><button class="wt-btn wt-btn--ghost" data-action="redeem-code">${escapeHtml(redeemLabel)}</button></p>` : ``}
+            ${redeemLabel ? `<p class="wt-muted wt-paywall-redeem"><button class="wt-btn wt-btn--ghost" data-action="redeem-code">${escapeHtml(redeemLabel)}</button></p>` : ``}
 
     ${"" /* trustLine already rendered above in trust section */}
-    ${checkoutNote ? `<p class="wt-muted" style="margin-top:8px">${escapeHtml(checkoutNote)}</p>` : ``}
-      ${deviceNote ? `<p class="wt-muted" style="margin-top:4px">${escapeHtml(deviceNote)}</p>` : ``}
+    ${checkoutNote ? `<p class="wt-muted wt-paywall-checkout-note">${escapeHtml(checkoutNote)}</p>` : ``}
+      ${deviceNote ? `<p class="wt-muted wt-paywall-device-note">${escapeHtml(deviceNote)}</p>` : ``}
     </div>
     `;
 
