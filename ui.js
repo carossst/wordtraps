@@ -6659,8 +6659,8 @@ void function () {
 
         const title = `${pct}%`;
         const sub = isComplete
-          ? `${mastered} of ${poolSizeSafe} words answered correctly`
-          : `${seen} of ${poolSizeSafe} words played`;
+          ? `${mastered} words answered correctly`
+          : `${seen} words played`;
 
         if (title || sub || landingLevelBadgeHtml) {
           welcomeBackHtml = `

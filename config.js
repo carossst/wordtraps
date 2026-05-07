@@ -629,7 +629,7 @@
     landing: {
       title: "Word Traps",
       tagline: "**Think you know French? Prove it.**",
-      subtitle: "Faux amis or true friends?\n200 French-English words to train your brain.",
+      subtitle: "Faux amis or true friends?\nFrench-English words to train your brain.",
       microFun: "No signup · Quick games · Free to try",
       microTrust: "A few quick rounds show which words you really know.",
 
@@ -643,7 +643,7 @@
       statsSeenLabel: "Words seen",
 
       // Before completion (goal gradient) 
-      statsSeenSummaryTemplate: "{seen}/{poolSize} word traps seen.",
+      statsSeenSummaryTemplate: "{seen} word traps seen.",
       statsPhaseBadgeDiscovery: "Phase 1/3: First pass",
       statsPhaseBadgeCorrection: "Phase 2/3: Fixing mistakes",
       statsPhaseBadgeConsolidation: "Phase 3/3: Locked in",
@@ -652,7 +652,7 @@
       statsSeenCompleteLabel: "French-English Faux Amis Mastery",
       statsMistakesLabel: "Mistakes",
       statsMistakesSummaryTemplate: "{mistakes}",
-      statsMasterySummaryTemplate: "{mastered}/{poolSize} traps mastered",
+      statsMasterySummaryTemplate: "{mastered} traps mastered",
 
       postPaywallTitle: "Free games completed. Ready for more?",
       postPaywallBody: "Unlock all 200 traps, unlimited play, Mistakes Mode, and High Focus Mode on this device.",
@@ -705,7 +705,7 @@
     phaseJourney: {
       discovery: {
         badge: "Phase 1/3: First pass",
-        landingSummaryTemplate: "{seen}/{poolSize} traps played.",
+        landingSummaryTemplate: "{seen} traps played.",
         landingDetailTemplate: "{remaining} still to go in your first pass.",
         endLens: "You're still on your first pass. Right now the goal is to cover more of the set.",
         micropics: {
@@ -735,7 +735,7 @@
       },
       consolidation: {
         badge: "Phase 3/3: Locked in",
-        landingSummaryTemplate: "{mastered}/{poolSize} traps mastered.",
+        landingSummaryTemplate: "{mastered} traps mastered.",
         landingDetail: "You've cleared the mistakes. Now keep the traps clear.",
         endLens: "You've cleared the mistakes. Now keep the traps clear.",
         micropics: {
