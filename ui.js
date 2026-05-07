@@ -2978,7 +2978,10 @@ void function () {
       return arr
         .map(s => String(s || "").trim())
         .filter(Boolean)
-        .map(s => `<p class="wt-meta">${escapeHtml(fillTemplate(s, vars))}</p>`)
+        .map((s, idx) => {
+          const cls = idx === 0 ? "wt-meta wt-meta--strong" : "wt-meta";
+          return `<p class="${cls}">${escapeHtml(fillTemplate(s, vars))}</p>`;
+        })
         .join("");
     };
 
@@ -7994,8 +7997,8 @@ ${(() => {
 
     const poolCompleteCelebration = isRun && !!lastRun.poolCompleteCelebration;
 
-    const shareEnabled = isRun && !!(cfg.share && cfg.share.enabled);
-    const shouldPromoteShare = isRun && shareEnabled;
+    const shareEnabled = !!(cfg.share && cfg.share.enabled);
+    const shouldPromoteShare = true;
 
     const runsExhausted = (isRun && !premium && Number.isFinite(remaining) && remaining <= 0);
 
@@ -8220,11 +8223,13 @@ ${(() => {
   ${endTitle ? `<p class="wt-h1">${escapeHtml(endTitle)}</p>` : ``}
 
   ${displayScoreLine ? `
-    <p class="wt-h2 wt-end-score${newBest ? " wt-end-score--newbest" : ""}">
-      ${displayScoreHeading ? `<span class="wt-end-score__eyebrow">${escapeHtml(displayScoreHeading)}</span>` : ``}
-      <span class="wt-end-score__value">
-        ${escapeHtml(displayScoreValue || displayScoreLine)}
-      </span>
+    <div class="wt-end-score${newBest ? " wt-end-score--newbest" : ""}" role="group" aria-label="${escapeHtml(displayScoreLine)}">
+      <div class="wt-end-score__headline">
+        ${displayScoreHeading ? `<span class="wt-end-score__eyebrow">${escapeHtml(displayScoreHeading)}</span>` : ``}
+        <span class="wt-end-score__value">
+          ${escapeHtml(displayScoreValue || displayScoreLine)}
+        </span>
+      </div>
 
       ${celebrationLabel ? `<span class="wt-end-score__label">${escapeHtml(celebrationLabel)}</span>` : ``}
 
@@ -8236,7 +8241,7 @@ ${(() => {
           <path d="M30 1 L31.4 4.6 L35 5.8 L31.4 7 L30 10.6 L28.6 7 L25 5.8 L28.6 4.6 Z" fill="currentColor" opacity="0.75"></path>
         </svg>
       ` : ``}
-    </p>
+    </div>
   ` : ``}
 
   ${levelUnlockHtml}

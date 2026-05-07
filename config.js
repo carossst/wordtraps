@@ -328,6 +328,7 @@
 
     landingStats: {
       enabled: true,
+      minCompletedRuns: 1,
       paceRunsCount: 4,
       showBeforeFirstRun: false
     },
@@ -542,7 +543,7 @@
   window.WT_WORDING = {
     brand: {
       creatorLine: "Carole, a French native from Paris 🇫🇷",
-      creatorLineHtml: "An indie game by Test Your French.<br>Created by <a href=\"https://www.linkedin.com/in/carolestromboni/\" target=\"_blank\" rel=\"noopener\">Carole</a>, a French native from Paris. 🇫🇷"
+      creatorLineHtml: "An indie game by Test Your French.<br>Created by <a href=\"./press.html\">Carole</a>, a French native from Paris. 🇫🇷"
     },
 
     system: {
