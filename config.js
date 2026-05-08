@@ -998,7 +998,7 @@
         direct: "Stay in Mistakes mode. These are the ones that need the work."
       },
 
-      scoreLine: "{total} words reviewed",
+      scoreLine: "Score: {score}",
 
       // PLAYING: calm progress line (replaces assertion in PRACTICE)
       playingProgressLine: "{current}/{total}",
@@ -1347,7 +1347,7 @@ Thanks!`
       template: `Hey!
 I've been playing this word traps game.
 This made me think of you.
-Best score yet: {bestScore}
+Score this round: {score}
 {funFact}
 Think you'd get it right?
 {url}`,

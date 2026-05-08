@@ -470,6 +470,7 @@ void function () {
   function cleanupPlayingExit(ui, opts) {
     const o = (opts && typeof opts === "object") ? opts : null;
     const keepChanceOverlayVisible = !!(o && o.keepChanceOverlayVisible === true);
+    const preserveEndSignals = !!(ui && ui._runtime && ui._runtime.finishingRun === true);
 
     cancelScheduledToast({ keepChanceOverlayVisible });
 
@@ -552,8 +553,10 @@ void function () {
       ui._runtime.poolExhaustedToastKey = null;
       ui._runtime.gameOverPending = false;
       ui._runtime.secretBonusPending = false;
-      ui._runtime.poolCompleteCelebrationPending = false;
-      ui._runtime.endRecordMomentUntil = 0;
+      if (!preserveEndSignals) {
+        ui._runtime.poolCompleteCelebrationPending = false;
+        ui._runtime.endRecordMomentUntil = 0;
+      }
     }
 
     try {
@@ -4944,11 +4947,9 @@ void function () {
 
     const lastRun = (this._runtime && this._runtime.lastRun) ? this._runtime.lastRun : {};
 
-    // Share is RUN-only to avoid mixing score semantics (BONUS/PRACTICE).
-    if (String(lastRun.mode || "RUN").trim() !== "RUN") return "";
-
     const scoreFP = clampInt(lastRun.scoreFP, 0, 99999);
     const bestScoreFP = clampInt(lastRun.bestScoreFP, 0, 99999);
+    const shareBestScoreFP = bestScoreFP > 0 ? bestScoreFP : scoreFP;
 
     // Curiosity-gap share: "Can you guess?" framing (nudge psychology).
     // Priority: pick a false friend (trap) for maximum surprise.
@@ -5020,7 +5021,7 @@ void function () {
       .replaceAll("{poolSize}", String(poolSize))
       .replaceAll("{maxChances}", String(maxChances))
       .replaceAll("{score}", String(scoreFP))
-      .replaceAll("{bestScore}", String(bestScoreFP))
+      .replaceAll("{bestScore}", String(shareBestScoreFP))
       .replaceAll("{funFact}", funFact);
 
     this._runtime = this._runtime || {};
@@ -7935,8 +7936,8 @@ ${(() => {
 
     // Always show the score (requested), never replace it.
     const displayScoreLine = scoreLine;
-    const displayScoreHeading = ((isRun || isBonus) && scoreHeading && scoreFP >= 0) ? scoreHeading : "";
-    const displayScoreValue = ((isRun || isBonus) && scoreLine) ? String(scoreFP) : "";
+    const displayScoreHeading = (scoreHeading && scoreFP >= 0) ? scoreHeading : "";
+    const displayScoreValue = (scoreHeading && scoreFP >= 0) ? String(scoreFP) : "";
 
     const pbLineTpl = String(end.personalBestLine || "").trim();
     const nearBestTpl = String(end.nearBestLine || "").trim();
