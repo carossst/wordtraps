@@ -143,6 +143,13 @@
     return await res.json();
   }
 
+  function appendVersionParam(url, version) {
+    const src = String(url || "").trim();
+    const v = String(version || "").trim();
+    if (!src || !v) return src;
+    return `${src}${src.includes("?") ? "&" : "?"}v=${encodeURIComponent(v)}`;
+  }
+
 
 
   // ============================================
@@ -575,15 +582,39 @@
       // Load content in parallel during boot
       loadJson(config.contentUrl)
 
-        .then((content) => {
+        .then(async (content) => {
           clearTimeout(slowLoadTimer);
 
-          const items = Array.isArray(content.items) ? content.items : [];
+          let finalContent = content;
+          let items = Array.isArray(finalContent.items) ? finalContent.items : [];
+          let declaredTotal = Number(finalContent && finalContent.totalItems);
+          const expectedPoolSize = Number(config?.game?.poolSize);
+
+          if (Number.isFinite(expectedPoolSize) && expectedPoolSize > 0 && items.length > 0 && items.length < expectedPoolSize) {
+            try {
+              const retryUrl = appendVersionParam(config.contentUrl, config.version);
+              const freshContent = await loadJson(retryUrl);
+              const freshItems = Array.isArray(freshContent.items) ? freshContent.items : [];
+              if (freshItems.length > items.length) {
+                finalContent = freshContent;
+                items = freshItems;
+                declaredTotal = Number(finalContent && finalContent.totalItems);
+              }
+            } catch (_) { /* keep initial content */ }
+          }
 
           if (!items.length) {
             if (ui && typeof ui.setContentLoading === "function") ui.setContentLoading(false);
             showFatal("Content not available. Please check your connection and reload.");
             return;
+          }
+
+          if (Number.isFinite(declaredTotal) && declaredTotal > 0 && declaredTotal !== items.length) {
+            Logger.warn(`Content totalItems mismatch: declared=${declaredTotal}, actual=${items.length}`);
+          }
+
+          if (config && config.game && items.length > 0) {
+            config.game.poolSize = items.length;
           }
 
           ui.setContent(items);

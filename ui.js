@@ -3597,8 +3597,12 @@ void function () {
 
   UI.prototype.openFreeLimitReachedModal = function (wordingBlock, vars) {
     const block = wordingBlock || {};
-    const title = fillTemplate(String(block.freeLimitReachedTitle || "").trim(), vars || {});
-    const body = fillTemplate(String(block.freeLimitReachedBody || "").trim(), vars || {});
+    const mergedVars = Object.assign(
+      { poolSize: clampInt(this.config?.game?.poolSize, 1, 9999) },
+      (vars && typeof vars === "object") ? vars : {}
+    );
+    const title = fillTemplate(String(block.freeLimitReachedTitle || "").trim(), mergedVars);
+    const body = fillTemplate(String(block.freeLimitReachedBody || "").trim(), mergedVars);
     const cta = String(block.freeLimitReachedCta || "").trim();
     const close = String(block.freeLimitReachedClose || "").trim();
 
@@ -5170,10 +5174,12 @@ void function () {
     const end = w.end || {};
     const sys = w.system || {};
     const lastRun = (this._runtime && this._runtime.lastRun) ? this._runtime.lastRun : {};
+    const poolSize = clampInt(this.config?.game?.poolSize, 1, 9999);
+    const vars = { poolSize };
 
-    const title = String(end.poolCompleteTitle || "").trim();
-    const line1 = String(end.poolCompleteLine1 || "").trim();
-    const line2 = String(end.poolCompleteLine2 || "").trim();
+    const title = fillTemplate(String(end.poolCompleteTitle || "").trim(), vars);
+    const line1 = fillTemplate(String(end.poolCompleteLine1 || "").trim(), vars);
+    const line2 = fillTemplate(String(end.poolCompleteLine2 || "").trim(), vars);
     const scoreLineTpl = String(end.poolCompleteScoreLine || "").trim();
     const cta = String(sys.continue || "").trim();
 
@@ -5210,6 +5216,11 @@ void function () {
     const w = this.wording || {};
     const ms = w.milestones || {};
     const hw = ms.halfway || {};
+    const poolSize = clampInt(this.config?.game?.poolSize, 1, 9999);
+    const vars = {
+      poolSize,
+      halfPool: Math.max(1, Math.floor(poolSize / 2))
+    };
 
     const title = String(hw.title || "").trim();
     const lines = Array.isArray(hw.bodyLines) ? hw.bodyLines : [];
@@ -5226,7 +5237,7 @@ void function () {
     } catch (_) { /* silent */ }
 
     const bodyHtml = lines.map((s) => {
-      const line = String(s || "");
+      const line = fillTemplate(String(s || ""), vars);
       if (!line) return `<div class="wt-spacer-8"></div>`;
       return `<p>${escapeHtml(line)}</p>`;
     }).join("");
@@ -6462,7 +6473,7 @@ void function () {
     if (isPostPaywallVariant && this._nav) this._nav.landingVariant = null;
 
     const postTitle = String(landing.postPaywallTitle || "").trim();
-    const postBody = String(landing.postPaywallBody || "").trim();
+    const postBody = fillTemplate(String(landing.postPaywallBody || "").trim(), { poolSize }).trim();
     const postCta = String(landing.postPaywallCta || "").trim();
 
     // postBlock: computed after canShowChest (see below)
@@ -7271,7 +7282,7 @@ ${(() => {
       const directToConsolidation =
         !!(poolCompleteCelebration && clampInt(vars.backlog, 0, 99999) === 0);
       const directToConsolidationLine = directToConsolidation
-        ? String(end.directToConsolidationLine || "").trim()
+        ? fillTemplate(String(end.directToConsolidationLine || "").trim(), vars)
         : "";
       body = [
         runStatsLine ? `<p class="wt-end-copy__stats">${escapeHtml(runStatsLine)}</p>` : ``,
@@ -7353,7 +7364,7 @@ ${(() => {
       !!(storage && typeof storage.isMastered === "function" && storage.isMastered() === true);
     const hasActiveMistakes = (clampInt(vars.backlog, 0, 99999) > 0);
 
-    const masteredTitle = String(postW.masteredTitle || "").trim();
+    const masteredTitle = fillTemplate(String(postW.masteredTitle || "").trim(), vars);
     const masteredL1 = String(postW.masteredLine1 || "").trim();
     const masteredL2 = String(postW.masteredLine2 || "").trim();
     const masteredHtml =
@@ -8031,8 +8042,8 @@ ${(() => {
     const endTitle =
       isBonus ? String(bonusW.endTitle || "").trim()
         : isPractice ? String(practiceW.endTitle || "").trim()
-          : poolCompleteCelebration ? String(end.poolCompleteTitle || "").trim()
-            : String(end.title || "").trim();
+          : poolCompleteCelebration ? fillTemplate(String(end.poolCompleteTitle || "").trim(), vars)
+            : fillTemplate(String(end.title || "").trim(), vars);
 
     if (!endTitle && this.config?.debug?.enabled) {
       console.warn("[WT_UI] Missing required copy: WT_WORDING.end.title / WT_WORDING.practice.endTitle / WT_WORDING.secretBonus.endTitle");
@@ -8087,8 +8098,8 @@ ${(() => {
     }
 
     // End -> Paywall bridge (copy must come from WT_WORDING; no hardcoded fallback)
-    const paywallBridgeTitle = String(w.paywall?.bridgeTitle || "").trim();
-    const paywallBridgeBody = String(w.paywall?.bridgeBody || "").trim();
+    const paywallBridgeTitle = fillTemplate(String(w.paywall?.bridgeTitle || "").trim(), vars);
+    const paywallBridgeBody = fillTemplate(String(w.paywall?.bridgeBody || "").trim(), vars);
 
     // Single source of truth for upgrade CTA (all contexts)
     const upgradeCta = String(w.paywall?.cta || "").trim();
@@ -8866,19 +8877,6 @@ ${questionPrompt ? `
       (Number.isFinite(runsBalance) && runsBalance <= 0) ||
       (this._runtime && this._runtime.runType === "LAST_FREE");
 
-    const headline =
-      isLastFree && pay.headlineLastFree
-        ? String(pay.headlineLastFree).trim()
-        : String(pay.headline || "").trim();
-
-
-
-    const valueTitle = String(pay.valueTitle || "").trim();
-    const trustTitle = String(pay.trustTitle || "").trim();
-
-    const valueBullets = Array.isArray(pay.valueBullets) ? pay.valueBullets : [];
-    const trustLine = String(pay.trustLine || "").trim();
-    const trustBullets = Array.isArray(pay.trustBullets) ? pay.trustBullets : [];
     const notNowLabel = String(w.system?.notNow || "").trim();
     const redeemLabel = String(pay.alreadyHaveCode || "").trim();
 
@@ -8899,6 +8897,19 @@ ${questionPrompt ? `
       (Number.isFinite(seen) && Number.isFinite(poolSize))
         ? Math.max(0, poolSize - seen)
         : NaN;
+    const poolSizeVars = { seen, poolSize, remaining };
+
+    const headline =
+      isLastFree && pay.headlineLastFree
+        ? fillTemplate(String(pay.headlineLastFree).trim(), poolSizeVars)
+        : fillTemplate(String(pay.headline || "").trim(), poolSizeVars);
+
+    const valueTitle = fillTemplate(String(pay.valueTitle || "").trim(), poolSizeVars);
+    const trustTitle = fillTemplate(String(pay.trustTitle || "").trim(), poolSizeVars);
+
+    const valueBullets = Array.isArray(pay.valueBullets) ? pay.valueBullets : [];
+    const trustLine = fillTemplate(String(pay.trustLine || "").trim(), poolSizeVars);
+    const trustBullets = Array.isArray(pay.trustBullets) ? pay.trustBullets : [];
 
     const progressLine1Tpl = String(pay.progressLine1 || "").trim();
     const progressLine2Tpl = String(pay.progressLine2 || "").trim();
@@ -8942,9 +8953,9 @@ ${questionPrompt ? `
     })();
 
 
-    const ctaEarly = String(pay.ctaEarly || "").trim();
-    const ctaStandard = String(pay.ctaStandard || "").trim();
-    const ctaFallback = String(pay.cta || "").trim();
+    const ctaEarly = fillTemplate(String(pay.ctaEarly || "").trim(), poolSizeVars);
+    const ctaStandard = fillTemplate(String(pay.ctaStandard || "").trim(), poolSizeVars);
+    const ctaFallback = fillTemplate(String(pay.cta || "").trim(), poolSizeVars);
     const primaryCta = isEarly ? (ctaEarly || ctaFallback) : (ctaStandard || ctaFallback);
 
     // EARLY savings bump (no fallback: requires template + valid cents)
@@ -8966,8 +8977,8 @@ ${questionPrompt ? `
         ? fillTemplate(savingsTpl, { saveAmount, earlyPrice: early, standardPrice: standard })
         : "";
 
-    const checkoutNote = String(pay.checkoutNote || "").trim();
-    const deviceNote = String(pay.deviceNote || "").trim();
+    const checkoutNote = fillTemplate(String(pay.checkoutNote || "").trim(), poolSizeVars);
+    const deviceNote = fillTemplate(String(pay.deviceNote || "").trim(), poolSizeVars);
 
     // Bullets: use existing .wt-list (better rhythm + less "pavé"
 
@@ -8975,7 +8986,7 @@ ${questionPrompt ? `
       if (!arr.length) return "";
       const cls = `wt-list${muted ? " wt-muted" : ""}`;
       const items = arr
-        .map(x => String(x || "").trim())
+        .map(x => fillTemplate(String(x || "").trim(), poolSizeVars))
         .filter(Boolean)
         .map(x => `<li>${renderTextWithStrong(x)}</li>`)
         .join("");

@@ -27,10 +27,10 @@ Just a decision: **is this actually correct, or not?**
 
 ## 🎯 What It Does
 
-* A fixed pool of **100 word traps**
+* A fixed pool of **400 word traps**
   (false friends, semantic shifts, misleading similarities)
 * **True / False** judgment format
-* **10 questions per session**, then it ends
+* **Continuous runs** until **3 mistakes**
 * No levels, no difficulty curve
 * A pure **judgment game**, not a learning flow
 
@@ -102,7 +102,7 @@ Complexity is removed, not abstracted.
 
 ### Free
 
-* **3 sessions** included
+* **2 games** included
 * Full game, no functional limitation
 * Each session consumes **1 play**
 

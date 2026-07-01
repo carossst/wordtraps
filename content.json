@@ -1,9 +1,9 @@
 {
-  "version": "3.5",
-  "totalItems": 200,
+  "version": "3.6-release-400",
+  "totalItems": 400,
   "breakdown": {
-    "falseItems": 109,
-    "trueItems": 91
+    "falseItems": 209,
+    "trueItems": 191
   },
   "items": [
     {
@@ -12,7 +12,9 @@
       "termEn": "library",
       "correctAnswer": false,
       "explanationShort": "librairie (FR) = a bookstore.\nlibrary (EN) = a place where you borrow books.\nFrench sells books; English lends them.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 2,
@@ -20,7 +22,9 @@
       "termEn": "actually",
       "correctAnswer": false,
       "explanationShort": "actuellement (FR) = currently, at the present time.\nactually (EN) = in fact, really, contrary to what was expected.\nFrench speaks about time; English corrects a statement.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 3,
@@ -28,7 +32,9 @@
       "termEn": "eventually",
       "correctAnswer": false,
       "explanationShort": "éventuellement (FR) = possibly, perhaps.\neventually (EN) = in the end, after some time.\nFrench is uncertainty; English is outcome.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 4,
@@ -36,7 +42,9 @@
       "termEn": "college",
       "correctAnswer": false,
       "explanationShort": "collège (FR) = middle school (ages 11-15).\ncollege (EN) = higher education after high school.\nTeenagers in French, adults in English.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 5,
@@ -44,7 +52,9 @@
       "termEn": "location",
       "correctAnswer": false,
       "explanationShort": "location (FR) = a rental (flat, car, equipment).\nlocation (EN) = a place or position.\nRenting in French, place in English.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 6,
@@ -52,7 +62,9 @@
       "termEn": "stage",
       "correctAnswer": false,
       "explanationShort": "stage (FR) = an internship or training period.\nstage (EN) = a platform for performances, or a phase.\nWork experience in French, theatre in English.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
     },
     {
       "id": 7,
@@ -60,7 +72,9 @@
       "termEn": "chair",
       "correctAnswer": false,
       "explanationShort": "chair (FR) = flesh, the soft tissue of the body.\nchair (EN) = a seat or piece of furniture.\nFrench is flesh; English is furniture.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 8,
@@ -68,7 +82,9 @@
       "termEn": "camera",
       "correctAnswer": false,
       "explanationShort": "caméra (FR) = a device mainly used to record video.\ncamera (EN) = a device used to take photographs or record images.\nFrench usually distinguishes photo ('appareil photo') and video ('caméra'); English often uses 'camera' for both.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 9,
@@ -76,7 +92,9 @@
       "termEn": "preservative",
       "correctAnswer": false,
       "explanationShort": "préservatif (FR) = a condom.\npreservative (EN) = a chemical added to food to keep it fresh.\nA notorious source of confusion for travellers ordering food in France.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Gastronomie"
     },
     {
       "id": 10,
@@ -84,15 +102,19 @@
       "termEn": "raisin",
       "correctAnswer": false,
       "explanationShort": "raisin (FR) = a grape.\nraisin (EN) = a dried grape.\nFrench is fresh; English is dried.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Gastronomie"
     },
     {
       "id": 11,
       "termFr": "tissu",
       "termEn": "tissue",
       "correctAnswer": false,
-      "explanationShort": "tissu (FR) = fabric or cloth.\ntissue (EN) = thin disposable paper, or biological body tissue in science.\nBoth from Old French \"tissu\" (woven); the meanings split between textile and paper.",
-      "tag": "false_friend"
+      "explanationShort": "tissu (FR) = fabric or cloth.\ntissue (EN) = thin disposable paper, or biological body tissue in science.\nBoth from Old French 'tissu' (woven); the meanings split between textile and paper.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 12,
@@ -100,7 +122,9 @@
       "termEn": "money",
       "correctAnswer": false,
       "explanationShort": "monnaie (FR) = coins, change, or currency in circulation.\nmoney (EN) = money in general, including cash or wealth.\nFrench counts the change; English counts the wealth.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 13,
@@ -108,7 +132,9 @@
       "termEn": "petrol",
       "correctAnswer": false,
       "explanationShort": "pétrole (FR) = crude oil in its natural state.\npetrol (EN) = gasoline used as fuel in cars.\nFrench names the raw oil; English names the fuel.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 14,
@@ -116,7 +142,9 @@
       "termEn": "grape",
       "correctAnswer": false,
       "explanationShort": "grappe (FR) = a cluster or bunch, especially of fruit on a stem.\ngrape (EN) = a single small fruit used for eating or making wine.\nFrench names the whole bunch hanging together; English names the individual berry.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Gastronomie"
     },
     {
       "id": 15,
@@ -124,7 +152,9 @@
       "termEn": "definitely",
       "correctAnswer": false,
       "explanationShort": "définitivement (FR) = permanently, for good.\ndefinitely (EN) = certainly, without doubt.\nPermanent in French, certain in English.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 16,
@@ -132,7 +162,9 @@
       "termEn": "assist",
       "correctAnswer": false,
       "explanationShort": "assister (FR) = to attend or be present at an event.\nassist (EN) = to help someone.\nFrom Latin 'assistere' (to stand by); French kept the passive witness sense, English took the active help sense.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
     },
     {
       "id": 17,
@@ -140,7 +172,9 @@
       "termEn": "attend",
       "correctAnswer": false,
       "explanationShort": "attendre (FR) = to wait.\nattend (EN) = to be present at an event.\nFrom Latin 'attendere' (to stretch toward); French kept the waiting, English kept the showing up.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
     },
     {
       "id": 18,
@@ -148,7 +182,9 @@
       "termEn": "demand",
       "correctAnswer": false,
       "explanationShort": "demander (FR) = to ask.\ndemand (EN) = to insist on receiving something.\nFrench asks; English insists.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
     },
     {
       "id": 19,
@@ -156,7 +192,9 @@
       "termEn": "quit",
       "correctAnswer": false,
       "explanationShort": "quitter (FR) = to leave a place or a person.\nquit (EN) = to stop doing something, especially a job or a habit.\nFrench leaves; English stops.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 20,
@@ -164,7 +202,9 @@
       "termEn": "avert",
       "correctAnswer": false,
       "explanationShort": "avertir (FR) = to warn or notify someone in advance.\navert (EN) = to prevent or turn away from danger.\nFrench warns first; English blocks danger.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 21,
@@ -172,7 +212,9 @@
       "termEn": "bless",
       "correctAnswer": false,
       "explanationShort": "blesser (FR) = to injure or wound someone.\nbless (EN) = to give a holy or divine favour.\nFrench injures; English blesses.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 22,
@@ -180,15 +222,19 @@
       "termEn": "charge",
       "correctAnswer": false,
       "explanationShort": "charger (FR) = to load something or charge a battery.\ncharge (EN) = to ask for payment or accuse someone.\nSome overlap exists, but French usually means to load.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
     },
     {
       "id": 23,
       "termFr": "sort",
       "termEn": "sort",
       "correctAnswer": false,
-      "explanationShort": "sort (FR) = goes out, comes out, gets out; as a noun, it can also mean fate or a spell.\nsort (EN) = to classify, arrange, or put into order.",
-      "tag": "false_friend"
+      "explanationShort": "sort (FR) = goes out, comes out, gets out; as a noun, it can also mean fate or a spell.\nsort (EN) = to classify, arrange, or put into order.\nFrench can mean coming out or fate; English puts things in order.",
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 24,
@@ -196,7 +242,9 @@
       "termEn": "medicine",
       "correctAnswer": false,
       "explanationShort": "médecin (FR) = a doctor, the person who treats patients.\nmedicine (EN) = a drug or substance used to treat illness.\nSame Latin root 'medicus,' but French named the healer while English named the remedy.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 25,
@@ -204,7 +252,9 @@
       "termEn": "lecture",
       "correctAnswer": false,
       "explanationShort": "lecture (FR) = reading.\nlecture (EN) = a talk or spoken presentation.\nFrench reads; English speaks.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
     },
     {
       "id": 26,
@@ -212,7 +262,9 @@
       "termEn": "journal",
       "correctAnswer": false,
       "explanationShort": "journal (FR) = a newspaper or TV news bulletin.\njournal (EN) = a diary or academic publication.\nFrench reports the news; English records it.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 27,
@@ -220,7 +272,9 @@
       "termEn": "cave",
       "correctAnswer": false,
       "explanationShort": "cave (FR) = a cellar or basement, often used for wine.\ncave (EN) = a natural underground cavern.\nFrench stores wine; English explores rock caves.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 28,
@@ -228,7 +282,9 @@
       "termEn": "habit",
       "correctAnswer": false,
       "explanationShort": "habit (FR) = a piece of clothing, or clothes in general.\nhabit (EN) = a repeated behaviour or routine.\nFrom Latin 'habitus' which covered both dress and condition; each language picked one meaning.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 29,
@@ -236,7 +292,9 @@
       "termEn": "travel",
       "correctAnswer": false,
       "explanationShort": "travail (FR) = work or labour.\ntravel (EN) = going on a journey.\nFrench works; English moves.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 30,
@@ -244,7 +302,9 @@
       "termEn": "coin",
       "correctAnswer": false,
       "explanationShort": "coin (FR) = a corner or a spot.\ncoin (EN) = a small metal disc used as money.\nFrench 'coin' comes from Latin 'cuneus' (wedge), describing the angular shape of a corner.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 31,
@@ -252,7 +312,9 @@
       "termEn": "phrase",
       "correctAnswer": false,
       "explanationShort": "phrase (FR) = a full sentence.\nphrase (EN) = a group of words, not always a full sentence.\nFrench is complete; English can be shorter.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 32,
@@ -260,7 +322,9 @@
       "termEn": "chat",
       "correctAnswer": false,
       "explanationShort": "chat (FR) = a cat.\nchat (EN) = an online written conversation.\nFrench purrs; English messages.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 33,
@@ -268,7 +332,9 @@
       "termEn": "support",
       "correctAnswer": false,
       "explanationShort": "supporter (FR) = to tolerate or endure something unpleasant.\nsupport (EN) = to help, encourage, or hold something up.\nFrench endures; English helps.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 34,
@@ -276,7 +342,9 @@
       "termEn": "resume",
       "correctAnswer": false,
       "explanationShort": "résumer (FR) = to summarize or condense.\nresume (EN) = to continue after a pause.\nFrench shortens; English starts again.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
     },
     {
       "id": 35,
@@ -284,7 +352,9 @@
       "termEn": "actual",
       "correctAnswer": false,
       "explanationShort": "actuel (FR) = current, present-day.\nactual (EN) = real, true, not imagined.\nFrench is current; English is real.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 36,
@@ -292,7 +362,9 @@
       "termEn": "prejudice",
       "correctAnswer": false,
       "explanationShort": "préjudice (FR) = harm or damage, especially in legal contexts.\nprejudice (EN) = a biased opinion formed without evidence.\nLatin 'praejudicium' (prior judgment) split into legal harm in French and personal bias in English.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Business"
     },
     {
       "id": 37,
@@ -300,7 +372,9 @@
       "termEn": "assume",
       "correctAnswer": false,
       "explanationShort": "assumer (FR) = to take responsibility for something, to own it.\nassume (EN) = to suppose or take for granted.\nFrench owns it; English guesses it.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 38,
@@ -308,7 +382,9 @@
       "termEn": "pretend",
       "correctAnswer": false,
       "explanationShort": "prétendre (FR) = to claim or assert something as true.\npretend (EN) = to fake or act as if something is true when it is not.\nFrench claims; English fakes.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 39,
@@ -316,7 +392,9 @@
       "termEn": "address",
       "correctAnswer": false,
       "explanationShort": "adresser (FR) = to send or direct something to someone.\naddress (EN) = to deal with a problem or issue.\nSome overlap exists, but French usually means to send or direct.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
     },
     {
       "id": 40,
@@ -324,7 +402,9 @@
       "termEn": "delay",
       "correctAnswer": false,
       "explanationShort": "délai (FR) = a time limit or allowed period.\ndelay (EN) = lateness or postponement.\nFrench gives you time; English makes you late.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
     },
     {
       "id": 41,
@@ -332,7 +412,9 @@
       "termEn": "etiquette",
       "correctAnswer": false,
       "explanationShort": "étiquette (FR) = a label or price tag.\netiquette (EN) = rules of polite behaviour.\nFrench sticks on objects; English guides behaviour.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 42,
@@ -340,7 +422,9 @@
       "termEn": "engage",
       "correctAnswer": false,
       "explanationShort": "engager (FR) = to hire someone or commit yourself.\nengage (EN) = to involve, attract attention, or take part.\nFrench hires; English grabs attention.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Business"
     },
     {
       "id": 43,
@@ -348,7 +432,9 @@
       "termEn": "formation",
       "correctAnswer": false,
       "explanationShort": "formation (FR) = training or education.\nformation (EN) = an arrangement or structure of things.\nFrench trains people; English arranges things.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Business"
     },
     {
       "id": 44,
@@ -356,7 +442,9 @@
       "termEn": "furnish",
       "correctAnswer": false,
       "explanationShort": "fournir (FR) = to supply or provide.\nfurnish (EN) = to equip with furniture.\nFrench provides; English decorates.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 45,
@@ -364,7 +452,9 @@
       "termEn": "eventual",
       "correctAnswer": false,
       "explanationShort": "éventuel (FR) = possible, potential, not certain.\neventual (EN) = final, happening at the end, ultimate.\nFrench is uncertainty; English is end result.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 46,
@@ -372,7 +462,9 @@
       "termEn": "journey",
       "correctAnswer": false,
       "explanationShort": "journée (FR) = the span of a full day.\njourney (EN) = a trip from one place to another.\nFrench refers to a day; English refers to travel.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 47,
@@ -380,7 +472,9 @@
       "termEn": "rest",
       "correctAnswer": false,
       "explanationShort": "rester (FR) = to stay or remain somewhere.\nrest (EN) = to relax or stop working.\nFrench stays; English relaxes.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 48,
@@ -388,15 +482,19 @@
       "termEn": "sympathetic",
       "correctAnswer": false,
       "explanationShort": "sympathique (FR) = nice, friendly, pleasant.\nsympathetic (EN) = showing compassion or understanding.\nFrench is friendly; English shows compassion.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 49,
       "termFr": "sensible",
       "termEn": "sensible",
       "correctAnswer": false,
-      "explanationShort": "sensible (FR) = sensitive, easily affected emotionally.\nsensible (EN) = practical, reasonable, showing good judgment.\nFrom Latin 'sensibilis'; French kept feeling deeply, English shifted to thinking clearly.",
-      "tag": "false_friend"
+      "explanationShort": "sensible (FR) = sensitive, easily affected emotionally.\nsensible (EN) = usually practical, reasonable, showing good judgment.\nIn everyday use, French is about feeling; English is about judgment. Rare literary/legal uses overlap, so this is a practical trap.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 50,
@@ -404,7 +502,9 @@
       "termEn": "envy",
       "correctAnswer": false,
       "explanationShort": "envie (FR) = a desire or craving for something.\nenvy (EN) = jealousy of what others have.\nWanting chocolate is French 'envie'; resenting someone else's chocolate is English 'envy.'",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 51,
@@ -412,7 +512,9 @@
       "termEn": "deception",
       "correctAnswer": false,
       "explanationShort": "déception (FR) = disappointment, when expectations are not met.\ndeception (EN) = trickery, deliberate lying or misleading.\nFrench is about unmet hopes; English is about intentional dishonesty.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 52,
@@ -420,7 +522,9 @@
       "termEn": "deceive",
       "correctAnswer": false,
       "explanationShort": "décevoir (FR) = to disappoint someone.\ndeceive (EN) = to trick or mislead someone.\nFrench hurts feelings; English breaks trust.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 53,
@@ -428,7 +532,9 @@
       "termEn": "roman",
       "correctAnswer": false,
       "explanationShort": "roman (FR) = a novel, a work of fiction.\nroman (EN) = relating to ancient Rome.\nFrench names the story; English names the empire.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 54,
@@ -436,7 +542,9 @@
       "termEn": "brass",
       "correctAnswer": false,
       "explanationShort": "bras (FR) = an arm, the body part.\nbrass (EN) = a yellow metal alloy.\nOne moves; the other shines.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 55,
@@ -444,7 +552,9 @@
       "termEn": "lemonade",
       "correctAnswer": false,
       "explanationShort": "limonade (FR) = a fizzy lemon soda.\nlemonade (EN) = a still drink made with lemon juice.\nIn France it bubbles; in English it does not.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Gastronomie"
     },
     {
       "id": 56,
@@ -452,7 +562,9 @@
       "termEn": "prune",
       "correctAnswer": false,
       "explanationShort": "prune (FR) = a fresh plum.\nprune (EN) = a dried plum.\nFrench is fresh; English is dried.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Gastronomie"
     },
     {
       "id": 57,
@@ -460,7 +572,9 @@
       "termEn": "pain",
       "correctAnswer": false,
       "explanationShort": "pain (FR) = bread.\npain (EN) = physical or emotional suffering.\nSame spelling, totally different meaning.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 58,
@@ -468,263 +582,329 @@
       "termEn": "sale",
       "correctAnswer": false,
       "explanationShort": "sale (FR) = dirty, filthy.\nsale (EN) = a discount event, or the act of selling.\nUnrelated roots: French from Frankish (dirty), English from Old Norse (selling).",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 59,
       "termFr": "table",
       "termEn": "table",
       "correctAnswer": true,
-      "explanationShort": "table (FR) = a piece of furniture used for eating, working, or placing objects.\ntable (EN) = the same: a piece of furniture for eating or working.\nSame word, same everyday meaning.",
-      "tag": "true_friend"
+      "explanationShort": "table (FR) = table, the furniture.\ntable (EN) = the same piece of furniture.\nSame word, but English says it more like TAY-b'l; French keeps the final syllable clearer.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 60,
       "termFr": "orange",
       "termEn": "orange",
       "correctAnswer": true,
-      "explanationShort": "orange (FR) = the fruit and the colour.\norange (EN) = the same: the fruit and the colour.\nThe word came from Sanskrit through Arabic \"naranj\"; European languages dropped the initial \"n\" by confusing it with the article.",
-      "tag": "true_friend"
+      "explanationShort": "orange (FR) = the fruit and the colour.\norange (EN) = the same fruit and colour.\nA safe transparent word, with stress on the first syllable in English: OR-inj.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Gastronomie"
     },
     {
       "id": 61,
       "termFr": "chocolat",
       "termEn": "chocolate",
       "correctAnswer": true,
-      "explanationShort": "chocolat (FR) = the food made from cacao beans.\nchocolate (EN) = the same: the cacao-based food or flavour.\nFrom Nahuatl 'xocolatl,' brought to Europe by Spanish conquistadors in the 1500s.",
-      "tag": "true_friend"
+      "explanationShort": "chocolat (FR) = chocolate.\nchocolate (EN) = the same cacao-based food.\nThe spelling stays close, but English often compresses the middle: CHOK-lut.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Gastronomie"
     },
     {
       "id": 62,
       "termFr": "fruit",
       "termEn": "fruit",
       "correctAnswer": true,
-      "explanationShort": "fruit (FR) = edible produce from a plant.\nfruit (EN) = the same: edible produce from a plant.\nFrom Latin 'fructus,' both languages preserved the botanical meaning.",
-      "tag": "true_friend"
+      "explanationShort": "fruit (FR) = fruit.\nfruit (EN) = fruit.\nPerfectly transparent, but pronunciation changes: English sounds like FROOT, not a French-style 'frui'.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Gastronomie"
     },
     {
       "id": 63,
       "termFr": "restaurant",
       "termEn": "restaurant",
       "correctAnswer": true,
-      "explanationShort": "restaurant (FR) = a place where meals are prepared and served.\nrestaurant (EN) = the same: a place where meals are served to customers.\nFrom French 'restaurer' (to restore strength).",
-      "tag": "true_friend"
+      "explanationShort": "restaurant (FR) = a place where meals are served.\nrestaurant (EN) = the same place.\nBorrowed from French, but English usually pronounces the final consonant more clearly.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Gastronomie"
     },
     {
       "id": 64,
       "termFr": "zoo",
       "termEn": "zoo",
       "correctAnswer": true,
-      "explanationShort": "zoo = a place where animals are kept for public display.\nShort for 'zoological garden,' from Greek 'zoion' (animal).",
-      "tag": "true_friend"
+      "explanationShort": "zoo (FR) = zoo.\nzoo (EN) = zoo.\nA fully international word. In English, stretch the 'oo' sound like a long French 'ou'.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 65,
       "termFr": "appartement",
       "termEn": "apartment",
       "correctAnswer": true,
-      "explanationShort": "appartement = a residential unit inside a building.\nFrom Italian 'appartamento,' both languages kept the same housing meaning.",
-      "tag": "true_friend"
+      "explanationShort": "appartement (FR) = an apartment.\napartment (EN) = a residential unit in a building.\nVery close, but English drops the French '-e-ment' feel; in UK English, 'flat' is also common.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 66,
       "termFr": "accident",
       "termEn": "accident",
       "correctAnswer": true,
-      "explanationShort": "accident = an unexpected, usually harmful event.\nFrom Latin 'accidere' (to happen), both kept the sense of chance misfortune.",
-      "tag": "true_friend"
+      "explanationShort": "accident (FR) = an accident.\naccident (EN) = an accident.\nSame spelling and meaning. English puts the stress at the start: AK-si-dent.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 67,
       "termFr": "information",
       "termEn": "information",
       "correctAnswer": true,
-      "explanationShort": "information (FR) = facts or knowledge about a subject; in the plural, it can also mean the TV news.\ninformation (EN) = facts or knowledge about a subject.",
-      "tag": "true_friend"
+      "explanationShort": "information (FR) = information; in plural, it can also mean the news.\ninformation (EN) = information.\nUseful grammar trap: in English, 'information' is uncountable. Say 'some information,' not 'informations'.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Business"
     },
     {
       "id": 68,
       "termFr": "communication",
       "termEn": "communication",
       "correctAnswer": true,
-      "explanationShort": "communication = the exchange of information through speech, writing, or signals.\nFrom Latin 'communicare' (to share), both preserved the same meaning.",
-      "tag": "true_friend"
+      "explanationShort": "communication (FR) = communication.\ncommunication (EN) = communication.\nThe '-tion' bridge is reliable here; English stress falls late: com-mu-ni-KAY-shun.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
     },
     {
       "id": 69,
       "termFr": "situation",
       "termEn": "situation",
       "correctAnswer": true,
-      "explanationShort": "situation = a set of circumstances or state of affairs.\nFrom Latin 'situs' (position), both languages use it for circumstances.",
-      "tag": "true_friend"
+      "explanationShort": "situation (FR) = situation.\nsituation (EN) = situation.\nA strong true friend for daily life and work. English often makes the 'tu' sound like 'tch': si-tchou-AY-shun.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 70,
       "termFr": "solution",
       "termEn": "solution",
       "correctAnswer": true,
-      "explanationShort": "solution = an answer to a problem, or a liquid mixture in chemistry.\nFrom Latin 'solvere' (to loosen), both kept the same double meaning.",
-      "tag": "true_friend"
+      "explanationShort": "solution (FR) = a solution.\nsolution (EN) = a solution.\nSame word in business and science. English stress lands on the middle: so-LOO-shun.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Business"
     },
     {
       "id": 71,
       "termFr": "nation",
       "termEn": "nation",
       "correctAnswer": true,
-      "explanationShort": "nation = a country or its people as a political community.\nFrom Latin 'natio' (birth, people), both use it for political and cultural entities.",
-      "tag": "true_friend"
+      "explanationShort": "nation (FR) = nation.\nnation (EN) = nation.\nTransparent in meaning. In English, the 'a' sounds like 'ay': NAY-shun.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 72,
       "termFr": "important",
       "termEn": "important",
       "correctAnswer": true,
-      "explanationShort": "important = significant, having great value or influence.\nFrom Latin 'importare' (to carry in, to matter), both languages mark what has weight.",
-      "tag": "true_friend"
+      "explanationShort": "important (FR) = important.\nimportant (EN) = important.\nSame meaning, different rhythm: English avoids the French nasal ending and stresses the middle.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 73,
       "termFr": "possible",
       "termEn": "possible",
       "correctAnswer": true,
-      "explanationShort": "possible = something that can happen or be done.\nFrom Latin 'posse' (to be able), both kept the same sense.",
-      "tag": "true_friend"
+      "explanationShort": "possible (FR) = possible.\npossible (EN) = possible.\nThe '-ible' ending is a useful bridge; English stress is on the first syllable: POS-si-b'l.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 74,
       "termFr": "impossible",
       "termEn": "impossible",
       "correctAnswer": true,
-      "explanationShort": "impossible = something that cannot happen or be done.\nThe Latin prefix 'im-' negates 'possible' the same way in both languages.",
-      "tag": "true_friend"
+      "explanationShort": "impossible (FR) = impossible.\nimpossible (EN) = impossible.\nThe negative prefix 'im-' works the same way in both languages. One pattern, many useful words.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 75,
       "termFr": "excellent",
       "termEn": "excellent",
       "correctAnswer": true,
-      "explanationShort": "excellent = of the highest quality or standard.\nFrom Latin 'excellere' (to surpass), both preserved the superlative sense.",
-      "tag": "true_friend"
+      "explanationShort": "excellent (FR) = excellent.\nexcellent (EN) = excellent.\nSame written form, but English strongly stresses the first syllable: EK-suh-lent.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 76,
       "termFr": "intelligent",
       "termEn": "intelligent",
       "correctAnswer": true,
-      "explanationShort": "intelligent = having strong mental ability.\nFrom Latin 'intelligere' (to understand), both describe cognitive ability.",
-      "tag": "true_friend"
+      "explanationShort": "intelligent (FR) = intelligent.\nintelligent (EN) = intelligent.\nA real true friend. The English 'g' sounds like 'j': in-TEL-i-jent.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 77,
       "termFr": "urgent",
       "termEn": "urgent",
       "correctAnswer": true,
-      "explanationShort": "urgent = requiring immediate attention or action.\nFrom Latin 'urgere' (to press), both kept the sense of pressing time.",
-      "tag": "true_friend"
+      "explanationShort": "urgent (FR) = urgent.\nurgent (EN) = urgent.\nSame meaning. English starts with an 'ur' sound and often makes the 'g' soft: UR-jent.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 78,
       "termFr": "taxi",
       "termEn": "taxi",
       "correctAnswer": true,
-      "explanationShort": "taxi = a hired car with a driver.\nShort for 'taximeter' (fare meter), the word spread internationally with identical meaning.",
-      "tag": "true_friend"
+      "explanationShort": "taxi (FR) = taxi.\ntaxi (EN) = taxi.\nThe meaning travels everywhere. In English, the stress is on the first syllable: TAK-see.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 79,
       "termFr": "bus",
       "termEn": "bus",
       "correctAnswer": true,
-      "explanationShort": "bus = a large vehicle for carrying passengers on a fixed route.\nShortened from Latin 'omnibus' (for everyone), both languages adopted the same abbreviation.",
-      "tag": "true_friend"
+      "explanationShort": "bus (FR) = bus.\nbus (EN) = bus.\nSame everyday word, but the English vowel sounds like 'uh' or 'bus' in 'but,' not the French 'u'.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 80,
       "termFr": "menu",
       "termEn": "menu",
       "correctAnswer": true,
-      "explanationShort": "menu = a list of available dishes in a restaurant.\nFrom French 'menu' (detailed, small), originally meaning a detailed list of options.",
-      "tag": "true_friend"
+      "explanationShort": "menu (FR) = menu.\nmenu (EN) = menu.\nBorrowed from French. English often adds a small 'y' sound before the final vowel: MEN-yoo.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Gastronomie"
     },
     {
       "id": 81,
       "termFr": "animal",
       "termEn": "animal",
       "correctAnswer": true,
-      "explanationShort": "animal = a living creature that is not a plant.\nFrom Latin 'animalis' (having breath), both kept the biological category.",
-      "tag": "true_friend"
+      "explanationShort": "animal (FR) = animal.\nanimal (EN) = animal.\nSame spelling and meaning. English stresses the first syllable: AN-i-m'l.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 82,
       "termFr": "musique",
       "termEn": "music",
       "correctAnswer": true,
-      "explanationShort": "musique = the art of organized sound.\nFrom Greek 'mousike' (art of the Muses), both preserved the same artistic meaning.",
-      "tag": "true_friend"
+      "explanationShort": "musique (FR) = music.\nmusic (EN) = music.\nThe French '-ique' often becomes English '-ic'. Meaning stays aligned; spelling gets shorter.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 83,
       "termFr": "culture",
       "termEn": "culture",
       "correctAnswer": true,
-      "explanationShort": "culture (FR) = the arts, customs, and beliefs of a society; it can also mean the cultivation of living organisms in science.\nculture (EN) = the same: the arts, customs, and beliefs of a society; it can also mean the cultivation of living organisms in science.",
-      "tag": "true_friend"
+      "explanationShort": "culture (FR) = culture.\nculture (EN) = culture.\nSame core idea: arts, beliefs, habits, and cultivation. English starts with a 'kul' sound: KUL-chur.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 84,
       "termFr": "minute",
       "termEn": "minute",
       "correctAnswer": true,
-      "explanationShort": "minute = a unit of time equal to 60 seconds.\nFrom Latin 'minuta' (small part), international timekeeping aligned the unit.",
-      "tag": "true_friend"
+      "explanationShort": "minute (FR) = a minute of time.\nminute (EN) = a minute of time.\nSame time word. Extra trap: English 'minute' pronounced my-NYOOT is an adjective meaning very small.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 85,
       "termFr": "seconde",
       "termEn": "second",
       "correctAnswer": true,
-      "explanationShort": "seconde (FR) = a unit of time or second position.\nsecond (EN) = the same: a unit of time or position after first.\nFrom Latin 'secunda' (following).",
-      "tag": "true_friend"
+      "explanationShort": "seconde (FR) = a second of time, or second position.\nsecond (EN) = the same time unit or position.\nFrench adds a final '-e'; English stops at the 'd'.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 86,
       "termFr": "public",
       "termEn": "public",
       "correctAnswer": true,
-      "explanationShort": "public = open to everyone, or relating to the people as a whole.\nFrom Latin 'publicus,' both describe collective access and shared space.",
-      "tag": "true_friend"
+      "explanationShort": "public (FR) = public.\npublic (EN) = public.\nSame idea: open to everyone or linked to people as a whole. English spelling avoids French '-que'.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 87,
       "termFr": "total",
       "termEn": "total",
       "correctAnswer": true,
-      "explanationShort": "total = the complete amount or sum.\nFrom Latin 'totus' (whole), both use it for a full count.",
-      "tag": "true_friend"
+      "explanationShort": "total (FR) = total.\ntotal (EN) = total.\nA clean true friend for numbers and summaries. English often sounds like TOH-t'l.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Business"
     },
     {
       "id": 88,
       "termFr": "normal",
       "termEn": "normal",
       "correctAnswer": true,
-      "explanationShort": "normal = conforming to what is standard or expected.\nFrom Latin 'norma' (carpenter's square); the measuring tool became the metaphor for what fits the rule.",
-      "tag": "true_friend"
+      "explanationShort": "normal (FR) = normal.\nnormal (EN) = normal.\nZero difference in meaning. English stresses the first syllable: NOR-m'l.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 89,
       "termFr": "national",
       "termEn": "national",
       "correctAnswer": true,
-      "explanationShort": "national = relating to or belonging to a nation.\nBuilt on 'nation,' the adjective stayed aligned in both languages.",
-      "tag": "true_friend"
+      "explanationShort": "national (FR) = national.\nnational (EN) = national.\nBuilt from 'nation' in both languages. In English, the middle sounds shorter: NASH-uh-n'l.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 90,
       "termFr": "international",
       "termEn": "international",
       "correctAnswer": true,
-      "explanationShort": "international = involving two or more countries.\nThe prefix 'inter-' (between) worked identically in both languages.",
-      "tag": "true_friend"
+      "explanationShort": "international (FR) = international.\ninternational (EN) = international.\nThe prefix 'inter-' works the same way. In fast American English, the 't' may be softened or dropped.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Business"
     },
     {
       "id": 91,
@@ -732,15 +912,19 @@
       "termEn": "value",
       "correctAnswer": false,
       "explanationShort": "valeur (FR) = worth, importance, moral principle.\nvalue (EN) = numerical or economic amount.\nFrench can mean importance; English usually means a quantity.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
     },
     {
       "id": 92,
       "termFr": "photographe",
       "termEn": "photographer",
       "correctAnswer": true,
-      "explanationShort": "photographe = a person who takes photographs.\nFrom Greek 'photo' (light) + 'graphe' (writing), both name the same profession.",
-      "tag": "true_friend"
+      "explanationShort": "photographe (FR) = a photographer, someone who takes photographs.\nphotographer (EN) = a person who takes photographs.\nSame profession; English adds -er at the end.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 93,
@@ -748,7 +932,9 @@
       "termEn": "responsible",
       "correctAnswer": true,
       "explanationShort": "responsable (FR) = in charge or accountable.\nresponsible (EN) = the same: accountable or in charge.\nIn French the noun can also mean a manager.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
     },
     {
       "id": 94,
@@ -756,7 +942,9 @@
       "termEn": "danger",
       "correctAnswer": true,
       "explanationShort": "danger = a risk of harm or threat to safety.\nBoth languages inherited the word from Old French, keeping the sense of threat.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 95,
@@ -764,7 +952,9 @@
       "termEn": "product",
       "correctAnswer": true,
       "explanationShort": "produit = something manufactured, grown, or created for sale.\nFrom Latin 'producere' (to bring forth), both name what is made.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Business"
     },
     {
       "id": 96,
@@ -772,7 +962,9 @@
       "termEn": "organization",
       "correctAnswer": true,
       "explanationShort": "organisation = a structured group of people working together.\nSame meaning in both languages.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
     },
     {
       "id": 97,
@@ -780,7 +972,9 @@
       "termEn": "administration",
       "correctAnswer": true,
       "explanationShort": "administration = the management or governance of an organization.\nFrom Latin 'administrare' (to serve, manage), both refer to governance.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
     },
     {
       "id": 98,
@@ -788,7 +982,9 @@
       "termEn": "librarian",
       "correctAnswer": false,
       "explanationShort": "libraire (FR) = a bookseller.\nlibrarian (EN) = a person who works in a library.\nSeller in French; library staff in English.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 99,
@@ -796,7 +992,9 @@
       "termEn": "historical",
       "correctAnswer": false,
       "explanationShort": "historique (FR) = historic, significant in history.\nhistorical (EN) = related to history in general.\nFrench often means important; English simply relates to history.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
     },
     {
       "id": 100,
@@ -804,7 +1002,9 @@
       "termEn": "economic",
       "correctAnswer": true,
       "explanationShort": "économique = relating to the economy, trade, and production of wealth.\nFrom Greek 'oikonomia' (household management), both kept the resource meaning.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
     },
     {
       "id": 101,
@@ -812,7 +1012,9 @@
       "termEn": "magazine",
       "correctAnswer": false,
       "explanationShort": "magasin (FR) = a shop or store where you buy things.\nmagazine (EN) = a periodical publication with articles and photos.\nBoth come from Arabic 'makhazin' (storehouses); one stores goods, the other stores stories.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 102,
@@ -820,7 +1022,9 @@
       "termEn": "vest",
       "correctAnswer": false,
       "explanationShort": "veste (FR) = a jacket, a garment with sleeves.\nvest (EN) = a sleeveless undergarment or waistcoat.\nFrench wears a jacket; English wears an undershirt.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 103,
@@ -828,7 +1032,9 @@
       "termEn": "reclaim",
       "correctAnswer": false,
       "explanationShort": "réclamer (FR) = to demand or ask for something.\nreclaim (EN) = to take something back or recover it.\nFrench demands; English takes back.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Business"
     },
     {
       "id": 104,
@@ -836,7 +1042,9 @@
       "termEn": "formidable",
       "correctAnswer": false,
       "explanationShort": "formidable (FR) = wonderful or fantastic.\nformidable (EN) = impressive, powerful, or intimidating.\nFrench praises; English warns.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 105,
@@ -844,47 +1052,59 @@
       "termEn": "cry",
       "correctAnswer": false,
       "explanationShort": "crier (FR) = to shout loudly.\ncry (EN) = to shed tears.\nFrench shouts; English weeps.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 106,
       "termFr": "portrait",
       "termEn": "portrait",
       "correctAnswer": true,
-      "explanationShort": "portrait (FR) = an artistic depiction of a person.\nportrait (EN) = the same: an artistic depiction of a person.\nBoth languages use it the same way.",
-      "tag": "true_friend"
+      "explanationShort": "portrait (FR) and portrait (EN) share the same meaning: an image of a person.\nThe oral trap is the final sound: English pronounces the final t, while French keeps it silent.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 107,
       "termFr": "garage",
       "termEn": "garage",
       "correctAnswer": true,
-      "explanationShort": "garage = a building for parking or repairing vehicles.\nA French word exported worldwide with identical meaning.",
-      "tag": "true_friend"
+      "explanationShort": "garage means the same in both languages: a place for parking or repairing vehicles.\nPronunciation varies in English, especially between British and American accents, but the meaning stays aligned.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 108,
       "termFr": "touriste",
       "termEn": "tourist",
       "correctAnswer": true,
-      "explanationShort": "touriste = a person travelling for pleasure.\nFrom French 'tour' (a journey or circuit), both describe the same traveller.",
-      "tag": "true_friend"
+      "explanationShort": "touriste (FR) = tourist (EN), the same traveller.\nPattern to remember: French -iste often becomes English -ist.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 109,
       "termFr": "science",
       "termEn": "science",
       "correctAnswer": true,
-      "explanationShort": "science = the systematic study of the natural world through observation and experiment.\nFrom Latin 'scientia' (knowledge), both kept the same meaning.",
-      "tag": "true_friend"
+      "explanationShort": "science means science in both languages.\nThe spelling is friendly, but the English sound changes: the c is silent and the i sounds like 'eye'.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 110,
       "termFr": "architecture",
       "termEn": "architecture",
       "correctAnswer": true,
-      "explanationShort": "architecture = the art and practice of designing buildings.\nFrom Greek 'arkhitekton' (master builder), both preserved the construction meaning.",
-      "tag": "true_friend"
+      "explanationShort": "architecture means architecture in both languages.\nThe oral trap is the ch: in English it sounds like k, as in AR-ki-tek-chur.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
     },
     {
       "id": 111,
@@ -892,7 +1112,9 @@
       "termEn": "regard",
       "correctAnswer": false,
       "explanationShort": "regarder (FR) = to look at or watch.\nregard (EN) = respect or consideration.\nFrench looks; English respects.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 112,
@@ -900,7 +1122,9 @@
       "termEn": "caution",
       "correctAnswer": false,
       "explanationShort": "caution (FR) = a security deposit or bail money.\ncaution (EN) = care taken to avoid danger or mistakes.\nFrench turned it into a financial guarantee; English turned it into a warning.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Business"
     },
     {
       "id": 113,
@@ -908,7 +1132,9 @@
       "termEn": "pet",
       "correctAnswer": false,
       "explanationShort": "pet (FR) = a fart, gas released from the body.\npet (EN) = a domesticated animal kept for companionship.\nFlatulence in French; furry friend in English.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 114,
@@ -916,7 +1142,9 @@
       "termEn": "patron",
       "correctAnswer": false,
       "explanationShort": "patron (FR) = the boss or employer who runs the business.\npatron (EN) = a loyal customer or financial supporter.\nFrom Latin 'patronus' (protector); French took the authority side, English took the generosity side.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
     },
     {
       "id": 115,
@@ -924,47 +1152,59 @@
       "termEn": "piece",
       "correctAnswer": false,
       "explanationShort": "pièce (FR) = a room, coin, or theatrical play.\npiece (EN) = a part of something.\nFrench enters a room; English takes a part.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 116,
       "termFr": "massage",
       "termEn": "massage",
       "correctAnswer": true,
-      "explanationShort": "massage = therapeutic manipulation of muscles and soft tissue.\nFrom Arabic 'mass' (to touch), the word entered French then spread worldwide.",
-      "tag": "true_friend"
+      "explanationShort": "massage means massage in both languages.\nEnglish often keeps a French-like ending and stresses the last part of the word.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 117,
       "termFr": "surprise",
       "termEn": "surprise",
       "correctAnswer": true,
-      "explanationShort": "surprise = an unexpected event, or the feeling of astonishment it causes.\nFrom Old French 'surprendre' (to overtake), both kept the element of the unexpected.",
-      "tag": "true_friend"
+      "explanationShort": "surprise means surprise in both languages.\nIn English, the final -se sounds like z, and the r is usually pronounced in rhotic accents.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 118,
       "termFr": "concert",
       "termEn": "concert",
       "correctAnswer": true,
-      "explanationShort": "concert = a live musical performance before an audience.\nFrom Italian through French, both name the same musical event.",
-      "tag": "true_friend"
+      "explanationShort": "concert means a live musical performance in both languages.\nIn English, the noun usually stresses the first syllable, and the final t is pronounced.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 119,
       "termFr": "effort",
       "termEn": "effort",
       "correctAnswer": true,
-      "explanationShort": "effort = physical or mental energy applied to a task.\nFrom Old French 'esforcer' (to force), both kept the sense of trying hard.",
-      "tag": "true_friend"
+      "explanationShort": "effort means effort in both languages.\nThe useful detail is stress: English puts the weight at the start of the word.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 120,
       "termFr": "virus",
       "termEn": "virus",
       "correctAnswer": true,
-      "explanationShort": "virus = an infectious agent that causes disease.\nAlso used for harmful computer programs — Latin scientific vocabulary keeps both languages aligned.",
-      "tag": "true_friend"
+      "explanationShort": "virus works in medicine and computing in both languages.\nPronunciation trap: the English i sounds like 'eye', as in VAI-rus.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 121,
@@ -972,7 +1212,9 @@
       "termEn": "default",
       "correctAnswer": false,
       "explanationShort": "défaut (FR) = a flaw or imperfection.\ndefault (EN) = the preset option or a failure to pay.\nFrench points to a flaw; English points to a preset.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Business"
     },
     {
       "id": 122,
@@ -980,7 +1222,9 @@
       "termEn": "physician",
       "correctAnswer": false,
       "explanationShort": "physicien (FR) = a physicist, a scientist who studies physics.\nphysician (EN) = a medical doctor.\nSame root, different worlds: physics in French, medicine in English.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 123,
@@ -988,7 +1232,9 @@
       "termEn": "proper",
       "correctAnswer": false,
       "explanationShort": "propre (FR) = clean, or one's own.\nproper (EN) = correct or appropriate.\nFrench washes things; English approves them.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 124,
@@ -996,7 +1242,9 @@
       "termEn": "injury",
       "correctAnswer": false,
       "explanationShort": "injure (FR) = a verbal insult or offensive word.\ninjury (EN) = a physical wound or bodily harm.\nFrench wounds with words; English wounds the body.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 125,
@@ -1004,23 +1252,29 @@
       "termEn": "course",
       "correctAnswer": false,
       "explanationShort": "course (FR) = an errand, a shopping trip, or a race.\ncourse (EN) = a class, a direction, or a part of a meal.\nFrench runs errands; English runs classes.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 126,
       "termFr": "train",
       "termEn": "train",
       "correctAnswer": true,
-      "explanationShort": "train (FR) = a railway vehicle that carries passengers or freight.\ntrain (EN) = the same: a railway vehicle that carries passengers or freight.\nSame word, same meaning in both languages.",
-      "tag": "true_friend"
+      "explanationShort": "train is fully transparent in writing and meaning.\nPronunciation trap: English has no French nasal sound here; say a clear 'ay' sound, as in trayn.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 127,
       "termFr": "dialogue",
       "termEn": "dialogue",
       "correctAnswer": true,
-      "explanationShort": "dialogue (FR) = a conversation between two or more people.\ndialogue (EN) = the same: a conversation between two or more people.\nBoth languages kept the same meaning from Greek 'dialogos'.",
-      "tag": "true_friend"
+      "explanationShort": "dialogue means dialogue in both languages.\nSpelling note: American English also uses the shorter form dialog, especially in computing.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 128,
@@ -1028,23 +1282,29 @@
       "termEn": "costume",
       "correctAnswer": false,
       "explanationShort": "costume (FR) = a men's business suit, jacket and trousers for formal wear.\ncostume (EN) = fancy dress, a disguise, or a stage outfit.\nBoardroom in French, costume party in English.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 129,
       "termFr": "artiste",
       "termEn": "artist",
       "correctAnswer": true,
-      "explanationShort": "artiste = a person who creates art — painting, music, or other creative work.\nFrom Latin 'ars' (skill), both describe the same creative role.",
-      "tag": "true_friend"
+      "explanationShort": "The French suffix -iste becomes the shorter English -ist. Same role: someone who creates art. English stresses the first syllable: AR-tist.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 130,
       "termFr": "avenue",
       "termEn": "avenue",
       "correctAnswer": true,
-      "explanationShort": "avenue = a wide urban road, often lined with trees.\nFrom French 'avenir' (to approach), both name broad city streets.",
-      "tag": "true_friend"
+      "explanationShort": "A perfect twin in writing and meaning: a broad city street. In English, the last syllable often sounds like 'you': AV-en-you.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 131,
@@ -1052,7 +1312,9 @@
       "termEn": "blank",
       "correctAnswer": false,
       "explanationShort": "blanc (FR) = white, the colour.\nblank (EN) = empty, unmarked, or without content.\nBoth from a Germanic root meaning bright or shining, but one became a colour and the other an absence.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 132,
@@ -1060,15 +1322,19 @@
       "termEn": "jolly",
       "correctAnswer": false,
       "explanationShort": "joli (FR) = pretty or attractive in appearance.\njolly (EN) = cheerful, merry, full of good spirits.\nFrench looks pretty; English feels cheerful.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 133,
       "termFr": "retirer",
       "termEn": "retire",
       "correctAnswer": false,
-      "explanationShort": "retirer (FR) = to withdraw or remove — especially money from a bank.\nretire (EN) = to stop working permanently at the end of a career.\nFrench withdraws; English stops working.",
-      "tag": "false_friend"
+      "explanationShort": "retirer (FR) = to withdraw or remove, especially money from a bank.\nretire (EN) = to stop working permanently at the end of a career.\nFrench withdraws; English stops working.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
     },
     {
       "id": 134,
@@ -1076,7 +1342,9 @@
       "termEn": "prevent",
       "correctAnswer": false,
       "explanationShort": "prévenir (FR) = to warn or alert someone in advance.\nprevent (EN) = to stop something from happening.\nFrom Latin 'praevenire' (to come before); French warns before the event, English blocks it.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 135,
@@ -1084,47 +1352,59 @@
       "termEn": "hurt",
       "correctAnswer": false,
       "explanationShort": "heurter (FR) = to bump into or collide with something.\nhurt (EN) = to feel pain, or to cause someone pain.\nFrench bumps into things; English feels pain.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 136,
       "termFr": "silence",
       "termEn": "silence",
       "correctAnswer": true,
-      "explanationShort": "silence = the complete absence of sound.\nFrom Latin 'silentium,' both languages kept the quiet meaning.",
-      "tag": "true_friend"
+      "explanationShort": "Same spelling and same meaning. The oral trap is stress: English puts the weight at the start, as in SY-lence.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 137,
       "termFr": "piano",
       "termEn": "piano",
       "correctAnswer": true,
-      "explanationShort": "piano = a keyboard instrument with hammers striking strings.\nShort for Italian 'pianoforte' (soft-loud), naming the instrument's dynamic range.",
-      "tag": "true_friend"
+      "explanationShort": "An international word from Italian, with the same meaning in both languages. English usually stresses the middle: pi-A-no.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 138,
       "termFr": "radio",
       "termEn": "radio",
       "correctAnswer": true,
-      "explanationShort": "radio = wireless audio broadcasting, or the device that receives it.\nFrom Latin 'radius' (ray), both adopted the same shortened form.",
-      "tag": "true_friend"
+      "explanationShort": "Identical in writing and meaning. English stretches the ending and says it more like RAY-dee-oh.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 139,
       "termFr": "téléphone",
       "termEn": "telephone",
       "correctAnswer": true,
-      "explanationShort": "téléphone = a device for voice communication over distance.\nFrom Greek 'tele' (far) + 'phone' (voice), both kept the same scientific coinage.",
-      "tag": "true_friend"
+      "explanationShort": "The accent disappears in English, but the meaning stays the same. Both languages shorten it the same way: telephone becomes phone.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 140,
       "termFr": "document",
       "termEn": "document",
       "correctAnswer": true,
-      "explanationShort": "document = an official or informative written record.\nFrom Latin 'documentum' (lesson, proof), both kept the written record meaning.",
-      "tag": "true_friend"
+      "explanationShort": "A key professional true friend. Same written form, same idea: a file, paper, or digital document. English stresses the first syllable: DOC-you-ment.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Business"
     },
     {
       "id": 141,
@@ -1132,7 +1412,9 @@
       "termEn": "lemon",
       "correctAnswer": false,
       "explanationShort": "limon (FR) = silt, fine sediment deposited by rivers.\nlemon (EN) = a sour yellow citrus fruit.\nRiver mud in French; sour fruit in English.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Gastronomie"
     },
     {
       "id": 142,
@@ -1140,7 +1422,9 @@
       "termEn": "cart",
       "correctAnswer": false,
       "explanationShort": "carte (FR) = a map, a card, or a restaurant menu.\ncart (EN) = a wheeled vehicle for carrying goods.\nFrench reads maps; English pushes carts.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 143,
@@ -1148,7 +1432,9 @@
       "termEn": "supply",
       "correctAnswer": false,
       "explanationShort": "supplier (FR) = to beg or plead desperately for mercy.\nsupply (EN) = to provide goods or resources.\nFrench begs; English provides.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
     },
     {
       "id": 144,
@@ -1156,7 +1442,9 @@
       "termEn": "education",
       "correctAnswer": true,
       "explanationShort": "éducation = the process of teaching, learning, and personal development.\nFrom Latin 'educare' (to bring up, to rear), both kept the full educational meaning.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 145,
@@ -1164,7 +1452,9 @@
       "termEn": "apology",
       "correctAnswer": false,
       "explanationShort": "apologie (FR) = a defense or strong justification of something.\napology (EN) = saying sorry for a mistake.\nBoth come from Greek 'apologia' (a speech in defense), but English shifted toward regret.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Business"
     },
     {
       "id": 146,
@@ -1172,7 +1462,9 @@
       "termEn": "village",
       "correctAnswer": true,
       "explanationShort": "village = a small rural settlement, smaller than a town.\nFrom Old French, both name the same type of community.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 147,
@@ -1180,7 +1472,9 @@
       "termEn": "station",
       "correctAnswer": true,
       "explanationShort": "station = a stopping point for transport or services.\nFrom Latin 'statio' (a standing place), both describe where things halt.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 148,
@@ -1188,7 +1482,9 @@
       "termEn": "act",
       "correctAnswer": true,
       "explanationShort": "acte/act = an action, a deed, or a division of a play.\nBoth also have legal uses: \"acte de naissance,\" \"Act of Parliament.\"\nSame meaning in most everyday contexts.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
     },
     {
       "id": 149,
@@ -1196,7 +1492,9 @@
       "termEn": "park",
       "correctAnswer": true,
       "explanationShort": "parc = a public green space, or an enclosed area like a theme park.\nFrom Old French, both kept the recreational outdoor meaning.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 150,
@@ -1204,7 +1502,9 @@
       "termEn": "ocean",
       "correctAnswer": true,
       "explanationShort": "océan = a vast body of saltwater covering much of the Earth.\nNamed after the Greek titan Okeanos, who personified the world-encircling river.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 151,
@@ -1212,7 +1512,9 @@
       "termEn": "asset",
       "correctAnswer": false,
       "explanationShort": "assiette (FR) = a plate, a dish used for eating.\nasset (EN) = a valuable resource or property.\nFrench holds food; English holds value.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 152,
@@ -1220,7 +1522,9 @@
       "termEn": "chef",
       "correctAnswer": false,
       "explanationShort": "chef (FR) = a leader, boss, or head of a group.\nchef (EN) = a professional cook in a restaurant.\nFrench means a leader; English means a professional cook.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Gastronomie"
     },
     {
       "id": 153,
@@ -1228,7 +1532,9 @@
       "termEn": "parkour",
       "correctAnswer": false,
       "explanationShort": "parcours (FR) = a route, path, or career journey.\nparkour (EN) = an urban acrobatic sport of jumping over obstacles.\nFrench means a route; English names a sport.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 154,
@@ -1236,7 +1542,9 @@
       "termEn": "fabric",
       "correctAnswer": false,
       "explanationShort": "fabrique (FR) = a factory or manufacturing workshop.\nfabric (EN) = textile, cloth, or woven material.\nThe place of making vs. what gets made.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
     },
     {
       "id": 155,
@@ -1244,7 +1552,9 @@
       "termEn": "crayon",
       "correctAnswer": false,
       "explanationShort": "crayon (FR) = a pencil.\ncrayon (EN) = a wax colouring stick.\nFrench writes homework; English colours it.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 156,
@@ -1252,7 +1562,9 @@
       "termEn": "ballet",
       "correctAnswer": true,
       "explanationShort": "ballet = a classical dance form performed to music.\nBorn in the Italian and French courts of the Renaissance, the word and art spread together unchanged.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 157,
@@ -1260,7 +1572,9 @@
       "termEn": "continent",
       "correctAnswer": true,
       "explanationShort": "continent = one of the Earth's major landmasses.\nFrom Latin 'continere' (to hold together), both name the same geographical divisions.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 158,
@@ -1268,7 +1582,9 @@
       "termEn": "residence",
       "correctAnswer": true,
       "explanationShort": "résidence = a place where someone lives, especially a formal or official dwelling.\nFrom Latin 'residere' (to sit back, settle), both kept the dwelling meaning.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 159,
@@ -1276,7 +1592,9 @@
       "termEn": "profession",
       "correctAnswer": true,
       "explanationShort": "profession = a skilled occupation requiring specialized training.\nFrom Latin 'professio' (public declaration), both describe a declared career or trade.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Business"
     },
     {
       "id": 160,
@@ -1284,7 +1602,9 @@
       "termEn": "emotion",
       "correctAnswer": true,
       "explanationShort": "émotion = a strong feeling such as joy, fear, or sadness.\nFrom Latin 'emovere' (to stir up), both kept the inner experience meaning.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 161,
@@ -1292,7 +1612,9 @@
       "termEn": "issue",
       "correctAnswer": false,
       "explanationShort": "issue (FR) = an exit or way out.\nissue (EN) = a problem, topic, or matter.\nFrench leaves the room; English starts the discussion.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Business"
     },
     {
       "id": 162,
@@ -1300,7 +1622,9 @@
       "termEn": "pull",
       "correctAnswer": false,
       "explanationShort": "pull (FR) = a sweater or jumper.\npull (EN) = to draw something toward you.\nFrench wears it; English tugs it.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 163,
@@ -1308,7 +1632,9 @@
       "termEn": "billet",
       "correctAnswer": false,
       "explanationShort": "billet (FR) = a ticket or banknote.\nbillet (EN) = temporary lodging assigned to soldiers.\nFrench buys tickets; English houses soldiers.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 164,
@@ -1316,7 +1642,9 @@
       "termEn": "attire",
       "correctAnswer": false,
       "explanationShort": "attirer (FR) = to attract or draw toward.\nattire (EN) = clothing or dress.\nFrench attracts; English dresses.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 165,
@@ -1324,7 +1652,9 @@
       "termEn": "robe",
       "correctAnswer": false,
       "explanationShort": "robe (FR) = a dress worn by women.\nrobe (EN) = a gown or bathrobe.\nFrench means a dress; English means a robe or gown.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 166,
@@ -1332,7 +1662,9 @@
       "termEn": "theatre",
       "correctAnswer": true,
       "explanationShort": "théâtre = a venue for live performances, or the art of dramatic performance.\nFrom Greek 'theatron' (viewing place), both kept the same dramatic meaning.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 167,
@@ -1340,7 +1672,9 @@
       "termEn": "university",
       "correctAnswer": true,
       "explanationShort": "université = a higher education institution that awards degrees.\nFrom Latin 'universitas' (community of scholars); the first ones appeared in Bologna and Paris around 1150.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 168,
@@ -1348,7 +1682,9 @@
       "termEn": "page",
       "correctAnswer": true,
       "explanationShort": "page = a leaf of a book, document, or website.\nFrom Latin 'pagina,' both kept the written surface meaning.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 169,
@@ -1356,7 +1692,9 @@
       "termEn": "route",
       "correctAnswer": true,
       "explanationShort": "route = a road or path taken to reach a destination.\nFrom Latin 'rupta via' (broken path, a road cleared through terrain), both describe a travel way.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 170,
@@ -1364,7 +1702,9 @@
       "termEn": "president",
       "correctAnswer": true,
       "explanationShort": "président = the head of state, company, or organization.\nFrom Latin 'praesidens' (sitting before, presiding), both name the person in charge.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
     },
     {
       "id": 171,
@@ -1372,7 +1712,9 @@
       "termEn": "lunatic",
       "correctAnswer": false,
       "explanationShort": "lunettes (FR) = glasses for seeing better.\nlunatic (EN) = a crazy or insane person.\nFrench means glasses; English means a crazy person.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 172,
@@ -1380,7 +1722,9 @@
       "termEn": "bibliography",
       "correctAnswer": false,
       "explanationShort": "bibliothèque (FR) = a library, a place where you borrow books.\nbibliography (EN) = a list of books or sources cited in a work.\nBuilding in French; list in English.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Business"
     },
     {
       "id": 173,
@@ -1388,7 +1732,9 @@
       "termEn": "forfeit",
       "correctAnswer": false,
       "explanationShort": "forfait (FR) = a flat-rate package like a phone plan or ski pass.\nforfeit (EN) = to lose something as a penalty.\nFrench sells packages; English takes them away.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 174,
@@ -1396,7 +1742,9 @@
       "termEn": "rapport",
       "correctAnswer": false,
       "explanationShort": "rapport (FR) = a written report or official account.\nrapport (EN) = a relationship of trust or harmony.\nFrench writes reports; English builds connections.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Business"
     },
     {
       "id": 175,
@@ -1404,7 +1752,9 @@
       "termEn": "buffet",
       "correctAnswer": true,
       "explanationShort": "buffet (FR) = a self-service meal where people serve themselves.\nbuffet (EN) = the same: a self-service meal.\nThe word can also mean a sideboard or dining-room cabinet in both languages.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Gastronomie"
     },
     {
       "id": 176,
@@ -1412,7 +1762,9 @@
       "termEn": "guitar",
       "correctAnswer": true,
       "explanationShort": "guitare = a stringed instrument played by plucking or strumming.\nThe word travelled from Arabic 'qitara' through Spanish and French to English, unchanged in meaning.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 177,
@@ -1420,7 +1772,9 @@
       "termEn": "migration",
       "correctAnswer": true,
       "explanationShort": "migration = the movement of people, animals, or data from one place to another.\nFrom Latin 'migrare' (to move), both describe the same displacement.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
     },
     {
       "id": 178,
@@ -1428,15 +1782,19 @@
       "termEn": "cinema",
       "correctAnswer": true,
       "explanationShort": "cinéma = a movie theatre, or the film industry as a whole.\nShort for 'cinématographe,' invented by the Lumière brothers in Lyon in 1895.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 179,
       "termFr": "catastrophe",
       "termEn": "catastrophe",
       "correctAnswer": true,
-      "explanationShort": "catastrophe = a sudden, large-scale disaster with severe consequences.\nIn Greek drama, 'katastrophe' was the final turning point of a play — the meaning shifted from endings to disasters.",
-      "tag": "true_friend"
+      "explanationShort": "catastrophe = a sudden, large-scale disaster with severe consequences.\nIn Greek drama, 'katastrophe' was the final turning point of a play; the meaning shifted from endings to disasters.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 180,
@@ -1444,7 +1802,9 @@
       "termEn": "tunnel",
       "correctAnswer": true,
       "explanationShort": "tunnel = an underground or underwater passage.\nFrom Old French 'tonnelle' (barrel vault), both describe the same enclosed corridor.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 181,
@@ -1452,7 +1812,9 @@
       "termEn": "brilliant",
       "correctAnswer": true,
       "explanationShort": "brillant = extremely intelligent, or shining with bright light.\nFrom Italian 'brillare' (to sparkle), both kept the dual meaning of shine and intellect.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 182,
@@ -1460,7 +1822,9 @@
       "termEn": "spirit",
       "correctAnswer": false,
       "explanationShort": "esprit (FR) = mind, intellect, or attitude.\nspirit (EN) = a ghost, strong attitude, or alcohol.\nFrench thinks; English haunts or drinks.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 183,
@@ -1468,7 +1832,9 @@
       "termEn": "gentle",
       "correctAnswer": false,
       "explanationShort": "gentil (FR) = kind, nice, friendly.\ngentle (EN) = soft, mild, not rough.\nFrench is kind; English is gentle.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 184,
@@ -1476,7 +1842,9 @@
       "termEn": "slip",
       "correctAnswer": false,
       "explanationShort": "slip (FR) = briefs or underwear.\nslip (EN) = to slide or make a mistake.\nFrench puts it on; English loses balance.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 185,
@@ -1484,7 +1852,9 @@
       "termEn": "character",
       "correctAnswer": false,
       "explanationShort": "caractère (FR) = personality or temperament.\ncharacter (EN) = a fictional person or someone's qualities.\nFrench describes temperament; English can enter the story.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 186,
@@ -1492,7 +1862,9 @@
       "termEn": "volcano",
       "correctAnswer": true,
       "explanationShort": "volcan = a mountain with an opening through which lava and gases erupt.\nNamed after Vulcanus, the Roman god of fire and metalworking.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 187,
@@ -1500,15 +1872,19 @@
       "termEn": "horizon",
       "correctAnswer": true,
       "explanationShort": "horizon = the line where earth and sky appear to meet.\nFrom Greek 'horizein' (to limit), both describe the same visual boundary.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
     },
     {
       "id": 188,
       "termFr": "décembre",
       "termEn": "december",
       "correctAnswer": true,
-      "explanationShort": "décembre = the twelfth and final month of the year.\nFrom Latin 'decem' (ten) — it was the tenth month in the old Roman calendar before January and February were added.",
-      "tag": "true_friend"
+      "explanationShort": "décembre = the twelfth and final month of the year.\nFrom Latin 'decem' (ten): it was the tenth month in the old Roman calendar before January and February were added.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 189,
@@ -1516,15 +1892,19 @@
       "termEn": "guide",
       "correctAnswer": true,
       "explanationShort": "guide = a person who leads others, or a book with useful information about a topic.\nFrom Old French, both describe someone or something that shows the way.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 190,
       "termFr": "collection",
       "termEn": "collection",
       "correctAnswer": true,
-      "explanationShort": "collection = a group of gathered objects.\nIn fashion, it also refers to a designer's seasonal range of clothing — a usage shared by both languages.",
-      "tag": "true_friend"
+      "explanationShort": "collection = a group of gathered objects.\nIn fashion, it also refers to a designer's seasonal range of clothing; a usage shared by both languages.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 191,
@@ -1532,15 +1912,19 @@
       "termEn": "liege",
       "correctAnswer": false,
       "explanationShort": "liège (FR) = cork, the bark used for bottle stoppers.\nliege (EN) = a feudal lord or sovereign.\nFrench seals bottles; English rules vassals.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "C1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 192,
       "termFr": "bride",
       "termEn": "bride",
       "correctAnswer": false,
-      "explanationShort": "bride (FR) = a bridle, the straps used to control a horse.\nbride (EN) = a woman getting married.\nReins vs. rings — no shared root despite identical spelling.",
-      "tag": "false_friend"
+      "explanationShort": "bride (FR) = a bridle, the straps used to control a horse.\nbride (EN) = a woman getting married.\nReins vs. rings: no shared root despite identical spelling.",
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
     },
     {
       "id": 193,
@@ -1548,7 +1932,9 @@
       "termEn": "surname",
       "correctAnswer": false,
       "explanationShort": "surnom (FR) = a nickname, an informal name from friends or family.\nsurname (EN) = a family name or last name.\nCasual vs. official, despite the shared 'sur-' (over/above) prefix.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 194,
@@ -1556,7 +1942,9 @@
       "termEn": "bag",
       "correctAnswer": false,
       "explanationShort": "bague (FR) = a ring worn on a finger.\nbag (EN) = a container used to carry items.\nFrench wears rings; English carries bags.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 195,
@@ -1564,7 +1952,9 @@
       "termEn": "dot",
       "correctAnswer": false,
       "explanationShort": "dot (FR) = a dowry brought to marriage.\ndot (EN) = a small round point.\nFrench means a dowry; English means a small point.",
-      "tag": "false_friend"
+      "tag": "false_friend",
+      "level": "C1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 196,
@@ -1572,7 +1962,9 @@
       "termEn": "festival",
       "correctAnswer": true,
       "explanationShort": "festival = a large public event centred on music, film, or culture.\nFrom Latin 'festivalis,' both name the same joyful public gatherings.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 197,
@@ -1580,7 +1972,9 @@
       "termEn": "promotion",
       "correctAnswer": true,
       "explanationShort": "promotion (FR) = a career advancement or a marketing campaign; in universities, it can also mean a graduating class.\npromotion (EN) = a career advancement or a marketing campaign.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
     },
     {
       "id": 198,
@@ -1588,7 +1982,9 @@
       "termEn": "ambulance",
       "correctAnswer": true,
       "explanationShort": "ambulance = an emergency vehicle that transports patients to hospital.\nFrom French 'hôpital ambulant' (mobile hospital), the word was born on Napoleonic battlefields.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 199,
@@ -1596,7 +1992,9 @@
       "termEn": "latitude",
       "correctAnswer": true,
       "explanationShort": "latitude = a geographic coordinate showing how far north or south a place is.\nSame meaning in both languages.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
     },
     {
       "id": 200,
@@ -1604,7 +2002,2009 @@
       "termEn": "saxophone",
       "correctAnswer": true,
       "explanationShort": "saxophone = a woodwind instrument with a brass body.\nNamed after Belgian inventor Adolphe Sax, who patented it in Paris in 1846.",
-      "tag": "true_friend"
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 201,
+      "termFr": "compréhensif",
+      "termEn": "comprehensive",
+      "correctAnswer": false,
+      "explanationShort": "compréhensif (FR) = understanding or sympathetic toward someone.\ncomprehensive (EN) = complete, broad, or covering everything.\nFrench is about empathy; English is about coverage.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 202,
+      "termFr": "entendre",
+      "termEn": "intend",
+      "correctAnswer": false,
+      "explanationShort": "entendre (FR) = to hear, or sometimes to mean.\nintend (EN) = to plan or mean to do something.\nFrench hears; English plans.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 203,
+      "termFr": "sensitif",
+      "termEn": "sensitive",
+      "correctAnswer": false,
+      "explanationShort": "sensitif (FR) = linked to the senses or sensory perception.\nsensitive (EN) = easily affected, delicate, or emotionally responsive.\nFrench is sensory; English is sensitivity.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 204,
+      "termFr": "avertissement",
+      "termEn": "advertisement",
+      "correctAnswer": false,
+      "explanationShort": "avertissement (FR) = a warning or notice of danger.\nadvertisement (EN) = a paid ad or promotion.\nFrench warns; English advertises.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 205,
+      "termFr": "commodité",
+      "termEn": "commodity",
+      "correctAnswer": false,
+      "explanationShort": "commodité (FR) = convenience, comfort, or amenities.\ncommodity (EN) = a product, raw material, or tradable good.\nFrench is convenience; English is merchandise.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 206,
+      "termFr": "convenance",
+      "termEn": "convenience",
+      "correctAnswer": false,
+      "explanationShort": "convenance (FR) = propriety, suitability, or social appropriateness.\nconvenience (EN) = practical ease or usefulness.\nFrench fits social rules; English makes life easier.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 207,
+      "termFr": "nouvelle",
+      "termEn": "novel",
+      "correctAnswer": false,
+      "explanationShort": "nouvelle (FR) = a short story or a piece of news.\nnovel (EN) = a long work of fiction.\nFrench can be short fiction; English is a full book.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 208,
+      "termFr": "contrôler",
+      "termEn": "control",
+      "correctAnswer": false,
+      "explanationShort": "contrôler (FR) = to check, inspect, or verify.\ncontrol (EN) = to direct, command, or have power over something.\nFrench often checks; English usually commands.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 209,
+      "termFr": "achever",
+      "termEn": "achieve",
+      "correctAnswer": false,
+      "explanationShort": "achever (FR) = to finish, complete, or kill.\nachieve (EN) = to succeed in reaching a goal.\nFrench finishes; English succeeds.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 210,
+      "termFr": "altérer",
+      "termEn": "alter",
+      "correctAnswer": false,
+      "explanationShort": "altérer (FR) = to spoil, damage, distort, or change for the worse.\nalter (EN) = to change or modify.\nFrench often damages; English simply changes.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 211,
+      "termFr": "grippe",
+      "termEn": "grip",
+      "correctAnswer": false,
+      "explanationShort": "grippe (FR) = the flu.\ngrip (EN) = a firm hold or grasp.\nFrench is illness; English is holding.",
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 212,
+      "termFr": "plume",
+      "termEn": "plum",
+      "correctAnswer": false,
+      "explanationShort": "plume (FR) = a feather, or a pen in some contexts.\nplum (EN) = a plum fruit.\nFrench writes or flies; English is fruit.",
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 213,
+      "termFr": "formel",
+      "termEn": "formal",
+      "correctAnswer": false,
+      "explanationShort": "formel (FR) = clear, explicit, categorical, or definite.\nformal (EN) = official, ceremonial, or not casual.\nFrench is often categorical; English is often official.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 214,
+      "termFr": "défini",
+      "termEn": "definite",
+      "correctAnswer": false,
+      "explanationShort": "défini (FR) = defined or specified.\ndefinite (EN) = certain, clear, or without doubt.\nFrench marks definition; English marks certainty.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 215,
+      "termFr": "délayer",
+      "termEn": "delay",
+      "correctAnswer": false,
+      "explanationShort": "délayer (FR) = to dilute or thin something with liquid.\ndelay (EN) = to make something late.\nFrench adds liquid; English loses time.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Gastronomie"
+    },
+    {
+      "id": 216,
+      "termFr": "conducteur",
+      "termEn": "conductor",
+      "correctAnswer": false,
+      "explanationShort": "conducteur (FR) = a driver, or something that conducts energy.\nconductor (EN) = a person leading an orchestra or collecting fares.\nFrench is usually the driver; English is often the orchestra leader.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 217,
+      "termFr": "large",
+      "termEn": "large",
+      "correctAnswer": false,
+      "explanationShort": "large (FR) = wide or broad.\nlarge (EN) = big in size or amount.\nFrench is width; English is size.",
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 218,
+      "termFr": "abuser",
+      "termEn": "abuse",
+      "correctAnswer": false,
+      "explanationShort": "abuser (FR) = to take advantage of, mislead, or overuse.\nabuse (EN) = to mistreat, insult, or misuse.\nThe overlap is limited; the everyday meanings do not line up cleanly.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 219,
+      "termFr": "introduire",
+      "termEn": "introduce",
+      "correctAnswer": false,
+      "explanationShort": "introduire (FR) = to insert or bring something in.\nintroduce (EN) = to present someone or something for the first time.\nFrench often inserts; English often presents.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 220,
+      "termFr": "sentence",
+      "termEn": "sentence",
+      "correctAnswer": false,
+      "explanationShort": "sentence (FR) = a court judgment or a formal maxim.\nsentence (EN) = a complete grammatical unit of words.\nFrench is legal or moral; English is grammar.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 221,
+      "termFr": "procéder",
+      "termEn": "proceed",
+      "correctAnswer": false,
+      "explanationShort": "procéder (FR) = to carry out, act, or come from.\nproceed (EN) = to continue or move forward.\nFrench is method; English is movement or continuation.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 222,
+      "termFr": "notice",
+      "termEn": "notice",
+      "correctAnswer": false,
+      "explanationShort": "notice (FR) = instructions or a user leaflet.\nnotice (EN) = a warning, announcement, or attention.\nFrench explains how to use something; English catches attention.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 223,
+      "termFr": "annoter",
+      "termEn": "note",
+      "correctAnswer": false,
+      "explanationShort": "annoter (FR) = to annotate or add written comments.\nnote (EN) = to notice, record, or mention.\nFrench adds notes to a text; English can simply notice.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 224,
+      "termFr": "taper",
+      "termEn": "tap",
+      "correctAnswer": false,
+      "explanationShort": "taper (FR) = to hit, type, or strike.\ntap (EN) = to touch lightly or draw from a source.\nFrench hits or types; English taps lightly.",
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 225,
+      "termFr": "faculté",
+      "termEn": "faculty",
+      "correctAnswer": false,
+      "explanationShort": "faculté (FR) = an ability, or a university department.\nfaculty (EN) = teaching staff in a school or university.\nFrench can mean ability or department; English usually means staff.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 226,
+      "termFr": "lecteur",
+      "termEn": "lecturer",
+      "correctAnswer": false,
+      "explanationShort": "lecteur (FR) = a reader, or a media player.\nlecturer (EN) = a university teacher who gives lectures.\nFrench reads; English teaches.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 227,
+      "termFr": "pavé",
+      "termEn": "pavement",
+      "correctAnswer": false,
+      "explanationShort": "pavé (FR) = a paving stone or cobblestone.\npavement (EN) = a sidewalk in UK English, or a road surface in US English.\nFrench is the stone; English is the surface.",
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 228,
+      "termFr": "adapter",
+      "termEn": "adopt",
+      "correctAnswer": false,
+      "explanationShort": "adapter (FR) = to adapt, adjust, or make something fit.\nadopt (EN) = to take someone or something as one's own.\nTrap: adapter matches adapt, not adopt.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 229,
+      "termFr": "adéquat",
+      "termEn": "adequate",
+      "correctAnswer": false,
+      "explanationShort": "adéquat (FR) = appropriate or suitable.\nadequate (EN) = acceptable but not especially good.\nFrench is suitable; English can sound merely sufficient.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 230,
+      "termFr": "affaire",
+      "termEn": "affair",
+      "correctAnswer": false,
+      "explanationShort": "affaire (FR) = a business, matter, deal, or case.\naffair (EN) = a romantic relationship, scandal, or public matter.\nFrench is often business; English often suggests scandal or romance.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 231,
+      "termFr": "agressif",
+      "termEn": "aggressive",
+      "correctAnswer": false,
+      "explanationShort": "agressif (FR) = hostile or violent.\naggressive (EN) = assertive, forceful, or sometimes hostile.\nFrench is more negative; English can be positive in business.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 232,
+      "termFr": "agonie",
+      "termEn": "agony",
+      "correctAnswer": false,
+      "explanationShort": "agonie (FR) = death throes or the final stage before death.\nagony (EN) = extreme pain or anguish.\nFrench is dying; English is pain.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 233,
+      "termFr": "aliéné",
+      "termEn": "alien",
+      "correctAnswer": false,
+      "explanationShort": "aliéné (FR) = mentally ill in older usage, or transferred away in legal language.\nalien (EN) = foreign, strange, or extraterrestrial.\nFrench is not the usual word for an extraterrestrial.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 234,
+      "termFr": "appointer",
+      "termEn": "appoint",
+      "correctAnswer": false,
+      "explanationShort": "appointer (FR) = to pay a salary in older or formal usage.\nappoint (EN) = to name someone to a role or fix a time.\nFrench pays; English names or schedules.",
+      "tag": "false_friend",
+      "level": "C1",
+      "category": "Business"
+    },
+    {
+      "id": 235,
+      "termFr": "appointements",
+      "termEn": "appointments",
+      "correctAnswer": false,
+      "explanationShort": "appointements (FR) = salary or wages in formal French.\nappointments (EN) = meetings or scheduled arrangements.\nFrench pays people; English puts meetings in a calendar.",
+      "tag": "false_friend",
+      "level": "C1",
+      "category": "Business"
+    },
+    {
+      "id": 236,
+      "termFr": "publicité",
+      "termEn": "publicity",
+      "correctAnswer": false,
+      "explanationShort": "publicité (FR) = advertising, an advert, or a commercial.\npublicity (EN) = public attention or media coverage.\nFrench buys attention; English receives attention.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 237,
+      "termFr": "assistance",
+      "termEn": "assistance",
+      "correctAnswer": false,
+      "explanationShort": "assistance (FR) = an audience, attendance, or help.\nassistance (EN) = help or support.\nFrench can mean the people present; English mainly means help.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 238,
+      "termFr": "audience",
+      "termEn": "audience",
+      "correctAnswer": false,
+      "explanationShort": "audience (FR) = a hearing, interview, or court session.\naudience (EN) = the people watching or listening.\nFrench can be legal; English is usually the public.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 239,
+      "termFr": "balance",
+      "termEn": "balance",
+      "correctAnswer": false,
+      "explanationShort": "balance (FR) = scales used for weighing.\nbalance (EN) = equilibrium, account balance, or weighing scales.\nFrench usually weighs; English usually means equilibrium.",
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 240,
+      "termFr": "balancer",
+      "termEn": "balance",
+      "correctAnswer": false,
+      "explanationShort": "balancer (FR) = to swing, throw, or leak information.\nbalance (EN) = to keep steady or compare sides.\nFrench can throw; English keeps things even.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 241,
+      "termFr": "balle",
+      "termEn": "ball",
+      "correctAnswer": false,
+      "explanationShort": "balle (FR) = a small ball, bullet, or bale.\nball (EN) = a round object used in games.\nFrench can be a bullet; English is usually a game ball.",
+      "tag": "false_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 242,
+      "termFr": "baraque",
+      "termEn": "barrack",
+      "correctAnswer": false,
+      "explanationShort": "baraque (FR) = a shack, hut, or informal house.\nbarrack (EN) = a military building where soldiers live.\nFrench is an informal building; English is military housing.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 243,
+      "termFr": "bénéfice",
+      "termEn": "benefit",
+      "correctAnswer": false,
+      "explanationShort": "bénéfice (FR) = profit or gain.\nbenefit (EN) = an advantage, payment, or help received.\nFrench is often profit; English is often advantage.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 244,
+      "termFr": "bilan",
+      "termEn": "bill",
+      "correctAnswer": false,
+      "explanationShort": "bilan (FR) = an assessment, balance sheet, or toll.\nbill (EN) = an invoice, banknote, or proposed law.\nFrench sums up; English asks for payment.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 245,
+      "termFr": "blouse",
+      "termEn": "blouse",
+      "correctAnswer": false,
+      "explanationShort": "blouse (FR) = a lab coat, work coat, or smock.\nblouse (EN) = a woman's shirt.\nFrench is often professional clothing; English is a top.",
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 246,
+      "termFr": "bond",
+      "termEn": "bond",
+      "correctAnswer": false,
+      "explanationShort": "bond (FR) = a leap or jump.\nbond (EN) = a connection, obligation, or financial security.\nFrench jumps; English connects or finances.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 247,
+      "termFr": "bonnet",
+      "termEn": "bonnet",
+      "correctAnswer": false,
+      "explanationShort": "bonnet (FR) = a beanie, cap, or bra cup.\nbonnet (EN) = a baby hat or a car hood in UK English.\nFrench is everyday headwear; English is narrower.",
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 248,
+      "termFr": "brocanteur",
+      "termEn": "broker",
+      "correctAnswer": false,
+      "explanationShort": "brocanteur (FR) = a secondhand dealer.\nbroker (EN) = a person who arranges deals, insurance, or investments.\nFrench sells old goods; English brokers deals.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 249,
+      "termFr": "bureau",
+      "termEn": "bureau",
+      "correctAnswer": false,
+      "explanationShort": "bureau (FR) = an office, desk, or department.\nbureau (EN) = a chest of drawers or an agency.\nFrench is where you work; English can be furniture.",
+      "tag": "false_friend",
+      "level": "A1",
+      "category": "Business"
+    },
+    {
+      "id": 250,
+      "termFr": "cabinet",
+      "termEn": "cabinet",
+      "correctAnswer": false,
+      "explanationShort": "cabinet (FR) = a practice, office, small room, or restroom in some contexts.\ncabinet (EN) = a cupboard or a group of senior ministers.\nFrench often means a professional office; English often means furniture or government.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 251,
+      "termFr": "cachet",
+      "termEn": "cachet",
+      "correctAnswer": false,
+      "explanationShort": "cachet (FR) = a stamp, seal, tablet, or performer's fee.\ncachet (EN) = prestige or a mark of distinction.\nFrench can be a pill or fee; English is prestige.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 252,
+      "termFr": "cadre",
+      "termEn": "cadre",
+      "correctAnswer": false,
+      "explanationShort": "cadre (FR) = a frame, setting, or executive.\ncadre (EN) = a small group of trained activists or leaders.\nFrench frames things or manages; English names a core group.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 253,
+      "termFr": "camisole",
+      "termEn": "camisole",
+      "correctAnswer": false,
+      "explanationShort": "camisole (FR) = mainly seen in camisole de force, a straitjacket.\ncamisole (EN) = a light sleeveless top.\nFrench restrains; English is clothing.",
+      "tag": "false_friend",
+      "level": "C1",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 254,
+      "termFr": "campagne",
+      "termEn": "campaign",
+      "correctAnswer": false,
+      "explanationShort": "campagne (FR) = the countryside, or a campaign.\ncampaign (EN) = a planned political, military, or marketing effort.\nFrench can mean rural land; English is organized action.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 255,
+      "termFr": "canapé",
+      "termEn": "canape",
+      "correctAnswer": false,
+      "explanationShort": "canapé (FR) = a sofa or couch.\ncanape (EN) = a small appetizer on bread or pastry.\nFrench sits down; English serves a bite.",
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Gastronomie"
+    },
+    {
+      "id": 256,
+      "termFr": "cap",
+      "termEn": "cap",
+      "correctAnswer": false,
+      "explanationShort": "cap (FR) = a course, cape, milestone, or threshold.\ncap (EN) = a hat, lid, or limit.\nFrench points direction; English covers or limits.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 257,
+      "termFr": "caprice",
+      "termEn": "caprice",
+      "correctAnswer": false,
+      "explanationShort": "caprice (FR) = a whim or tantrum.\ncaprice (EN) = a sudden fancy or impulsive change.\nFrench is often childish; English is more literary.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 258,
+      "termFr": "carton",
+      "termEn": "carton",
+      "correctAnswer": false,
+      "explanationShort": "carton (FR) = cardboard, a box, or a big success in slang.\ncarton (EN) = a milk or juice container, or a box.\nFrench is the material or box; English is usually the container.",
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 259,
+      "termFr": "censure",
+      "termEn": "censure",
+      "correctAnswer": false,
+      "explanationShort": "censure (FR) = censorship.\ncensure (EN) = strong official criticism.\nFrench suppresses speech; English criticizes officially.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 260,
+      "termFr": "cerise",
+      "termEn": "cerise",
+      "correctAnswer": false,
+      "explanationShort": "cerise (FR) = a cherry.\ncerise (EN) = a bright cherry-red color.\nFrench is fruit; English is mainly a color word.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Gastronomie"
+    },
+    {
+      "id": 261,
+      "termFr": "change",
+      "termEn": "change",
+      "correctAnswer": false,
+      "explanationShort": "change (FR) = currency exchange.\nchange (EN) = change, alteration, or coins.\nFrench exchanges money; English changes things.",
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Business"
+    },
+    {
+      "id": 262,
+      "termFr": "chant",
+      "termEn": "chant",
+      "correctAnswer": false,
+      "explanationShort": "chant (FR) = singing or a song.\nchant (EN) = a repeated slogan, call, or simple religious song.\nFrench is singing; English is repetition.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 263,
+      "termFr": "chantier",
+      "termEn": "shanty",
+      "correctAnswer": false,
+      "explanationShort": "chantier (FR) = a construction site or messy project.\nshanty (EN) = a rough hut or sea song.\nFrench builds; English shelters or sings.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 264,
+      "termFr": "chapeau",
+      "termEn": "chapeau",
+      "correctAnswer": false,
+      "explanationShort": "chapeau (FR) = a hat, or an introductory heading.\nchapeau (EN) = a hat, especially in a French cultural context.\nFrench is everyday; English is rare and borrowed.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 265,
+      "termFr": "chèque",
+      "termEn": "check",
+      "correctAnswer": false,
+      "explanationShort": "chèque (FR) = a cheque or payment document.\ncheck (EN) = a verification, mark, or bill in US restaurants.\nFrench pays; English checks.",
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Business"
+    },
+    {
+      "id": 266,
+      "termFr": "chiffon",
+      "termEn": "chiffon",
+      "correctAnswer": false,
+      "explanationShort": "chiffon (FR) = a rag or cleaning cloth.\nchiffon (EN) = a light, transparent fabric.\nFrench cleans; English dresses.",
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 267,
+      "termFr": "chiffre",
+      "termEn": "cipher",
+      "correctAnswer": false,
+      "explanationShort": "chiffre (FR) = a digit, figure, or numerical code.\ncipher (EN) = a secret code or a zero-like symbol.\nFrench counts; English hides information.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 268,
+      "termFr": "cité",
+      "termEn": "city",
+      "correctAnswer": false,
+      "explanationShort": "cité (FR) = an estate, housing project, or ancient city.\ncity (EN) = a large town or urban area.\nFrench can mean housing estate; English is the whole city.",
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 269,
+      "termFr": "baskets",
+      "termEn": "baskets",
+      "correctAnswer": false,
+      "explanationShort": "baskets (FR) = sneakers or trainers.\nbaskets (EN) = containers used for carrying or holding things.\nFrench goes on your feet; English holds objects.",
+      "tag": "false_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 270,
+      "termFr": "clerc",
+      "termEn": "clerk",
+      "correctAnswer": false,
+      "explanationShort": "clerc (FR) = a notary's assistant or cleric in some contexts.\nclerk (EN) = an office or shop employee.\nFrench is more specialized; English is a general employee.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 271,
+      "termFr": "clinique",
+      "termEn": "clinic",
+      "correctAnswer": false,
+      "explanationShort": "clinique (FR) = a private hospital or clinic.\nclinic (EN) = an outpatient medical center or specialist service.\nFrench can mean a private hospital; English is usually a consultation center.",
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 272,
+      "termFr": "coche",
+      "termEn": "coach",
+      "correctAnswer": false,
+      "explanationShort": "coche (FR) = a tick mark or old coach.\ncoach (EN) = a trainer, bus, or carriage.\nFrench marks a box; English trains people.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 273,
+      "termFr": "colis",
+      "termEn": "collision",
+      "correctAnswer": false,
+      "explanationShort": "colis (FR) = a parcel or package.\ncollision (EN) = a crash between moving things.\nFrench delivers; English crashes.",
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 274,
+      "termFr": "commande",
+      "termEn": "command",
+      "correctAnswer": false,
+      "explanationShort": "commande (FR) = an order for goods, or a control.\ncommand (EN) = an instruction, command, or authority.\nFrench buys or controls; English orders people.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 275,
+      "termFr": "commentaire",
+      "termEn": "comment",
+      "correctAnswer": false,
+      "explanationShort": "commentaire (FR) = a comment, note, or commentary.\ncomment (EN) = a remark or response.\nFrench can be a full analytical commentary; English is often a short remark.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 276,
+      "termFr": "commercial",
+      "termEn": "commercial",
+      "correctAnswer": false,
+      "explanationShort": "commercial (FR) = sales-related, or a salesperson as a noun.\ncommercial (EN) = an advertisement, or related to commerce.\nFrench names the sales role; English often means an ad.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 277,
+      "termFr": "commis",
+      "termEn": "committee",
+      "correctAnswer": false,
+      "explanationShort": "commis (FR) = a clerk, assistant, or junior worker.\ncommittee (EN) = a group appointed to handle a task.\nFrench is one person; English is a group.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 278,
+      "termFr": "commode",
+      "termEn": "commodious",
+      "correctAnswer": false,
+      "explanationShort": "commode (FR) = a chest of drawers, or convenient as an adjective.\ncommodious (EN) = spacious and roomy.\nFrench can be furniture; English means roomy.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 279,
+      "termFr": "compagnie",
+      "termEn": "company",
+      "correctAnswer": false,
+      "explanationShort": "compagnie (FR) = companionship, guests, or a company.\ncompany (EN) = a business or group of people.\nFrench can mean keeping someone company; English is usually a business or group.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 280,
+      "termFr": "complet",
+      "termEn": "complete",
+      "correctAnswer": false,
+      "explanationShort": "complet (FR) = a suit, or full as an adjective.\ncomplete (EN) = finished, whole, or entire.\nFrench can be clothing; English is completion.",
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 281,
+      "termFr": "compléter",
+      "termEn": "complete",
+      "correctAnswer": false,
+      "explanationShort": "compléter (FR) = to add what is missing or fill in.\ncomplete (EN) = to finish or make whole.\nFrench often adds to; English often finishes.",
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Business"
+    },
+    {
+      "id": 282,
+      "termFr": "complexion",
+      "termEn": "complexion",
+      "correctAnswer": false,
+      "explanationShort": "complexion (FR) = constitution or overall health in older or formal French.\ncomplexion (EN) = skin tone or facial appearance.\nFrench is constitution; English is skin tone.",
+      "tag": "false_friend",
+      "level": "C1",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 283,
+      "termFr": "compliment",
+      "termEn": "complement",
+      "correctAnswer": false,
+      "explanationShort": "compliment (FR) = praise or a polite remark.\ncomplement (EN) = something that completes or goes well with something else.\nFrench praises; English completes.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 284,
+      "termFr": "composant",
+      "termEn": "composer",
+      "correctAnswer": false,
+      "explanationShort": "composant (FR) = a component or part.\ncomposer (EN) = a person who writes music.\nFrench is a part; English is a person.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 285,
+      "termFr": "compromis",
+      "termEn": "compromise",
+      "correctAnswer": false,
+      "explanationShort": "compromis (FR) = a compromise, or a property sale agreement.\ncompromise (EN) = an agreement after concessions, or damage to integrity.\nFrench can be a sales agreement; English is the concession itself.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 286,
+      "termFr": "compromission",
+      "termEn": "compromise",
+      "correctAnswer": false,
+      "explanationShort": "compromission (FR) = a shady deal or discreditable involvement.\ncompromise (EN) = an agreement or a weakening of standards.\nFrench suggests discredit; English can be neutral.",
+      "tag": "false_friend",
+      "level": "C1",
+      "category": "Business"
+    },
+    {
+      "id": 287,
+      "termFr": "compulsion",
+      "termEn": "compulsion",
+      "correctAnswer": false,
+      "explanationShort": "compulsion (FR) = constraint or obligation from outside.\ncompulsion (EN) = an irresistible internal urge.\nFrench is external pressure; English is internal urge.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 288,
+      "termFr": "compte",
+      "termEn": "count",
+      "correctAnswer": false,
+      "explanationShort": "compte (FR) = an account, bill, count, or story.\ncount (EN) = a number count, or a noble title when capitalized.\nFrench manages an account; English counts.",
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Business"
+    },
+    {
+      "id": 289,
+      "termFr": "contrôleur",
+      "termEn": "controller",
+      "correctAnswer": false,
+      "explanationShort": "contrôleur (FR) = an inspector or ticket collector.\ncontroller (EN) = a device, regulator, or financial officer.\nFrench checks tickets; English controls systems.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 290,
+      "termFr": "break",
+      "termEn": "break",
+      "correctAnswer": false,
+      "explanationShort": "break (FR) = a station wagon in French car vocabulary.\nbreak (EN) = a pause, split, or interruption.\nFrench can be a car; English is a pause.",
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 291,
+      "termFr": "smoking",
+      "termEn": "smoking",
+      "correctAnswer": false,
+      "explanationShort": "smoking (FR) = a tuxedo or dinner jacket.\nsmoking (EN) = the act of smoking tobacco.\nFrench dresses up; English lights up.",
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 292,
+      "termFr": "dressing",
+      "termEn": "dressing",
+      "correctAnswer": false,
+      "explanationShort": "dressing (FR) = a walk-in closet or wardrobe area.\ndressing (EN) = salad sauce or a medical bandage.\nFrench stores clothes; English dresses salad or wounds.",
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 293,
+      "termFr": "relooking",
+      "termEn": "relooking",
+      "correctAnswer": false,
+      "explanationShort": "relooking (FR) = a makeover or style change.\nrelooking (EN) = not a standard English word in this sense.\nFrench uses a pseudo-English word; English says makeover.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 294,
+      "termFr": "footing",
+      "termEn": "footing",
+      "correctAnswer": false,
+      "explanationShort": "footing (FR) = jogging or a run.\nfooting (EN) = a base, foundation, or financial standing.\nFrench runs; English stands on a base.",
+      "tag": "false_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 295,
+      "termFr": "zapping",
+      "termEn": "zapping",
+      "correctAnswer": false,
+      "explanationShort": "zapping (FR) = channel-hopping on television.\nzapping (EN) = not the usual English word for changing channels.\nFrench flips channels; English says channel-hopping.",
+      "tag": "false_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 296,
+      "termFr": "planning",
+      "termEn": "planning",
+      "correctAnswer": false,
+      "explanationShort": "planning (FR) = a schedule or timetable.\nplanning (EN) = the act or process of making plans.\nFrench is the timetable; English is the process.",
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Business"
+    },
+    {
+      "id": 297,
+      "termFr": "sweat",
+      "termEn": "sweat",
+      "correctAnswer": false,
+      "explanationShort": "sweat (FR) = a sweatshirt.\nsweat (EN) = perspiration.\nFrench wears it; English produces it.",
+      "tag": "false_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 298,
+      "termFr": "self",
+      "termEn": "self",
+      "correctAnswer": false,
+      "explanationShort": "self (FR) = a cafeteria or self-service restaurant.\nself (EN) = one's own person or identity.\nFrench eats there; English talks about identity.",
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Gastronomie"
+    },
+    {
+      "id": 299,
+      "termFr": "forcing",
+      "termEn": "forcing",
+      "correctAnswer": false,
+      "explanationShort": "forcing (FR) = strong pressure or a push to make something happen.\nforcing (EN) = the act of making someone do something, or a technical term in sport or computing.\nFrench uses pseudo-English for pressure; English uses a different structure.",
+      "tag": "false_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 300,
+      "termFr": "tennisman",
+      "termEn": "tennisman",
+      "correctAnswer": false,
+      "explanationShort": "tennisman (FR) = a tennis player in French everyday speech.\ntennisman (EN) = not the standard English word for a tennis player.\nFrench uses tennisman; English says tennis player.",
+      "tag": "false_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 301,
+      "termFr": "idéal",
+      "termEn": "ideal",
+      "correctAnswer": true,
+      "explanationShort": "A near-perfect twin: the ideal option in both languages. The main difference is sound: English stresses the middle, as in ai-DEE-al.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 302,
+      "termFr": "challenge",
+      "termEn": "challenge",
+      "correctAnswer": true,
+      "explanationShort": "A modern true friend. In French business, it means a stimulating challenge. In English, it can also be a verb: to challenge someone.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 303,
+      "termFr": "bonus",
+      "termEn": "bonus",
+      "correctAnswer": true,
+      "explanationShort": "Same meaning: an extra reward, advantage, or payment. English stretches the first vowel: BOH-nus.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Business"
+    },
+    {
+      "id": 304,
+      "termFr": "impact",
+      "termEn": "impact",
+      "correctAnswer": true,
+      "explanationShort": "Same written form, same core meaning: an effect or influence. In professional English, the stress usually comes first: IM-pact.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 305,
+      "termFr": "standard",
+      "termEn": "standard",
+      "correctAnswer": true,
+      "explanationShort": "Used the same way as a noun or adjective: a standard, a standard process, a standard format. English stresses the first syllable: STAN-dard.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 306,
+      "termFr": "innovation",
+      "termEn": "innovation",
+      "correctAnswer": true,
+      "explanationShort": "The -tion pattern works perfectly here: same spelling, same meaning. English pronounces the final part like -VAY-shun.",
+      "tag": "true_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 307,
+      "termFr": "flexibilité",
+      "termEn": "flexibility",
+      "correctAnswer": true,
+      "explanationShort": "The French suffix -té often becomes English -ty. Flexibilité and flexibility share the same professional meaning: the ability to adapt.",
+      "tag": "true_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 308,
+      "termFr": "optimisme",
+      "termEn": "optimism",
+      "correctAnswer": true,
+      "explanationShort": "The French suffix -isme becomes English -ism. Same idea: a positive view of what can happen.",
+      "tag": "true_friend",
+      "level": "B2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 309,
+      "termFr": "spécialiste",
+      "termEn": "specialist",
+      "correctAnswer": true,
+      "explanationShort": "The French suffix -iste becomes English -ist. Same role: a specialist in a field, skill, or topic.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 310,
+      "termFr": "négociable",
+      "termEn": "negotiable",
+      "correctAnswer": true,
+      "explanationShort": "The -able pattern stays transparent. Negotiable means open to discussion or adjustment in both languages.",
+      "tag": "true_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 311,
+      "termFr": "flexible",
+      "termEn": "flexible",
+      "correctAnswer": true,
+      "explanationShort": "The -ible ending is transparent here. Same meaning in interviews, project work, and everyday planning: able to adapt.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 312,
+      "termFr": "prioriser",
+      "termEn": "prioritize",
+      "correctAnswer": true,
+      "explanationShort": "A useful action-verb bridge: French -iser maps to English -ize. Same business meaning: to rank tasks by importance.",
+      "tag": "true_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 313,
+      "termFr": "optimiser",
+      "termEn": "optimize",
+      "correctAnswer": true,
+      "explanationShort": "Another -iser to -ize verb. Same professional meaning: to improve a process, tool, or system so it works better.",
+      "tag": "true_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 314,
+      "termFr": "organiser",
+      "termEn": "organize",
+      "correctAnswer": true,
+      "explanationShort": "Same action, different ending: organiser becomes organize. English also accepts organise in British spelling.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Business"
+    },
+    {
+      "id": 315,
+      "termFr": "moderniser",
+      "termEn": "modernize",
+      "correctAnswer": true,
+      "explanationShort": "The -iser to -ize pattern works again. Modernize is useful in technology and management for updating systems or processes.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 316,
+      "termFr": "visualiser",
+      "termEn": "visualize",
+      "correctAnswer": true,
+      "explanationShort": "The French -iser ending maps to English -ize. Visualize means to imagine something clearly or display data as a chart or graphic.",
+      "tag": "true_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 317,
+      "termFr": "personnaliser",
+      "termEn": "personalize",
+      "correctAnswer": true,
+      "explanationShort": "The -iser to -ize pattern works here too. Personalize is a key marketing and product word: adapt something to a specific user or customer.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 318,
+      "termFr": "standardiser",
+      "termEn": "standardize",
+      "correctAnswer": true,
+      "explanationShort": "Same structure and same business meaning: to make methods, formats, or rules follow one shared standard.",
+      "tag": "true_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 319,
+      "termFr": "synchroniser",
+      "termEn": "synchronize",
+      "correctAnswer": true,
+      "explanationShort": "A transparent technical and business verb. Both languages often shorten it in tech contexts: synchro in French, sync in English.",
+      "tag": "true_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 320,
+      "termFr": "automatiser",
+      "termEn": "automate",
+      "correctAnswer": true,
+      "explanationShort": "A small ending shift: French automatiser becomes English automate. Same meaning: make a task run automatically.",
+      "tag": "true_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 321,
+      "termFr": "adapter",
+      "termEn": "adapt",
+      "correctAnswer": true,
+      "explanationShort": "adapter (FR) = to adapt, adjust, or make something fit.\nadapt (EN) = to change something so it fits a new need.\nSafe match: adapter matches adapt; do not confuse it with adopt.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Business"
+    },
+    {
+      "id": 322,
+      "termFr": "adoption",
+      "termEn": "adoption",
+      "correctAnswer": true,
+      "explanationShort": "Same spelling and same meaning. It works for adopting a child, but also for adopting a new technology, tool, or strategy.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 323,
+      "termFr": "association",
+      "termEn": "association",
+      "correctAnswer": true,
+      "explanationShort": "A transparent word with the same core meaning: a group, link, or formal association. English stress falls near the end: as-so-see-AY-shun.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 324,
+      "termFr": "collaboration",
+      "termEn": "collaboration",
+      "correctAnswer": true,
+      "explanationShort": "A central teamwork word. Same spelling and same meaning: working together on a shared project or goal.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 325,
+      "termFr": "coordination",
+      "termEn": "coordination",
+      "correctAnswer": true,
+      "explanationShort": "A perfect project-management twin. Same meaning: making people, tasks, or actions work together in an organized way.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 326,
+      "termFr": "décision",
+      "termEn": "decision",
+      "correctAnswer": true,
+      "explanationShort": "The accents disappear in English, but the meaning stays the same. Decision is a core business word for choosing between options.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Business"
+    },
+    {
+      "id": 327,
+      "termFr": "évaluation",
+      "termEn": "evaluation",
+      "correctAnswer": true,
+      "explanationShort": "The initial accent disappears in English. Same meaning: an assessment, review, or evaluation, including annual performance evaluations.",
+      "tag": "true_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 328,
+      "termFr": "option",
+      "termEn": "option",
+      "correctAnswer": true,
+      "explanationShort": "A perfect twin: an option is a possible choice in both languages. English pronounces it with an open first sound: OP-shun.",
+      "tag": "true_friend",
+      "level": "A1",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 329,
+      "termFr": "position",
+      "termEn": "position",
+      "correctAnswer": true,
+      "explanationShort": "Same word for a physical place, a viewpoint, or a role in a company. In English, it sounds like po-ZI-shun.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Business"
+    },
+    {
+      "id": 330,
+      "termFr": "production",
+      "termEn": "production",
+      "correctAnswer": true,
+      "explanationShort": "A true friend across industry, film, and software. In tech, production can mean the live environment: push to production.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 331,
+      "termFr": "protection",
+      "termEn": "protection",
+      "correctAnswer": true,
+      "explanationShort": "Same spelling, same meaning. Useful in law, cybersecurity, insurance, and human resources: data protection, worker protection.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 332,
+      "termFr": "qualification",
+      "termEn": "qualification",
+      "correctAnswer": true,
+      "explanationShort": "Same written form and same meaning: a skill, credential, or official requirement. Useful for resumes and job descriptions.",
+      "tag": "true_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 333,
+      "termFr": "relation",
+      "termEn": "relation",
+      "correctAnswer": true,
+      "explanationShort": "A transparent word for a connection between people, things, or ideas. In business English, relations is often plural: client relations, public relations.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Business"
+    },
+    {
+      "id": 334,
+      "termFr": "sélection",
+      "termEn": "selection",
+      "correctAnswer": true,
+      "explanationShort": "The accent disappears in English, but the meaning stays the same: a choice made from several options.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 335,
+      "termFr": "transformation",
+      "termEn": "transformation",
+      "correctAnswer": true,
+      "explanationShort": "A key consulting and technology word. Same spelling and same meaning: a major change in form, model, or organization.",
+      "tag": "true_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 336,
+      "termFr": "transition",
+      "termEn": "transition",
+      "correctAnswer": true,
+      "explanationShort": "Same spelling and same meaning: a move from one state to another. Useful for energy transition, career transition, or business transition.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 337,
+      "termFr": "version",
+      "termEn": "version",
+      "correctAnswer": true,
+      "explanationShort": "A perfect tech twin: version means the same thing in both languages. Think V1, V2, beta version, final version.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Business"
+    },
+    {
+      "id": 338,
+      "termFr": "vision",
+      "termEn": "vision",
+      "correctAnswer": true,
+      "explanationShort": "Same meaning for eyesight and long-term strategy. In business English, vision often means the direction a leader wants to build toward.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 339,
+      "termFr": "mission",
+      "termEn": "mission",
+      "correctAnswer": true,
+      "explanationShort": "Same spelling and same meaning: a task, purpose, or company direction. Mission statement is a common business phrase.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Business"
+    },
+    {
+      "id": 340,
+      "termFr": "conclusion",
+      "termEn": "conclusion",
+      "correctAnswer": true,
+      "explanationShort": "Same word for the end of a presentation, report, or argument. English stress falls in the middle: con-CLOO-zhun.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 341,
+      "termFr": "discussion",
+      "termEn": "discussion",
+      "correctAnswer": true,
+      "explanationShort": "Same spelling and same meaning, but often slightly more formal in English: a serious exchange of ideas or points of view.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Business"
+    },
+    {
+      "id": 342,
+      "termFr": "division",
+      "termEn": "division",
+      "correctAnswer": true,
+      "explanationShort": "A true friend in math and business. In a company, a division can mean a department, branch, or business unit.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 343,
+      "termFr": "extension",
+      "termEn": "extension",
+      "correctAnswer": true,
+      "explanationShort": "Same spelling and same meaning. It can mean extra time, a browser extension, a phone extension, or an added part.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 344,
+      "termFr": "inclusion",
+      "termEn": "inclusion",
+      "correctAnswer": true,
+      "explanationShort": "Same spelling and same meaning. A modern management word, often used in diversity and inclusion.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 345,
+      "termFr": "progression",
+      "termEn": "progression",
+      "correctAnswer": true,
+      "explanationShort": "Same spelling and same meaning: gradual movement forward, step by step. Useful for progress tracking and performance curves.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 346,
+      "termFr": "application",
+      "termEn": "application",
+      "correctAnswer": true,
+      "explanationShort": "Transparent and tech-friendly. Both languages shorten it the same way: une appli in French, an app in English.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Business"
+    },
+    {
+      "id": 347,
+      "termFr": "contribution",
+      "termEn": "contribution",
+      "correctAnswer": true,
+      "explanationShort": "Same spelling and same meaning: help or value added to a project, team, or result. English stresses the -BYOO- sound: con-tri-BYOO-shun.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 348,
+      "termFr": "distribution",
+      "termEn": "distribution",
+      "correctAnswer": true,
+      "explanationShort": "A useful true friend in logistics, commerce, and technology. It can describe a distribution chain or a Linux distribution.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 349,
+      "termFr": "installation",
+      "termEn": "installation",
+      "correctAnswer": true,
+      "explanationShort": "Same spelling and same meaning. Useful for physical equipment, software setup, and technical deployment.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Business"
+    },
+    {
+      "id": 350,
+      "termFr": "instruction",
+      "termEn": "instruction",
+      "correctAnswer": true,
+      "explanationShort": "Same word, but business English often uses the plural instructions to mean steps or directions to follow.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 351,
+      "termFr": "intervention",
+      "termEn": "intervention",
+      "correctAnswer": true,
+      "explanationShort": "Same spelling and same meaning. It can describe speaking in a meeting or a technical visit by an engineer on site.",
+      "tag": "true_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 352,
+      "termFr": "limitation",
+      "termEn": "limitation",
+      "correctAnswer": true,
+      "explanationShort": "A perfect true friend for restrictions, technical constraints, or legal limits. English stress falls near the end: lim-i-TAY-shun.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 353,
+      "termFr": "orientation",
+      "termEn": "orientation",
+      "correctAnswer": true,
+      "explanationShort": "Same spelling, but English business usage often means onboarding or initial training for a new employee.",
+      "tag": "true_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 354,
+      "termFr": "participation",
+      "termEn": "participation",
+      "correctAnswer": true,
+      "explanationShort": "Perfectly transparent. Same meaning: taking part in an activity, meeting, project, or decision process.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 355,
+      "termFr": "présentation",
+      "termEn": "presentation",
+      "correctAnswer": true,
+      "explanationShort": "The accent disappears in English. Same professional meaning: a talk, deck, or meeting presentation.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Business"
+    },
+    {
+      "id": 356,
+      "termFr": "réaction",
+      "termEn": "reaction",
+      "correctAnswer": true,
+      "explanationShort": "The accent disappears in English. Same meaning: an emotional, physical, chemical, or user reaction.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 357,
+      "termFr": "recommandation",
+      "termEn": "recommendation",
+      "correctAnswer": true,
+      "explanationShort": "Very close, but watch the middle: French recommandation becomes English recommendation. Same meaning: advice or a formal suggestion.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 358,
+      "termFr": "réduction",
+      "termEn": "reduction",
+      "correctAnswer": true,
+      "explanationShort": "The accent disappears in English. Same meaning: making something smaller or lower, such as cost reduction or risk reduction.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 359,
+      "termFr": "régulation",
+      "termEn": "regulation",
+      "correctAnswer": true,
+      "explanationShort": "The accent disappears in English. Same meaning: official rules, legal control, or automatic control of a system.",
+      "tag": "true_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 360,
+      "termFr": "simulation",
+      "termEn": "simulation",
+      "correctAnswer": true,
+      "explanationShort": "A perfect written twin. Common in aviation, finance, medicine, training, and video games.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 361,
+      "termFr": "structure",
+      "termEn": "structure",
+      "correctAnswer": true,
+      "explanationShort": "A perfect written twin. In English, the ending sounds like -cher: STRUK-cher. Useful for company structure, code structure, and document structure.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Business"
+    },
+    {
+      "id": 362,
+      "termFr": "stratégie",
+      "termEn": "strategy",
+      "correctAnswer": true,
+      "explanationShort": "French -gie becomes English -gy, and the accent disappears. English stresses the first syllable: STRAT-uh-jee.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 363,
+      "termFr": "méthode",
+      "termEn": "method",
+      "correctAnswer": true,
+      "explanationShort": "English drops the final -e and the accent. The main oral trap is the th sound in method: place the tongue lightly between the teeth.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Business"
+    },
+    {
+      "id": 364,
+      "termFr": "processus",
+      "termEn": "process",
+      "correctAnswer": true,
+      "explanationShort": "French processus becomes the shorter English process. Essential for describing the steps, workflow, or sequence of a project.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 365,
+      "termFr": "prototype",
+      "termEn": "prototype",
+      "correctAnswer": true,
+      "explanationShort": "Same spelling and same meaning. Very common in tech, design, and industry. English says PRO-tuh-type, with the final type clearly pronounced.",
+      "tag": "true_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 366,
+      "termFr": "module",
+      "termEn": "module",
+      "correctAnswer": true,
+      "explanationShort": "Same spelling and same meaning. Used for a training unit or a code component. US English often says MAH-jool; UK English often says MOD-yool.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 367,
+      "termFr": "format",
+      "termEn": "format",
+      "correctAnswer": true,
+      "explanationShort": "A clean true friend. It works for document size, file type (.pdf, .csv), media format, or meeting structure.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Business"
+    },
+    {
+      "id": 368,
+      "termFr": "profil",
+      "termEn": "profile",
+      "correctAnswer": true,
+      "explanationShort": "French profil becomes English profile, with a final silent -e. Useful for a user account, a social media page, or a candidate description.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Business"
+    },
+    {
+      "id": 369,
+      "termFr": "performance",
+      "termEn": "performance",
+      "correctAnswer": true,
+      "explanationShort": "Same spelling and same meaning. In business and tech, performance measures how well a person, company, process, or server works.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 370,
+      "termFr": "capacité",
+      "termEn": "capacity",
+      "correctAnswer": true,
+      "explanationShort": "French -té becomes English -ty. Capacity can mean maximum volume, production ability, storage space, or legal ability.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 371,
+      "termFr": "priorité",
+      "termEn": "priority",
+      "correctAnswer": true,
+      "explanationShort": "French -té becomes English -ty. A daily management word for what should be handled first.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 372,
+      "termFr": "qualité",
+      "termEn": "quality",
+      "correctAnswer": true,
+      "explanationShort": "Another -té to -ty pattern. Quality can mean product excellence, quality control, or a positive personal trait.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Business"
+    },
+    {
+      "id": 373,
+      "termFr": "sécurité",
+      "termEn": "security",
+      "correctAnswer": true,
+      "explanationShort": "French -té becomes English -ty, and the French accent disappears. Security works for physical safety, road safety, IT security, and cybersecurity.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Business"
+    },
+    {
+      "id": 374,
+      "termFr": "stabilité",
+      "termEn": "stability",
+      "correctAnswer": true,
+      "explanationShort": "French -té becomes English -ty. Stability is used for an economy, an infrastructure, a relationship, or reliable software.",
+      "tag": "true_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 375,
+      "termFr": "visibilité",
+      "termEn": "visibility",
+      "correctAnswer": true,
+      "explanationShort": "French -té becomes English -ty. In modern business English, visibility means clear access to data, progress, risks, or forecasts.",
+      "tag": "true_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 376,
+      "termFr": "responsabilité",
+      "termEn": "responsibility",
+      "correctAnswer": true,
+      "explanationShort": "A long but transparent -ty word. Responsibility is very useful on a CV, in job descriptions, and when defining who owns a task.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 377,
+      "termFr": "diversité",
+      "termEn": "diversity",
+      "correctAnswer": true,
+      "explanationShort": "French -té becomes English -ty. Diversity is a major workplace concept in modern company culture.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 378,
+      "termFr": "identité",
+      "termEn": "identity",
+      "correctAnswer": true,
+      "explanationShort": "French -té becomes English -ty. Identity works for official documents and for tech, especially identity and access management.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Business"
+    },
+    {
+      "id": 379,
+      "termFr": "confidentialité",
+      "termEn": "confidentiality",
+      "correctAnswer": true,
+      "explanationShort": "A strong -ty pattern. Confidentiality is crucial in law, HR, cybersecurity, and confidentiality agreements.",
+      "tag": "true_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 380,
+      "termFr": "créativité",
+      "termEn": "creativity",
+      "correctAnswer": true,
+      "explanationShort": "French -té becomes English -ty, and the accent disappears. Creativity is essential in design, marketing, product work, and innovation.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 381,
+      "termFr": "productivité",
+      "termEn": "productivity",
+      "correctAnswer": true,
+      "explanationShort": "French -té becomes English -ty, and the accent disappears. Productivity is a key word in business performance analysis.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 382,
+      "termFr": "mobilité",
+      "termEn": "mobility",
+      "correctAnswer": true,
+      "explanationShort": "French -té becomes English -ty. Mobility can mean transport, internal job moves, or mobile technology.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 383,
+      "termFr": "activité",
+      "termEn": "activity",
+      "correctAnswer": true,
+      "explanationShort": "French -té becomes English -ty. Activity can mean a specific action, a company's business area, or an everyday hobby.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 384,
+      "termFr": "autorité",
+      "termEn": "authority",
+      "correctAnswer": true,
+      "explanationShort": "French -té becomes English -ty. Authority can mean legal power, official control, or a recognized expert source. Watch the th sound.",
+      "tag": "true_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 385,
+      "termFr": "capitalisme",
+      "termEn": "capitalism",
+      "correctAnswer": true,
+      "explanationShort": "French -isme becomes English -ism. Capitalism has the same meaning: an economic system based on private ownership.",
+      "tag": "true_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 386,
+      "termFr": "réalisme",
+      "termEn": "realism",
+      "correctAnswer": true,
+      "explanationShort": "French -isme becomes English -ism, and the accent disappears. Realism means seeing or representing things as they are.",
+      "tag": "true_friend",
+      "level": "B2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 387,
+      "termFr": "minimalisme",
+      "termEn": "minimalism",
+      "correctAnswer": true,
+      "explanationShort": "French -isme becomes English -ism. Minimalism is the same concept in design, interior decoration, and lifestyle.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 388,
+      "termFr": "mécanisme",
+      "termEn": "mechanism",
+      "correctAnswer": true,
+      "explanationShort": "French -isme becomes English -ism. The main trap is pronunciation: the ch in mechanism sounds like k in English.",
+      "tag": "true_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 389,
+      "termFr": "pragmatisme",
+      "termEn": "pragmatism",
+      "correctAnswer": true,
+      "explanationShort": "French -isme becomes English -ism. Pragmatism is a valued professional quality: choosing what works in practice over theory.",
+      "tag": "true_friend",
+      "level": "C1",
+      "category": "Business"
+    },
+    {
+      "id": 390,
+      "termFr": "professionnalisme",
+      "termEn": "professionalism",
+      "correctAnswer": true,
+      "explanationShort": "French -isme becomes English -ism. Watch the spelling: French professionnalisme has double n; English professionalism has one n.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 391,
+      "termFr": "activisme",
+      "termEn": "activism",
+      "correctAnswer": true,
+      "explanationShort": "French -isme becomes English -ism. Activism means committed action for a political, social, environmental, or human-rights cause.",
+      "tag": "true_friend",
+      "level": "B2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 392,
+      "termFr": "analyste",
+      "termEn": "analyst",
+      "correctAnswer": true,
+      "explanationShort": "French -iste becomes English -ist. Analyst is a key role in tech, finance, data, and business reporting.",
+      "tag": "true_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 393,
+      "termFr": "optimiste",
+      "termEn": "optimist",
+      "correctAnswer": true,
+      "explanationShort": "French -iste becomes English -ist. An optimist is a positive person. In optimist, the final st is pronounced clearly.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 394,
+      "termFr": "pessimiste",
+      "termEn": "pessimist",
+      "correctAnswer": true,
+      "explanationShort": "French -iste becomes English -ist. A pessimist is the opposite of an optimist. English keeps the double s spelling.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 395,
+      "termFr": "réaliste",
+      "termEn": "realist",
+      "correctAnswer": true,
+      "explanationShort": "French -iste becomes English -ist, and the accent disappears. A realist sees facts as they are, without wishful thinking.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 396,
+      "termFr": "journaliste",
+      "termEn": "journalist",
+      "correctAnswer": true,
+      "explanationShort": "French -iste becomes English -ist. Journalist is the same profession. In English, the beginning sounds like JUR-, not the French jour sound.",
+      "tag": "true_friend",
+      "level": "A2",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 397,
+      "termFr": "économiste",
+      "termEn": "economist",
+      "correctAnswer": true,
+      "explanationShort": "French -iste becomes English -ist, and the accent disappears. Economist stresses the second syllable: e-CON-uh-mist.",
+      "tag": "true_friend",
+      "level": "B2",
+      "category": "Business"
+    },
+    {
+      "id": 398,
+      "termFr": "biologiste",
+      "termEn": "biologist",
+      "correctAnswer": true,
+      "explanationShort": "French -iste becomes English -ist. Biologist is a clean scientific true friend, with stress on the middle: bi-OL-uh-jist.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Vie quotidienne"
+    },
+    {
+      "id": 399,
+      "termFr": "accessible",
+      "termEn": "accessible",
+      "correctAnswer": true,
+      "explanationShort": "The adjective in -ible is spelled the same in both languages. Accessible works for physical access and for content that is easy to understand.",
+      "tag": "true_friend",
+      "level": "B1",
+      "category": "Business"
+    },
+    {
+      "id": 400,
+      "termFr": "validité",
+      "termEn": "validity",
+      "correctAnswer": true,
+      "explanationShort": "Final -té to -ty pattern. Validity works for an expiry date, a legal document, a research result, or the logic of an argument.",
+      "tag": "true_friend",
+      "level": "B2",
+      "category": "Business"
     }
   ]
 }

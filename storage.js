@@ -240,14 +240,17 @@
         // Milestone: halfway through the pool (one-shot).
         halfwayMilestoneShown: false,
         halfwayMilestoneShownAt: 0,
+        halfwayMilestonePoolSize: 0,
 
-        // One-shot: celebrate "seen all 200" once, then never again (even if user reaches 400+).
+        // One-shot: celebrate "seen all" once for the current pool size.
         poolCompleteCelebrated: false,
         poolCompleteCelebratedAt: 0,
+        poolCompleteCelebratedPoolSize: 0,
 
-        // One-shot: celebrate "mastered" once (pool exhausted + 0 active mistakes)
+        // One-shot: celebrate "mastered" once for the current pool size.
         masteredCelebrated: false,
-        masteredCelebratedAt: 0
+        masteredCelebratedAt: 0,
+        masteredCelebratedPoolSize: 0
       },
 
       endgame: {
@@ -421,6 +424,21 @@
     }
     if (typeof wl.draftIdea !== "string") wl.draftIdea = "";
     this.data.waitlist = wl;
+
+    const pc = this.data.postCompletion || {};
+    if (typeof pc.postCompletionShown !== "boolean") pc.postCompletionShown = false;
+    if (!Number.isFinite(pc.postCompletionAt)) pc.postCompletionAt = 0;
+    if (typeof pc.halfwayMilestoneShown !== "boolean") pc.halfwayMilestoneShown = false;
+    if (!Number.isFinite(pc.halfwayMilestoneShownAt)) pc.halfwayMilestoneShownAt = 0;
+    if (!Number.isFinite(pc.halfwayMilestonePoolSize)) pc.halfwayMilestonePoolSize = 0;
+    if (typeof pc.poolCompleteCelebrated !== "boolean") pc.poolCompleteCelebrated = false;
+    if (!Number.isFinite(pc.poolCompleteCelebratedAt)) pc.poolCompleteCelebratedAt = 0;
+    if (!Number.isFinite(pc.poolCompleteCelebratedPoolSize)) pc.poolCompleteCelebratedPoolSize = 0;
+    if (typeof pc.masteredCelebrated !== "boolean") pc.masteredCelebrated = false;
+    if (!Number.isFinite(pc.masteredCelebratedAt)) pc.masteredCelebratedAt = 0;
+    if (!Number.isFinite(pc.masteredCelebratedPoolSize)) pc.masteredCelebratedPoolSize = 0;
+    this.data.postCompletion = pc;
+
     // Harden counters
     const c = this.data.counters;
     for (const k in this.defaultData.counters) {
@@ -1056,9 +1074,18 @@
     this._save();
   };
 
-  // One-shot: halfway milestone (pool midpoint)
+  function getCurrentPoolSizeForPostCompletion(storage) {
+    return clampNonNegativeInt(storage?.config?.game?.poolSize);
+  }
+
+  // One-shot: halfway milestone (pool midpoint for current pool size)
   StorageManager.prototype.hasHalfwayMilestoneShown = function () {
-    return !!(this.data?.postCompletion?.halfwayMilestoneShown);
+    const poolSize = getCurrentPoolSizeForPostCompletion(this);
+    if (poolSize <= 0) return false;
+    return (
+      this.data?.postCompletion?.halfwayMilestoneShown === true &&
+      clampNonNegativeInt(this.data?.postCompletion?.halfwayMilestonePoolSize) === poolSize
+    );
   };
 
   StorageManager.prototype.markHalfwayMilestoneShown = function () {
@@ -1068,16 +1095,27 @@
       this.data.postCompletion = deepCopy(this.defaultData.postCompletion);
     }
 
-    if (this.data.postCompletion.halfwayMilestoneShown === true) return;
+    const poolSize = getCurrentPoolSizeForPostCompletion(this);
+    if (poolSize <= 0) return;
+    if (
+      this.data.postCompletion.halfwayMilestoneShown === true &&
+      clampNonNegativeInt(this.data.postCompletion.halfwayMilestonePoolSize) === poolSize
+    ) return;
 
     this.data.postCompletion.halfwayMilestoneShown = true;
     this.data.postCompletion.halfwayMilestoneShownAt = now();
+    this.data.postCompletion.halfwayMilestonePoolSize = poolSize;
     this._save();
   };
 
-  // One-shot: did we already celebrate "seen all 200"?
+  // One-shot: did we already celebrate "seen all" for the current pool size?
   StorageManager.prototype.hasPoolCompleteCelebrated = function () {
-    return !!(this.data?.postCompletion?.poolCompleteCelebrated);
+    const poolSize = getCurrentPoolSizeForPostCompletion(this);
+    if (poolSize <= 0) return false;
+    return (
+      this.data?.postCompletion?.poolCompleteCelebrated === true &&
+      clampNonNegativeInt(this.data?.postCompletion?.poolCompleteCelebratedPoolSize) === poolSize
+    );
   };
 
   StorageManager.prototype.markPoolCompleteCelebrated = function () {
@@ -1087,16 +1125,27 @@
       this.data.postCompletion = deepCopy(this.defaultData.postCompletion);
     }
 
-    if (this.data.postCompletion.poolCompleteCelebrated === true) return;
+    const poolSize = getCurrentPoolSizeForPostCompletion(this);
+    if (poolSize <= 0) return;
+    if (
+      this.data.postCompletion.poolCompleteCelebrated === true &&
+      clampNonNegativeInt(this.data.postCompletion.poolCompleteCelebratedPoolSize) === poolSize
+    ) return;
 
     this.data.postCompletion.poolCompleteCelebrated = true;
     this.data.postCompletion.poolCompleteCelebratedAt = now();
+    this.data.postCompletion.poolCompleteCelebratedPoolSize = poolSize;
     this._save();
   };
 
 
   StorageManager.prototype.hasMasteredCelebrated = function () {
-    return !!(this.data?.postCompletion?.masteredCelebrated);
+    const poolSize = getCurrentPoolSizeForPostCompletion(this);
+    if (poolSize <= 0) return false;
+    return (
+      this.data?.postCompletion?.masteredCelebrated === true &&
+      clampNonNegativeInt(this.data?.postCompletion?.masteredCelebratedPoolSize) === poolSize
+    );
   };
 
   StorageManager.prototype.markMasteredCelebrated = function () {
@@ -1106,10 +1155,16 @@
       this.data.postCompletion = deepCopy(this.defaultData.postCompletion);
     }
 
-    if (this.data.postCompletion.masteredCelebrated === true) return;
+    const poolSize = getCurrentPoolSizeForPostCompletion(this);
+    if (poolSize <= 0) return;
+    if (
+      this.data.postCompletion.masteredCelebrated === true &&
+      clampNonNegativeInt(this.data.postCompletion.masteredCelebratedPoolSize) === poolSize
+    ) return;
 
     this.data.postCompletion.masteredCelebrated = true;
     this.data.postCompletion.masteredCelebratedAt = now();
+    this.data.postCompletion.masteredCelebratedPoolSize = poolSize;
     this._save();
   };
 

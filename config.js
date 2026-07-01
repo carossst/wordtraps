@@ -44,7 +44,7 @@
   window.WT_CONFIG = {
 
     // Product version (UI display, logs)
-    version: "3.4",
+    version: "3.5.0",
 
     // Storage schema version (localStorage).
     // Change ONLY if you accept a migration/wipe.
@@ -85,7 +85,7 @@
     // ============================================
     game: {
       maxChances: 3,
-      poolSize: 200,
+      poolSize: 400,
       antiRepetitionUntilExhaustion: true
     },
 
@@ -202,7 +202,7 @@
       showAfterEnd: true,
 
       // Unlock threshold (unique seen items)
-      minUniqueSeenToShow: 100,
+      minUniqueSeenToShow: 200,
 
       // "Remind later" hide window (mechanics). Storage reads houseAd.hideMs.
       hideMs: 24 * 60 * 60 * 1000, // 24h
@@ -409,7 +409,7 @@
       enabled: true,
 
       // Unlock threshold (unique seen items)
-      minUniqueSeenToShow: 100,
+      minUniqueSeenToShow: 200,
 
       // UI routing:
       // - END: can appear when pool is exhausted (first reveal)
@@ -649,14 +649,14 @@
       statsPhaseBadgeCorrection: "Phase 2/3: Fixing mistakes",
       statsPhaseBadgeConsolidation: "Phase 3/3: Locked in",
 
-      // After completion (fail-closed: required for the post-200 line)
+      // After completion (fail-closed: required for the post-completion line)
       statsSeenCompleteLabel: "French-English Faux Amis Mastery",
       statsMistakesLabel: "Mistakes",
       statsMistakesSummaryTemplate: "{mistakes}",
       statsMasterySummaryTemplate: "{mastered} traps mastered",
 
       postPaywallTitle: "Free games completed. Ready for more?",
-      postPaywallBody: "Unlock all 200 traps, unlimited play, Mistakes Mode, and High Focus Mode on this device.",
+      postPaywallBody: "Unlock all {poolSize} traps, unlimited play, Mistakes Mode, and High Focus Mode on this device.",
       practiceCtaTemplate: "Fix your {count} mistake{pluralS}",
       postPaywallCta: "Unlock full access",
 
@@ -695,7 +695,7 @@
       halfway: {
         title: "Halfway milestone.",
         bodyLines: [
-          "Halfway there: 100/200 traps explored.",
+          "Halfway there: {halfPool}/{poolSize} traps explored.",
           "You are now seeing the real patterns.",
           "Keep going. This is where mastery starts."
         ],
@@ -1072,8 +1072,8 @@
       title: "",
 
 
-      // Pool complete (one-shot celebration when 200/200 reached)
-      poolCompleteTitle: "Bravo ! All 200 word traps complete.",
+      // Pool complete (one-shot celebration when the whole set is reached)
+      poolCompleteTitle: "Bravo ! All {poolSize} word traps complete.",
       poolCompleteLine1: "This isn't about streaks. It's about whether you're actually improving. By the end of this set, you'll know.",
       poolCompleteLine2: "Now we find out what you actually know. Come back in a few weeks. See if it still holds.",
       poolCompleteScoreLine: "This game: {score} {fpShort}",
@@ -1081,7 +1081,7 @@
       poolCompleteCtaPractice: "Fix your mistakes",
 
       freeLimitReachedTitle: "Nice game.",
-      freeLimitReachedBody: "You've used your {limit} free games.\n\nFull access unlocks all 200 traps, unlimited play, Mistakes Mode, and High Focus Mode on this device.",
+      freeLimitReachedBody: "You've used your {limit} free games.\n\nFull access unlocks all {poolSize} traps, unlimited play, Mistakes Mode, and High Focus Mode on this device.",
       freeLimitReachedCta: "Keep playing",
       freeLimitReachedClose: "Not now",
 
@@ -1125,8 +1125,8 @@
 
       // Explicit best sequence surfacing (RUN only)
       // Definition: longest sequence of consecutive correct answers within the run
-      strongestTagLine: "Category you handled best: {tag}.",
-      weakestTagLine: "Category that gave you the most trouble: {tag}.",
+      strongestTagLine: "Word type you handled best: {tag}.",
+      weakestTagLine: "Word type that gave you the most trouble: {tag}.",
 
       // False friends identified (RUN only)
       // Definition: distinct items with tag === "false_friend" and correctCount > 0
@@ -1180,7 +1180,7 @@
       trustTitle: "No surprises",
 
       valueBullets: [
-        "**All 200 French word traps**",
+        "**All {poolSize} French word traps**",
         "**Explanations after every answer**",
         "**Mistakes Mode** to fix what you missed",
         "**High Focus Mode** and unlimited reshuffled games",
@@ -1189,7 +1189,7 @@
 
       // Shared bridge copy (LANDING post-paywall + END runs exhausted)
       bridgeTitle: "Know these French word traps better.",
-      bridgeBody: "Unlock all 200 traps, fix what you missed, and keep playing with every mode open.",
+      bridgeBody: "Unlock all {poolSize} traps, fix what you missed, and keep playing with every mode open.",
 
       trustLine: "**One-time unlock**",
       trustBullets: [
@@ -1216,8 +1216,8 @@
       checkoutNote: "Secure checkout via Stripe. Takes about 30 seconds.",
 
       // Primary CTA changes with price phase (EARLY vs STANDARD)
-      ctaEarly: "Unlock all 200 traps for $4.99",
-      ctaStandard: "Unlock all 200 traps for $6.99",
+      ctaEarly: "Unlock all {poolSize} traps for $4.99",
+      ctaStandard: "Unlock all {poolSize} traps for $6.99",
 
       // Backward compat (still used in a few places)
       cta: "Get unlimited games",
@@ -1281,7 +1281,7 @@
       body: "Now make it stick. Practice your mistakes, explore High Focus Mode, or replay full games.",
 
       // Mastered (pool exhausted + 0 active mistakes)
-      masteredTitle: "Bravo ! You've mastered all 200 word traps.",
+      masteredTitle: "Bravo ! You've mastered all {poolSize} word traps.",
       masteredLine1: "Zero active mistakes. Every trap identified correctly.",
       masteredLine2: "Now test your focus under pressure. Then come back in a few weeks and see if it still holds.",
       masteredCtaBonus: "Challenge yourself in High Focus Mode",
