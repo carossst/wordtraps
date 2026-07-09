@@ -14,6 +14,23 @@
     return Date.now();
   }
 
+  function generateLocalUuid() {
+    try {
+      if (
+        typeof crypto !== "undefined" &&
+        crypto &&
+        typeof crypto.randomUUID === "function"
+      ) {
+        return String(crypto.randomUUID());
+      }
+    } catch (_) {
+      /* fall through */
+    }
+
+    const rand = Math.random().toString(36).slice(2, 10);
+    return `local-${now().toString(36)}-${rand}`;
+  }
+
   function safeJsonParse(str) {
     if (!str || typeof str !== "string") return null;
     try {
@@ -149,6 +166,14 @@
       waitlist: {
         status: "not_seen", // not_seen | seen | joined
         draftIdea: ""
+      },
+
+      // Leaderboard (public, opt-in) — device-local profile
+      leaderboard: {
+        deviceUuid: "",
+        nickname: "",
+        optIn: false,
+        updatedAt: 0
       },
 
       // Counters
@@ -328,6 +353,17 @@
     if (!this.data.uiDeviceFlags) this.data.uiDeviceFlags = deepCopy(this.defaultData.uiDeviceFlags);
     if (!this.data.houseAd) this.data.houseAd = deepCopy(this.defaultData.houseAd);
     if (!this.data.waitlist) this.data.waitlist = deepCopy(this.defaultData.waitlist);
+    if (!this.data.leaderboard) this.data.leaderboard = deepCopy(this.defaultData.leaderboard);
+
+    // Harden leaderboard state
+    {
+      const lb = this.data.leaderboard || {};
+      if (typeof lb.deviceUuid !== "string") lb.deviceUuid = "";
+      if (typeof lb.nickname !== "string") lb.nickname = "";
+      if (typeof lb.optIn !== "boolean") lb.optIn = false;
+      if (!Number.isFinite(lb.updatedAt)) lb.updatedAt = 0;
+      this.data.leaderboard = lb;
+    }
     if (!this.data.counters) this.data.counters = deepCopy(this.defaultData.counters);
     if (!this.data.history) this.data.history = deepCopy(this.defaultData.history);
     if (!this.data.progression) this.data.progression = deepCopy(this.defaultData.progression);
@@ -917,6 +953,56 @@
 
   StorageManager.prototype.getCounters = function () {
     return deepCopy(this.data?.counters || {});
+  };
+
+  StorageManager.prototype.getLeaderboardProfile = function () {
+    const lb = this.data?.leaderboard || {};
+    return {
+      deviceUuid: String(lb.deviceUuid || "").trim(),
+      nickname: String(lb.nickname || "").trim(),
+      optIn: lb.optIn === true,
+      updatedAt: clampNonNegativeInt(lb.updatedAt)
+    };
+  };
+
+  StorageManager.prototype.ensureLeaderboardDeviceUuid = function () {
+    if (!this.data) return "";
+
+    if (!this.data.leaderboard || typeof this.data.leaderboard !== "object") {
+      this.data.leaderboard = deepCopy(this.defaultData.leaderboard);
+    }
+
+    const existing = String(this.data.leaderboard.deviceUuid || "").trim();
+    if (existing) return existing;
+
+    const next = generateLocalUuid();
+    this.data.leaderboard.deviceUuid = next;
+    this.data.leaderboard.updatedAt = now();
+    this._save();
+    return next;
+  };
+
+  StorageManager.prototype.saveLeaderboardProfile = function (nickname, optIn) {
+    if (!this.data)
+      return { ok: false, nickname: "", optIn: false, deviceUuid: "" };
+
+    if (!this.data.leaderboard || typeof this.data.leaderboard !== "object") {
+      this.data.leaderboard = deepCopy(this.defaultData.leaderboard);
+    }
+
+    const nextNickname = String(nickname || "").trim();
+    this.data.leaderboard.deviceUuid = this.ensureLeaderboardDeviceUuid();
+    this.data.leaderboard.nickname = nextNickname;
+    this.data.leaderboard.optIn = optIn === true;
+    this.data.leaderboard.updatedAt = now();
+    this._save();
+
+    return {
+      ok: true,
+      nickname: nextNickname,
+      optIn: this.data.leaderboard.optIn === true,
+      deviceUuid: String(this.data.leaderboard.deviceUuid || "").trim()
+    };
   };
 
   StorageManager.prototype.getStoredPremiumCode = function () {

@@ -199,6 +199,24 @@ void function () {
     return out;
   }
 
+  function generateRunUuid() {
+    try {
+      if (typeof crypto !== "undefined" && crypto && typeof crypto.randomUUID === "function") {
+        return String(crypto.randomUUID());
+      }
+    } catch (_) { /* fall through */ }
+
+    const rand = Math.random().toString(36).slice(2, 10);
+    return `run-${Date.now().toString(36)}-${rand}`;
+  }
+
+  function getLeaderboardContentVersion(cfg) {
+    const contentVersion = String(cfg?.leaderboard?.contentVersion || "").trim();
+    if (contentVersion) return contentVersion;
+    const version = String(cfg?.version || "").trim();
+    return version || "unknown";
+  }
+
   function getMomentumMeterState(cfg, streak, modeNow, currentLevel) {
     const mm = (cfg?.ui?.momentumMeter && typeof cfg.ui.momentumMeter === "object")
       ? cfg.ui.momentumMeter
@@ -1267,6 +1285,11 @@ void function () {
 
       // current run
       // current run
+      currentRunNumber: 0,
+      currentRunId: "",
+      runStartedAt: 0,
+      currentQuestionShownAt: 0,
+      runAnswerLog: [],
       runItemIds: [],
       runMistakeIds: [],
       runMode: "",
@@ -1371,6 +1394,32 @@ void function () {
 
         case "open-level-progress":
           self.openLevelProgressModal();
+          break;
+
+        case "open-leaderboard":
+          self.openLeaderboardModal();
+          break;
+
+        case "open-leaderboard-profile":
+          self.openLeaderboardModal({ initialTab: "profile" });
+          break;
+
+        case "switch-leaderboard-tab": {
+          const source = event && event.target && event.target.closest
+            ? event.target.closest("[data-wt-leaderboard-tab]")
+            : null;
+          self.switchLeaderboardModalTab(
+            source ? source.getAttribute("data-wt-leaderboard-tab") : ""
+          );
+          break;
+        }
+
+        case "save-leaderboard-profile":
+          void self.saveLeaderboardProfileFromModal();
+          break;
+
+        case "leave-leaderboard":
+          void self.leaveLeaderboardFromModal();
           break;
 
         case "enter-secret-bonus":
@@ -2444,7 +2493,7 @@ void function () {
   // Modal helpers
   // ============================================
 
-  UI.prototype.openModal = function (html, title) {
+  UI.prototype.openModal = function (html, title, options) {
     if (!this.modalEl || !this.modalContentEl) {
       if (window.WT_CONFIG?.debug?.enabled) console.error("[WT Debug] openModal ABORT: modalEl=", !!this.modalEl, "modalContentEl=", !!this.modalContentEl);
       return;
@@ -2466,6 +2515,12 @@ void function () {
 
     const t = escapeHtml(String(title || "").trim());
     const closeLabel = escapeHtml(String(this.wording?.system?.close || "").trim());
+
+    // Modal identity key (used by ui-leaderboard.js to rerender an open modal)
+    const modalKey = String(options?.modalKey || "").trim();
+    if (this._runtime) this._runtime._modalKey = modalKey;
+    if (modalKey) this.modalContentEl.setAttribute("data-wt-modal-key", modalKey);
+    else this.modalContentEl.removeAttribute("data-wt-modal-key");
 
     this.modalContentEl.innerHTML = `
   <div class="wt-modal-header">
@@ -2551,6 +2606,7 @@ void function () {
 
     if (this._runtime) {
       this._runtime.secretBonusPending = false;
+      this._runtime._modalKey = "";
     }
 
     this.modalEl.classList.add("wt-hidden");
@@ -2572,6 +2628,69 @@ void function () {
         prev.focus();
       }
     } catch (_) { /* silent */ }
+  };
+
+  UI.prototype.openLeaderboardModal = function (opts) {
+    if (
+      !window.WT_UI_Leaderboard ||
+      typeof window.WT_UI_Leaderboard.openModal !== "function"
+    ) {
+      return;
+    }
+    return window.WT_UI_Leaderboard.openModal(this, {
+      escapeHtml,
+      initialTab: opts && typeof opts === "object" ? opts.initialTab : ""
+    });
+  };
+
+  UI.prototype.saveLeaderboardProfileFromModal = async function () {
+    if (
+      !window.WT_UI_Leaderboard ||
+      typeof window.WT_UI_Leaderboard.saveProfileFromModal !== "function"
+    ) {
+      return;
+    }
+    return window.WT_UI_Leaderboard.saveProfileFromModal(this, {
+      escapeHtml,
+      toastNow,
+      fillTemplate,
+      getLeaderboardContentVersion
+    });
+  };
+
+  UI.prototype.switchLeaderboardModalTab = function (tabKey) {
+    if (
+      !window.WT_UI_Leaderboard ||
+      typeof window.WT_UI_Leaderboard.switchModalTab !== "function"
+    ) {
+      return;
+    }
+    return window.WT_UI_Leaderboard.switchModalTab(
+      this,
+      String(tabKey || "").trim()
+    );
+  };
+
+  UI.prototype.leaveLeaderboardFromModal = async function () {
+    if (
+      !window.WT_UI_Leaderboard ||
+      typeof window.WT_UI_Leaderboard.leaveFromModal !== "function"
+    ) {
+      return;
+    }
+    return window.WT_UI_Leaderboard.leaveFromModal(this, { toastNow });
+  };
+
+  UI.prototype.submitLeaderboardRun = async function (lastRun) {
+    if (
+      !window.WT_UI_Leaderboard ||
+      typeof window.WT_UI_Leaderboard.submitRun !== "function"
+    ) {
+      return;
+    }
+    return window.WT_UI_Leaderboard.submitRun(this, lastRun, {
+      getLeaderboardContentVersion
+    });
   };
 
   UI.prototype.openHowToModal = function () {
@@ -3434,6 +3553,25 @@ void function () {
     this._runtime.runItemIds = [];
     this._runtime.runMistakeIds = [];
     this._runtime.runMode = (mistakesOnly === true) ? MODES.PRACTICE : MODES.RUN;
+
+    // Leaderboard run tracking (RUN only gets a run number; ids/log for all modes)
+    this._runtime.currentRunNumber = 0;
+    if (mistakesOnly !== true && this.storage) {
+      try {
+        if (typeof this.storage.reserveRunNumber === "function") {
+          this._runtime.currentRunNumber = clampInt(this.storage.reserveRunNumber(), 0, 999999999);
+        } else if (typeof this.storage.getRunNumber === "function") {
+          const prevRunNumber = Number(this.storage.getRunNumber() || 0);
+          this._runtime.currentRunNumber = Math.max(0, Math.floor(prevRunNumber)) + 1;
+        }
+      } catch (_) {
+        this._runtime.currentRunNumber = 0;
+      }
+    }
+    this._runtime.currentRunId = generateRunUuid();
+    this._runtime.runStartedAt = Date.now();
+    this._runtime.currentQuestionShownAt = this._runtime.runStartedAt;
+    this._runtime.runAnswerLog = [];
     this._runtime.lastAnswer = null;
     this._runtime.feedbackPending = false;
     this._runtime.feedbackReveal = true;
@@ -3682,6 +3820,13 @@ void function () {
     this._runtime.runItemIds = [];
     this._runtime.runMistakeIds = [];
     this._runtime.runMode = MODES.BONUS;
+
+    // Leaderboard run tracking (BONUS is never submitted; keep the log coherent)
+    this._runtime.currentRunNumber = 0;
+    this._runtime.currentRunId = generateRunUuid();
+    this._runtime.runStartedAt = Date.now();
+    this._runtime.currentQuestionShownAt = this._runtime.runStartedAt;
+    this._runtime.runAnswerLog = [];
     this._runtime.lastAnswer = null;
     this._runtime.feedbackPending = false;
     this._runtime.feedbackReveal = true;
@@ -4102,7 +4247,20 @@ void function () {
     }
     if (Number.isFinite(Number(res.itemId))) {
       const id = Number(res.itemId);
+      const shownAt = Number(
+        this._runtime?.currentQuestionShownAt ||
+          this._runtime?.runStartedAt ||
+          Date.now()
+      );
+      const answerMs = clampInt(Date.now() - shownAt, 0, 10 * 60 * 1000);
       this._runtime.runItemIds.push(id);
+      if (Array.isArray(this._runtime.runAnswerLog)) {
+        this._runtime.runAnswerLog.push({
+          id,
+          answer: choiceBool === true,
+          ms: answerMs
+        });
+      }
 
       // Track per-run mistakes for END recap (dedup)
       if (res.isCorrect !== true) {
@@ -4501,6 +4659,7 @@ void function () {
       return;
     }
 
+    this._runtime.currentQuestionShownAt = Date.now();
     this.render();
   };
 
@@ -4718,6 +4877,13 @@ void function () {
     // Store for END screen
     this._runtime.lastRun = {
       mode,
+      runId: String(this._runtime?.currentRunId || "").trim(),
+      runNumber: clampInt(this._runtime?.currentRunNumber, 0, 999999999),
+      durationMs: clampInt(
+        Date.now() - Number(this._runtime?.runStartedAt || Date.now()),
+        0,
+        24 * 60 * 60 * 1000
+      ),
       scoreFP,
       maxChances,
       chancesLeft,
@@ -4725,9 +4891,27 @@ void function () {
       bestScoreFP,
       mistakeIds: Array.isArray(this._runtime.runMistakeIds) ? this._runtime.runMistakeIds.slice() : [],
       runItemIds: Array.isArray(this._runtime.runItemIds) ? this._runtime.runItemIds.slice() : [],
+      answerLog: Array.isArray(this._runtime.runAnswerLog)
+        ? this._runtime.runAnswerLog.slice()
+        : [],
       poolCompleteCelebration: !!this._runtime?.poolCompleteCelebrationPending,
       levelProgress
     };
+
+    try {
+      void this.submitLeaderboardRun(this._runtime.lastRun).then((res) => {
+        if (
+          window.WT_UI_Leaderboard &&
+          typeof window.WT_UI_Leaderboard.handleSubmitResult === "function"
+        ) {
+          window.WT_UI_Leaderboard.handleSubmitResult(this, res, {
+            clampInt,
+            fillTemplate,
+            toastNow
+          });
+        }
+      });
+    } catch (_) { /* silent */ }
 
     try {
       if (this.config?.debug?.enabled) {
@@ -5839,7 +6023,20 @@ void function () {
 
     if (Number.isFinite(Number(res.itemId))) {
       const id = Number(res.itemId);
+      const shownAt = Number(
+        this._runtime?.currentQuestionShownAt ||
+          this._runtime?.runStartedAt ||
+          Date.now()
+      );
+      const answerMs = clampInt(Date.now() - shownAt, 0, 10 * 60 * 1000);
       this._runtime.runItemIds.push(id);
+      if (Array.isArray(this._runtime.runAnswerLog)) {
+        this._runtime.runAnswerLog.push({
+          id,
+          answer: forcedWrong === true,
+          ms: answerMs
+        });
+      }
 
       if (res.isCorrect !== true) {
         if (!Array.isArray(this._runtime.runMistakeIds)) this._runtime.runMistakeIds = [];
@@ -6243,13 +6440,17 @@ void function () {
       const prev = prevRenderedState;
       const next = this.state;
 
+      // Record the rendered state BEFORE the counter write.
+      // markLandingViewed() -> _save() -> _emit() re-enters render() synchronously;
+      // recording first makes the nested render see prev === LANDING and skip the
+      // counter (otherwise: infinite recursion until "Maximum call stack size exceeded").
+      if (this._runtime) this._runtime.lastRenderedState = next;
+
       if (next === STATES.LANDING && prev !== STATES.LANDING) {
         if (this.storage && typeof this.storage.markLandingViewed === "function") {
           this.storage.markLandingViewed();
         }
       }
-
-      if (this._runtime) this._runtime.lastRenderedState = next;
     } catch (_) { /* silent */ }
 
     // Preserve footer if it exists inside #app (otherwise leave it alone).
@@ -6951,6 +7152,10 @@ ${(() => {
     ${postBlock}
 
     ${postCompletionHtml}
+
+    ${((window.WT_UI_Leaderboard && typeof window.WT_UI_Leaderboard.renderLandingCard === "function")
+      ? window.WT_UI_Leaderboard.renderLandingCard(this, { escapeHtml })
+      : ``)}
 
     ${microTrust ? `<p class="wt-sub wt-muted wt-mt-12">${escapeHtml(microTrust)}</p>` : ``}
 

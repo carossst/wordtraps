@@ -4027,3 +4027,137 @@ particle rings"
       rgb(var(--bg));
   }
 }
+
+/* ============================================
+   Leaderboard (landing card + modal)
+   Ported from the Pickleball reference set.
+   ============================================ */
+
+.wt-leaderboard-card {
+  margin-top: var(--space-18);
+}
+
+.wt-leaderboard-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-10);
+}
+
+.wt-leaderboard-card__header .wt-landing-stat__label {
+  font-weight: 800;
+}
+
+.wt-leaderboard-card__live {
+  flex: 0 0 auto;
+  font-size: var(--fs-xs);
+  font-weight: 800;
+  letter-spacing: 1.2px;
+  color: rgb(var(--success-dark));
+}
+
+.wt-leaderboard-card__sub {
+  margin: var(--space-8) 0 0;
+  font-size: var(--fs-md);
+  line-height: 1.4;
+  font-weight: 700;
+  color: rgb(var(--text));
+}
+
+.wt-leaderboard-card__freshness {
+  margin: var(--space-4) 0 0;
+  font-size: var(--fs-md);
+  line-height: 1.4;
+  font-weight: 400;
+  color: rgb(var(--text));
+}
+
+.wt-leaderboard-card__best {
+  margin: var(--space-6) 0 0;
+  font-size: var(--fs-sm);
+  line-height: 1.35;
+  font-weight: 700;
+  color: rgb(var(--text));
+}
+
+.wt-leaderboard-list,
+.wt-leaderboard-modal__list {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+}
+
+.wt-leaderboard-list__item,
+.wt-leaderboard-modal__item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-top: 1px solid rgb(var(--border) / var(--wt-a-45));
+}
+
+.wt-leaderboard-list__item:first-child,
+.wt-leaderboard-modal__item:first-child {
+  border-top: 0;
+}
+
+.wt-leaderboard-modal__ellipsis {
+  list-style: none;
+  padding: 6px 0;
+  text-align: center;
+  color: rgb(var(--text-muted));
+  font-weight: 700;
+  letter-spacing: 1.2px;
+}
+
+.wt-leaderboard-list__item--player,
+.wt-leaderboard-modal__item--player {
+  color: rgb(var(--primary-dark));
+  font-weight: 700;
+}
+
+.wt-leaderboard-list__rank,
+.wt-leaderboard-modal__rank {
+  min-width: 32px;
+  font-variant-numeric: tabular-nums;
+  font-size: var(--fs-sm);
+  color: rgb(var(--text-muted));
+}
+
+.wt-leaderboard-list__name,
+.wt-leaderboard-modal__name {
+  min-width: 0;
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wt-leaderboard-list__score,
+.wt-leaderboard-modal__score {
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  color: rgb(var(--primary-dark));
+}
+
+.wt-leaderboard-modal__item--gap {
+  border-top: 0;
+  padding: 2px 0;
+  color: rgb(var(--text-muted));
+}
+
+.wt-landing-stat__actions {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-8);
+}
+
+.wt-question-title {
+  margin: 0;
+  color: rgb(var(--text));
+  font-size: var(--fs-md);
+  font-weight: 700;
+  line-height: 1.35;
+}
