@@ -44,7 +44,7 @@
   window.WT_CONFIG = {
 
     // Product version (UI display, logs)
-    version: "3.5.0",
+    version: "3.6.0",
 
     // Storage schema version (localStorage).
     // Change ONLY if you accept a migration/wipe.
@@ -468,6 +468,58 @@
     },
 
 
+
+    // Leaderboard (public, opt-in). Backend: leaderboard-worker/ (Cloudflare Worker + D1).
+    leaderboard: {
+      enabled: true,
+      showAfterRunCompletes: 1,
+      topN: 10,
+      cardPreviewCount: 3,
+      cacheTtlMs: 60 * 1000,
+      requestTimeoutMs: 4000,
+
+      // Keep false until the Worker is deployed and verified.
+      submitScores: false,
+      contentVersion: "2026-07-09",
+      nicknameMinLen: 3,
+      nicknameMaxLen: 24,
+      nicknameRegexSource: "^[\\p{L}\\p{N}][\\p{L}\\p{N} _-]{2,23}$",
+      nicknameRegexFlags: "u",
+
+      // Deployed Worker URL. Empty = local-only mode (seed rows, no network).
+      // Expected format once deployed: "https://wt-leaderboard-test.<subdomain>.workers.dev"
+      apiBaseUrl: "",
+
+      // Local-only UI test rows (trial names).
+      // Remove these before go-live if you want the honest empty state again.
+      // Includes varied nickname lengths to judge wrapping/truncation visually.
+      seedScores: {
+        weekly: [
+          { nickname: "Zoe", scoreFP: 21 },
+          { nickname: "Lex", scoreFP: 19 },
+          { nickname: "FauxAmi", scoreFP: 18 },
+          { nickname: "Two Word Alias", scoreFP: 17 },
+          { nickname: "TrapSpotter", scoreFP: 16 },
+          { nickname: "LibrairieFan24", scoreFP: 15 },
+          { nickname: "ParisianBanditPro", scoreFP: 14 },
+          { nickname: "UntrappableJudge77", scoreFP: 13 },
+          { nickname: "NuanceArchitect", scoreFP: 12 },
+          { nickname: "RidiculouslyLongDisplayName12345", scoreFP: 11 }
+        ],
+        all: [
+          { nickname: "Zoe", scoreFP: 28 },
+          { nickname: "Lex", scoreFP: 26 },
+          { nickname: "FauxAmi", scoreFP: 25 },
+          { nickname: "Two Word Alias", scoreFP: 24 },
+          { nickname: "TrapSpotter", scoreFP: 23 },
+          { nickname: "LibrairieFan24", scoreFP: 22 },
+          { nickname: "ParisianBanditPro", scoreFP: 21 },
+          { nickname: "UntrappableJudge77", scoreFP: 20 },
+          { nickname: "NuanceArchitect", scoreFP: 19 },
+          { nickname: "RidiculouslyLongDisplayName12345", scoreFP: 18 }
+        ]
+      }
+    },
 
     // Support
     support: {
@@ -1401,6 +1453,43 @@ Think you'd get it right?
     },
 
 
+
+    leaderboard: {
+      cardTitle: "THIS WEEK",
+      cardSubDefault: "Top scores this week.",
+      cardSubJoined: "Top scores this week.",
+      cardCtaJoin: "Choose nickname",
+      cardCtaView: "View leaderboard",
+      cardCtaEdit: "Edit nickname",
+      lastUpdatedTemplate: "",
+      nextRefreshTemplate: "",
+      weeklyResetLine: "Weekly reset: {localTime}.",
+      loading: "Loading leaderboard...",
+      empty: "No public scores yet.",
+      modalTitle: "Leaderboard",
+      modalBodyDefault: "Weekly reset every Monday.",
+      modalBodyJoined: "Weekly reset every Monday.",
+      rankingTab: "Leaderboard",
+      profileTab: "My nickname",
+      weeklyTitle: "This week",
+      allTitle: "All-time",
+      nicknameLabel: "Nickname",
+      nicknamePlaceholder: "Choose a nickname",
+      joinCta: "Join leaderboard",
+      endJoinTitle: "Put this score on the leaderboard",
+      endJoinBody: "Choose a nickname to submit this run to the public leaderboard.",
+      updateCta: "Update nickname",
+      editProfileCta: "Edit my nickname",
+      leaveCta: "Leave leaderboard",
+      nicknameRequiredToast: "Add a nickname first.",
+      nicknameTooShortToast: "Nickname must be at least 3 characters.",
+      nicknameInvalidCharsToast: "Use letters, numbers, spaces, hyphens, or underscores only.",
+      saveOkToast: "Nickname saved.",
+      leftToast: "You left the leaderboard on this device.",
+      remoteSaveErrorToast: "Nickname saved on this device. Online sync can be added later.",
+      rankToastWeekly: "This week: #{rank}.",
+      scoreRejectedToast: "This score was not added to the public leaderboard this time."
+    },
 
     support: {
       label: "Contact",
