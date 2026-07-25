@@ -1,0 +1,15 @@
+{
+  "name": "word-traps-quiz",
+  "private": true,
+  "scripts": {
+    "generate:leaderboard-key": "node scripts/generate-leaderboard-content-key.mjs",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "format:check": "prettier --check package.json vitest.config.cjs .prettierrc.json \"tests/**/*.js\"",
+    "format:write": "prettier --write package.json vitest.config.cjs .prettierrc.json \"tests/**/*.js\""
+  },
+  "devDependencies": {
+    "prettier": "^3.8.3",
+    "vitest": "^4.1.7"
+  }
+}
