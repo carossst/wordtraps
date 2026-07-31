@@ -1319,6 +1319,7 @@
       codeInvalid: "Invalid code format.",
       codeUsed: "This device already used a code.",
       codeOk: "Full access enabled on this device.",
+      codeChecking: "Checking code...",
 
 
       autoActivateTitle: "Device unlock code ready",

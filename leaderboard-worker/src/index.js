@@ -24,6 +24,8 @@ const NICKNAME_MAX_LEN = 24;
 const NICKNAME_RE = /^[\p{L}\p{N}][\p{L}\p{N} _-]{2,23}$/u;
 const DEVICE_UUID_MAX_LEN = 128;
 const RUN_ID_MAX_LEN = 128;
+const CODE_MAX_LEN = 128;
+const GUEST_CODE_MAX_USES = 10;
 const RATE_LIMIT_MEMORY = new Map();
 
 const RATE_LIMIT_RULES = Object.freeze({
@@ -32,7 +34,9 @@ const RATE_LIMIT_RULES = Object.freeze({
   scoreWriteIp: { windowMs: 10 * 60 * 1000, maxHits: 120 },
   scoreWriteDevice: { windowMs: 10 * 60 * 1000, maxHits: 20 },
   deleteWriteIp: { windowMs: 10 * 60 * 1000, maxHits: 10 },
-  deleteWriteDevice: { windowMs: 10 * 60 * 1000, maxHits: 3 }
+  deleteWriteDevice: { windowMs: 10 * 60 * 1000, maxHits: 3 },
+  redeemWriteIp: { windowMs: 10 * 60 * 1000, maxHits: 10 },
+  redeemWriteDevice: { windowMs: 10 * 60 * 1000, maxHits: 5 }
 });
 
 function getAllowedOrigins(env) {
@@ -851,6 +855,99 @@ export async function getPlayerRank(db, playerId, windowType, weekKey) {
   return clampNonNegativeInt(betterRows?.count_rows) + 1;
 }
 
+// Server-verified redemption for the ADMIN_CODE / GUEST_CODE secrets (set via
+// `wrangler secret put`, never shipped to the client). This does NOT know
+// about real customer purchase codes yet — those are still validated
+// client-side by format only (tracked separately). A code that isn't one of
+// these two secrets returns NOT_FOUND so the client can fall back to that
+// existing path.
+export async function handlePostRedeemCode(request, env) {
+  const body = await request.json().catch(() => null);
+  if (!body || typeof body !== "object") return badRequest("Invalid JSON", request, env);
+
+  const deviceUuidCheck = validateIdentifier(
+    body.device_uuid,
+    DEVICE_UUID_MAX_LEN,
+    "Missing device_uuid",
+    "Invalid device_uuid"
+  );
+  if (!deviceUuidCheck.ok) return badRequest(deviceUuidCheck.reason, request, env);
+  const deviceUuid = deviceUuidCheck.value;
+
+  const codeCheck = validateIdentifier(body.code, CODE_MAX_LEN, "Missing code", "Invalid code");
+  if (!codeCheck.ok) return badRequest(codeCheck.reason, request, env);
+  const code = codeCheck.value;
+
+  const rateLimit = enforceWriteRateLimits(request, env, {
+    scope: "redeem-write",
+    ip: RATE_LIMIT_RULES.redeemWriteIp,
+    device: RATE_LIMIT_RULES.redeemWriteDevice,
+    deviceUuid
+  });
+  if (rateLimit) return rateLimit;
+
+  const adminCode = String(env?.ADMIN_CODE || "").trim();
+  const guestCode = String(env?.GUEST_CODE || "").trim();
+  const ts = now();
+
+  if (adminCode && code === adminCode) {
+    await env.DB.prepare(
+      `INSERT INTO code_redemptions (code_tier, code_value, device_uuid, created_at) VALUES (?1, ?2, ?3, ?4)`
+    )
+      .bind("admin", code, deviceUuid, ts)
+      .run();
+
+    logInfo("worker.redeem.accepted", {
+      path: new URL(request.url).pathname,
+      tier: "admin"
+    });
+    return json({ ok: true, tier: "admin" }, undefined, request, env);
+  }
+
+  if (guestCode && code === guestCode) {
+    const usedRow = await env.DB.prepare(
+      `SELECT COUNT(*) AS use_count FROM code_redemptions WHERE code_tier = 'guest' AND code_value = ?1`
+    )
+      .bind(code)
+      .first();
+    const useCount = clampNonNegativeInt(usedRow?.use_count);
+
+    if (useCount >= GUEST_CODE_MAX_USES) {
+      logWarn("worker.redeem.rejected", {
+        path: new URL(request.url).pathname,
+        reason: "GUEST_CODE_EXHAUSTED"
+      });
+      return json(
+        { ok: false, reason: "GUEST_CODE_EXHAUSTED" },
+        { status: 403 },
+        request,
+        env
+      );
+    }
+
+    await env.DB.prepare(
+      `INSERT INTO code_redemptions (code_tier, code_value, device_uuid, created_at) VALUES (?1, ?2, ?3, ?4)`
+    )
+      .bind("guest", code, deviceUuid, ts)
+      .run();
+
+    logInfo("worker.redeem.accepted", {
+      path: new URL(request.url).pathname,
+      tier: "guest",
+      uses_remaining: GUEST_CODE_MAX_USES - useCount - 1
+    });
+    return json(
+      { ok: true, tier: "guest", uses_remaining: GUEST_CODE_MAX_USES - useCount - 1 },
+      undefined,
+      request,
+      env
+    );
+  }
+
+  logInfo("worker.redeem.not_found", { path: new URL(request.url).pathname });
+  return json({ ok: false, reason: "NOT_FOUND" }, { status: 404 }, request, env);
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -883,6 +980,10 @@ export default {
         return handleDeletePlayer(request, env);
       }
 
+      if (request.method === "POST" && url.pathname === "/redeem-code") {
+        return handlePostRedeemCode(request, env);
+      }
+
       if (request.method !== "GET" && request.method !== "POST" && request.method !== "DELETE") {
         return methodNotAllowed(request, env);
       }
@@ -890,7 +991,13 @@ export default {
       return json({
         ok: true,
         service: "wt-leaderboard-worker",
-        routes: ["GET /leaderboard", "POST /player", "DELETE /player", "POST /score"]
+        routes: [
+          "GET /leaderboard",
+          "POST /player",
+          "DELETE /player",
+          "POST /score",
+          "POST /redeem-code"
+        ]
       }, undefined, request, env);
     } catch (error) {
       logError("worker.request_failed", {

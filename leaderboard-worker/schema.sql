@@ -45,3 +45,14 @@ CREATE TABLE IF NOT EXISTS leaderboard_best (
 CREATE INDEX IF NOT EXISTS idx_leaderboard_best_window_score
 ON leaderboard_best(window_type, week_key, best_score_fp DESC, updated_at ASC);
 
+CREATE TABLE IF NOT EXISTS code_redemptions (
+  redemption_id INTEGER PRIMARY KEY AUTOINCREMENT,
+  code_tier TEXT NOT NULL,
+  code_value TEXT NOT NULL,
+  device_uuid TEXT NOT NULL,
+  created_at INTEGER NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_code_redemptions_tier_value
+ON code_redemptions(code_tier, code_value);
+
