@@ -478,17 +478,19 @@
       cacheTtlMs: 60 * 1000,
       requestTimeoutMs: 4000,
 
-      // Keep false until the Worker is deployed and verified.
-      submitScores: false,
-      contentVersion: "2026-07-09",
+      submitScores: true,
+      // Must match leaderboard-worker/src/content-key.js (LEADERBOARD_CONTENT_VERSION)
+      // and content.json `version`. Regenerate the key after changing this:
+      //   npm run generate:leaderboard-key
+      contentVersion: "3.6-release-400",
       nicknameMinLen: 3,
       nicknameMaxLen: 24,
       nicknameRegexSource: "^[\\p{L}\\p{N}][\\p{L}\\p{N} _-]{2,23}$",
       nicknameRegexFlags: "u",
 
       // Deployed Worker URL. Empty = local-only mode (seed rows, no network).
-      // Expected format once deployed: "https://wt-leaderboard-test.<subdomain>.workers.dev"
-      apiBaseUrl: "",
+      // Also used by storage.js tryRedeemPremiumCodeRemote (POST /redeem-code).
+      apiBaseUrl: "https://wt-leaderboard.carolestromboni.workers.dev",
 
       // Local-only UI test rows (trial names).
       // Remove these before go-live if you want the honest empty state again.

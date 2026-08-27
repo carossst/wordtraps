@@ -1,0 +1,15 @@
+{
+  "name": "wt-leaderboard",
+  "main": "src/index.js",
+  "compatibility_date": "2026-05-13",
+  "observability": {
+    "enabled": true
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "wt-leaderboard",
+      "database_id": "4912cfa4-c0a0-447a-b575-a8bb5ddad296"
+    }
+  ]
+}
