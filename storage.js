@@ -2079,6 +2079,45 @@
     return { ok: false, reason: "FAILED" };
   };
 
+  StorageManager.prototype.tryRedeemPremiumCodeRemote = async function (codeInput) {
+    if (!this.data) return { ok: false, reason: "NO_DATA" };
+    if (this.isPremium()) return { ok: true, reason: "ALREADY" };
+    const code = String(codeInput || "").trim();
+    if (!code) return { ok: false, reason: "EMPTY" };
+    const cfg = this.config || {};
+    const baseUrl = String(cfg?.leaderboard?.apiBaseUrl || "").trim().replace(/\/+$/, "");
+    if (!baseUrl) return { ok: false, reason: "REMOTE_UNAVAILABLE" };
+    let deviceUuid = "";
+    try { deviceUuid = String(this.ensureLeaderboardDeviceUuid() || "").trim(); } catch (_) { deviceUuid = ""; }
+    if (!deviceUuid) return { ok: false, reason: "REMOTE_UNAVAILABLE" };
+    const timeoutMs = Math.max(500, Math.min(15000, Number(cfg?.leaderboard?.requestTimeoutMs) || 4000));
+    const controller = typeof AbortController !== "undefined" ? new AbortController() : null;
+    let timerId = 0; let res = null; let json = null;
+    try {
+      if (controller && timeoutMs > 0) { timerId = window.setTimeout(() => controller.abort(), timeoutMs); }
+      res = await fetch(`${baseUrl}/redeem-code`, {
+        method: "POST",
+        headers: { "content-type": "application/json", accept: "application/json" },
+        body: JSON.stringify({ code, device_uuid: deviceUuid }),
+        signal: controller ? controller.signal : undefined
+      });
+      json = await res.json().catch(() => null);
+    } catch (_) { return { ok: false, reason: "REMOTE_UNAVAILABLE" }; }
+    finally { if (timerId) window.clearTimeout(timerId); }
+    if (!res || !json) return { ok: false, reason: "REMOTE_UNAVAILABLE" };
+    if (!res.ok || json.ok !== true) return { ok: false, reason: String(json.reason || `HTTP_${res.status}`) };
+    const tier = String(json.tier || "").trim();
+    const unlockRes = this.unlockPremium();
+    if (!unlockRes || !unlockRes.ok) return { ok: false, reason: "FAILED" };
+    if (!this.data.codes || typeof this.data.codes !== "object") { this.data.codes = { redeemedOnce: false, code: "" }; }
+    this.data.codes.redeemedOnce = true;
+    this.data.codes.code = code;
+    this.data.codes.tier = tier;
+    if (this.data.counters) { this.data.counters.codeRedeemed = clampNonNegativeInt(this.data.counters.codeRedeemed) + 1; }
+    this._save();
+    return { ok: true, reason: "UNLOCKED", tier };
+  };
+
   // ============================================
   // Anonymous Stats Payload (opt-in sharing)
   // ============================================

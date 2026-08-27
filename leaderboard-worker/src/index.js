@@ -24,6 +24,8 @@ const NICKNAME_MAX_LEN = 24;
 const NICKNAME_RE = /^[\p{L}\p{N}][\p{L}\p{N} _-]{2,23}$/u;
 const DEVICE_UUID_MAX_LEN = 128;
 const RUN_ID_MAX_LEN = 128;
+const CODE_MAX_LEN = 128;
+const GUEST_CODE_MAX_USES = 10;
 const RATE_LIMIT_MEMORY = new Map();
 
 const RATE_LIMIT_RULES = Object.freeze({
@@ -32,7 +34,9 @@ const RATE_LIMIT_RULES = Object.freeze({
   scoreWriteIp: { windowMs: 10 * 60 * 1000, maxHits: 120 },
   scoreWriteDevice: { windowMs: 10 * 60 * 1000, maxHits: 20 },
   deleteWriteIp: { windowMs: 10 * 60 * 1000, maxHits: 10 },
-  deleteWriteDevice: { windowMs: 10 * 60 * 1000, maxHits: 3 }
+  deleteWriteDevice: { windowMs: 10 * 60 * 1000, maxHits: 3 },
+  redeemWriteIp: { windowMs: 10 * 60 * 1000, maxHits: 10 },
+  redeemWriteDevice: { windowMs: 10 * 60 * 1000, maxHits: 5 }
 });
 
 function getAllowedOrigins(env) {
@@ -254,6 +258,21 @@ function validateIdentifier(value, maxLen, missingMessage, invalidMessage) {
   if (!text) return { ok: false, reason: missingMessage };
   if (text.length > maxLen) return { ok: false, reason: invalidMessage };
   return { ok: true, value: text };
+}
+
+// Constant-time-ish comparison for the ADMIN_CODE/GUEST_CODE secrets: avoids
+// leaking match-prefix-length via response timing on a plain `===` compare.
+// (Lengths differing is not itself sensitive, so the early length check is
+// fine to short-circuit on.)
+function timingSafeEqual(a, b) {
+  const strA = String(a || "");
+  const strB = String(b || "");
+  if (strA.length !== strB.length) return false;
+  let diff = 0;
+  for (let i = 0; i < strA.length; i += 1) {
+    diff |= strA.charCodeAt(i) ^ strB.charCodeAt(i);
+  }
+  return diff === 0;
 }
 
 function getPlausibilityRejectReason(answers, durationMs, scoreFpServer) {
@@ -851,6 +870,132 @@ export async function getPlayerRank(db, playerId, windowType, weekKey) {
   return clampNonNegativeInt(betterRows?.count_rows) + 1;
 }
 
+// Server-verified redemption for the ADMIN_CODE / GUEST_CODE secrets (set via
+// `wrangler secret put`, never shipped to the client). This does NOT know
+// about real customer purchase codes yet — those are still validated
+// client-side by format only (tracked separately). A code that isn't one of
+// these two secrets returns NOT_FOUND so the client can fall back to that
+// existing path.
+export async function handlePostRedeemCode(request, env) {
+  const body = await request.json().catch(() => null);
+  if (!body || typeof body !== "object") return badRequest("Invalid JSON", request, env);
+
+  const deviceUuidCheck = validateIdentifier(
+    body.device_uuid,
+    DEVICE_UUID_MAX_LEN,
+    "Missing device_uuid",
+    "Invalid device_uuid"
+  );
+  if (!deviceUuidCheck.ok) return badRequest(deviceUuidCheck.reason, request, env);
+  const deviceUuid = deviceUuidCheck.value;
+
+  const codeCheck = validateIdentifier(body.code, CODE_MAX_LEN, "Missing code", "Invalid code");
+  if (!codeCheck.ok) return badRequest(codeCheck.reason, request, env);
+  const code = codeCheck.value;
+
+  const rateLimit = enforceWriteRateLimits(request, env, {
+    scope: "redeem-write",
+    ip: RATE_LIMIT_RULES.redeemWriteIp,
+    device: RATE_LIMIT_RULES.redeemWriteDevice,
+    deviceUuid
+  });
+  if (rateLimit) return rateLimit;
+
+  const adminCode = String(env?.ADMIN_CODE || "").trim();
+  const guestCode = String(env?.GUEST_CODE || "").trim();
+  const ts = now();
+
+  if (adminCode && timingSafeEqual(code, adminCode)) {
+    // OR IGNORE: a retried/double-submitted request from the same device
+    // would otherwise hit the new unique index below and throw.
+    await env.DB.prepare(
+      `INSERT OR IGNORE INTO code_redemptions (code_tier, code_value, device_uuid, created_at) VALUES (?1, ?2, ?3, ?4)`
+    )
+      .bind("admin", code, deviceUuid, ts)
+      .run();
+
+    logInfo("worker.redeem.accepted", {
+      path: new URL(request.url).pathname,
+      tier: "admin"
+    });
+    return json({ ok: true, tier: "admin" }, undefined, request, env);
+  }
+
+  if (guestCode && timingSafeEqual(code, guestCode)) {
+    // device_uuid is entirely client-supplied and unauthenticated, so
+    // without per-device dedup a single caller could burn through the whole
+    // GUEST_CODE_MAX_USES allocation by varying device_uuid on each request,
+    // locking out every legitimate guest. The unique index on
+    // (code_tier, code_value, device_uuid) makes re-redeeming with the same
+    // device_uuid idempotent instead of consuming a fresh slot, and the cap
+    // itself is enforced on DISTINCT device_uuid.
+    //
+    // Atomicity: the INSERT only proposes its row when fewer than
+    // GUEST_CODE_MAX_USES distinct devices have redeemed this code at the
+    // moment this single statement runs, so two concurrent requests from
+    // different devices can't both read "under the cap" and both insert
+    // (D1/SQLite executes one statement at a time, so this can't interleave
+    // the way a separate SELECT-then-INSERT could). OR IGNORE makes a
+    // same-device retry a no-op instead of a unique-constraint error.
+    const insertResult = await env.DB.prepare(
+      `INSERT OR IGNORE INTO code_redemptions (code_tier, code_value, device_uuid, created_at)
+       SELECT ?1, ?2, ?3, ?4
+       WHERE (SELECT COUNT(DISTINCT device_uuid) FROM code_redemptions WHERE code_tier = ?1 AND code_value = ?2) < ?5`
+    )
+      .bind("guest", code, deviceUuid, ts, GUEST_CODE_MAX_USES)
+      .run();
+    const inserted = clampNonNegativeInt(insertResult?.meta?.changes) > 0;
+
+    if (!inserted) {
+      // changes === 0 means either the cap was already reached, or this
+      // exact device already redeemed the code earlier (silently no-op'd by
+      // OR IGNORE on the unique-index conflict) — tell those two cases apart
+      // so a repeat visit from the same device isn't rejected as exhausted.
+      const alreadyRedeemedByThisDevice = await env.DB.prepare(
+        `SELECT 1 AS found FROM code_redemptions WHERE code_tier = 'guest' AND code_value = ?1 AND device_uuid = ?2`
+      )
+        .bind(code, deviceUuid)
+        .first();
+
+      if (!alreadyRedeemedByThisDevice) {
+        logWarn("worker.redeem.rejected", {
+          path: new URL(request.url).pathname,
+          reason: "GUEST_CODE_EXHAUSTED"
+        });
+        return json(
+          { ok: false, reason: "GUEST_CODE_EXHAUSTED" },
+          { status: 403 },
+          request,
+          env
+        );
+      }
+    }
+
+    const usedRow = await env.DB.prepare(
+      `SELECT COUNT(DISTINCT device_uuid) AS use_count FROM code_redemptions WHERE code_tier = 'guest' AND code_value = ?1`
+    )
+      .bind(code)
+      .first();
+    const useCount = clampNonNegativeInt(usedRow?.use_count);
+    const usesRemaining = Math.max(0, GUEST_CODE_MAX_USES - useCount);
+
+    logInfo("worker.redeem.accepted", {
+      path: new URL(request.url).pathname,
+      tier: "guest",
+      uses_remaining: usesRemaining
+    });
+    return json(
+      { ok: true, tier: "guest", uses_remaining: usesRemaining },
+      undefined,
+      request,
+      env
+    );
+  }
+
+  logInfo("worker.redeem.not_found", { path: new URL(request.url).pathname });
+  return json({ ok: false, reason: "NOT_FOUND" }, { status: 404 }, request, env);
+}
+
 export default {
   async fetch(request, env) {
     const url = new URL(request.url);
@@ -883,6 +1028,10 @@ export default {
         return handleDeletePlayer(request, env);
       }
 
+      if (request.method === "POST" && url.pathname === "/redeem-code") {
+        return handlePostRedeemCode(request, env);
+      }
+
       if (request.method !== "GET" && request.method !== "POST" && request.method !== "DELETE") {
         return methodNotAllowed(request, env);
       }
@@ -890,7 +1039,13 @@ export default {
       return json({
         ok: true,
         service: "wt-leaderboard-worker",
-        routes: ["GET /leaderboard", "POST /player", "DELETE /player", "POST /score"]
+        routes: [
+          "GET /leaderboard",
+          "POST /player",
+          "DELETE /player",
+          "POST /score",
+          "POST /redeem-code"
+        ]
       }, undefined, request, env);
     } catch (error) {
       logError("worker.request_failed", {
