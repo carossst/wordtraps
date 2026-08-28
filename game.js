@@ -45,6 +45,41 @@
     return Number.isInteger(n) && n >= 0 ? n : null;
   }
 
+  // Reorder a deck so no more than `maxRun` consecutive questions share the same
+  // correctAnswer (true/false), when the remaining answers allow it. Greedy and
+  // stable: the shuffled order is kept except at a cap boundary, where the
+  // nearest item with a different answer is pulled forward.
+  function declusterByAnswer(ids, byId, maxRun) {
+    const list = Array.isArray(ids) ? ids.slice() : [];
+    const cap = (Number.isFinite(maxRun) && maxRun >= 1) ? Math.floor(maxRun) : 0;
+    if (cap <= 0 || list.length <= cap + 1) return list;
+
+    const ansOf = (id) => {
+      const it = byId ? byId[String(id)] : null;
+      if (it && it.correctAnswer === true) return true;
+      if (it && it.correctAnswer === false) return false;
+      return null;
+    };
+
+    const result = [];
+    const pending = list.slice();
+    let runVal = null;
+    let runLen = 0;
+    while (pending.length) {
+      let pick = 0;
+      if (runLen >= cap) {
+        const alt = pending.findIndex((id) => ansOf(id) !== runVal);
+        if (alt !== -1) pick = alt;
+      }
+      const chosen = pending.splice(pick, 1)[0];
+      result.push(chosen);
+      const a = ansOf(chosen);
+      if (a === runVal) runLen += 1;
+      else { runVal = a; runLen = 1; }
+    }
+    return result;
+  }
+
   function normalizePool(items) {
     const pool = [];
     const byId = Object.create(null);
@@ -169,15 +204,23 @@
       }
 
       return {
-        ids: unseen.length
-          ? shuffleCopy(unseen)
-          : shuffleCopy(pool.map((it) => safeIdNum(it && it.id)).filter((n) => n != null)),
+        ids: declusterByAnswer(
+          unseen.length
+            ? shuffleCopy(unseen)
+            : shuffleCopy(pool.map((it) => safeIdNum(it && it.id)).filter((n) => n != null)),
+          byId,
+          3
+        ),
         byId
       };
     }
 
     return {
-      ids: shuffleCopy(pool.map((it) => safeIdNum(it && it.id)).filter((n) => n != null)),
+      ids: declusterByAnswer(
+        shuffleCopy(pool.map((it) => safeIdNum(it && it.id)).filter((n) => n != null)),
+        byId,
+        3
+      ),
       byId
     };
   }
