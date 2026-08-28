@@ -1,21 +1,25 @@
 # Word Traps Leaderboard Worker
 
 Copie du Worker leaderboard de Pickleball Rules Quiz (version en production),
-adaptée à Word Traps. Noms d'essai: `wt-leaderboard-test`.
+adaptée à Word Traps. Sert aussi `POST /redeem-code` (codes admin/invité).
 
-Ce README décrit ce que fait le code réellement présent dans ce dossier.
+## État actuel — ✅ DÉPLOYÉ ET ACTIF (2026-08-27)
 
-## Etat actuel
-
-- Worker: `src/index.js` — identique au Worker Pickleball déployé, avec:
-  - origins autorisés: `wordtraps.com` / `www.wordtraps.com` (+ localhost)
-  - answer key Word Traps (400 items) dans `src/content-key.js`
-  - `LEADERBOARD_CONTENT_VERSION = "2026-07-09"` (doit matcher
-    `WT_CONFIG.leaderboard.contentVersion` dans `config.js`)
-- Frontend: branché mais inactif tant que:
-  - `WT_CONFIG.leaderboard.apiBaseUrl` est vide
-  - `WT_CONFIG.leaderboard.submitScores` est `false`
-  - en attendant, la carte landing affiche les seeds locaux (noms d'essai)
+- Worker: `https://wt-leaderboard.carolestromboni.workers.dev`
+  (`wrangler.jsonc`: name `wt-leaderboard`)
+- D1: `wt-leaderboard` (id dans `wrangler.jsonc`), 4 tables — `players`,
+  `score_submissions`, `leaderboard_best`, `code_redemptions`
+- `src/content-key.js` : answer key des 400 items,
+  `LEADERBOARD_CONTENT_VERSION = "3.6-release-400"` (= `content.json` `version`
+  = `WT_CONFIG.leaderboard.contentVersion`)
+- Origins autorisés: `wordtraps.com` / `www.wordtraps.com` (+ localhost)
+- Secrets `ADMIN_CODE` / `GUEST_CODE` définis (valeurs dans le
+  `.dev.vars` git-ignoré de ce dossier)
+- Frontend **actif** : `WT_CONFIG.leaderboard.apiBaseUrl` renseigné,
+  `submitScores: true`. La même URL alimente `storage.js:
+  tryRedeemPremiumCodeRemote` (`POST /redeem-code`).
+- Les `seedScores` de `config.js` ne s'affichent plus que tant que le
+  classement réel est vide (fallback dans `buildWindowRows`).
 
 ## Routes
 
@@ -66,30 +70,30 @@ vérification locale par format — donc les vrais codes clients (format
 `WT-XXXX-XXXX`) continuent de marcher pendant qu'on met en place la
 vérification Stripe réelle.
 
-## Déploiement (à faire manuellement)
+## Redéploiement (déjà fait une fois — pour référence)
 
 ```bash
 cd leaderboard-worker
-cp wrangler.jsonc.example wrangler.jsonc
-npx wrangler d1 create wt-leaderboard-test   # coller database_id dans wrangler.jsonc
-npx wrangler d1 execute wt-leaderboard-test --remote --file=./schema.sql
+# wrangler.jsonc est déjà commité (name wt-leaderboard + database_id)
+npx wrangler d1 execute wt-leaderboard --remote --file=./schema.sql   # idempotent
 npx wrangler deploy
 ```
 
-Puis dans `config.js`:
+Pour (re)définir les secrets : `npx wrangler secret put ADMIN_CODE` /
+`GUEST_CODE`.
 
-1. renseigner `leaderboard.apiBaseUrl` avec l'URL du Worker déployé
-2. vérifier lecture + création de pseudo en réel
-3. passer `leaderboard.submitScores` à `true`
-4. retirer les `seedScores` d'essai si tu veux l'état vide honnête
+Pour désactiver le classement côté jeu : `WT_CONFIG.leaderboard.enabled` ou
+`.submitScores` à `false` dans `config.js` (pas besoin de toucher au Worker).
 
 ## Contrat contenu <-> Worker
 
-Si `content.json` change (réponses) ou si `leaderboard.contentVersion` change:
+Si `content.json` change (réponses) ou si `leaderboard.contentVersion` change,
+mets d'abord à jour `WT_CONFIG.leaderboard.contentVersion` dans `config.js`, puis:
 
 ```bash
-node scripts/generate-leaderboard-content-key.mjs
+npm run generate:leaderboard-key   # (= node scripts/generate-leaderboard-content-key.mjs)
 ```
 
-puis redéployer le Worker. Sans ça, les soumissions sont rejetées en
-`CONTENT_VERSION_MISMATCH` (comportement voulu, fail-closed).
+puis redéploie le Worker. Sans ça, les soumissions sont rejetées en
+`CONTENT_VERSION_MISMATCH` (comportement voulu, fail-closed). Le test
+`tests/leaderboard-content-contract.test.js` vérifie l'alignement.
