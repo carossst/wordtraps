@@ -48,8 +48,10 @@
   // Reorder a deck so no more than `maxRun` consecutive questions share the same
   // correctAnswer (true/false), when the remaining answers allow it. Greedy and
   // stable: the shuffled order is kept except at a cap boundary, where the
-  // nearest item with a different answer is pulled forward.
-  function declusterByAnswer(ids, byId, maxRun) {
+  // nearest item with a different answer is pulled forward. The first
+  // `lockFirst` positions (curated opening) are never moved, only used to seed
+  // the run state so the opening -> shuffle seam is de-clustered too.
+  function declusterByAnswer(ids, byId, maxRun, lockFirst) {
     const list = Array.isArray(ids) ? ids.slice() : [];
     const cap = (Number.isFinite(maxRun) && maxRun >= 1) ? Math.floor(maxRun) : 0;
     if (cap <= 0 || list.length <= cap + 1) return list;
@@ -61,10 +63,16 @@
       return null;
     };
 
-    const result = [];
-    const pending = list.slice();
+    const lock = Math.max(0, Math.min(list.length, Math.floor(Number(lockFirst) || 0)));
+    const result = list.slice(0, lock);
+    const pending = list.slice(lock);
     let runVal = null;
     let runLen = 0;
+    for (const id of result) {
+      const a = ansOf(id);
+      if (a === runVal) runLen += 1;
+      else { runVal = a; runLen = 1; }
+    }
     while (pending.length) {
       let pick = 0;
       if (runLen >= cap) {
@@ -103,6 +111,52 @@
     return s || EMPTY_STATS;
   }
 
+  // Curated opening for the first free runs. Returns the configured card IDs for
+  // run `runStartNumber` (1-based), keeping the configured order, dropping any
+  // that are unknown, duplicated, or already seen by the player.
+  function getCuratedFreeRunOpeningIds(config, byId, statsByItem, runStartNumber) {
+    const cfr = (config && config.curatedFreeRuns && typeof config.curatedFreeRuns === "object")
+      ? config.curatedFreeRuns
+      : null;
+    if (!cfr || cfr.enabled !== true) return [];
+
+    const runNum = Number(runStartNumber);
+    if (!Number.isFinite(runNum) || Math.floor(runNum) !== runNum || runNum < 1) return [];
+
+    const runCount = Number(cfr.runCount);
+    if (!Number.isFinite(runCount) || Math.floor(runCount) !== runCount || runCount < 1) return [];
+    if (runNum > runCount) return [];
+
+    const byRun = (cfr.cardIdsByRun && typeof cfr.cardIdsByRun === "object") ? cfr.cardIdsByRun : null;
+    if (!byRun) return [];
+
+    const rawIds = Array.isArray(byRun[String(runNum)]) ? byRun[String(runNum)] : [];
+    if (!rawIds.length) return [];
+
+    const ids = [];
+    const seenIds = new Set();
+    for (const rawId of rawIds) {
+      const idNum = safeIdNum(rawId);
+      if (idNum == null) continue;
+      if (seenIds.has(idNum)) continue;
+      if (!byId || !byId[String(idNum)]) continue;
+      const s = getStats(statsByItem, idNum);
+      if ((Number(s.seenCount) || 0) > 0) continue;
+      seenIds.add(idNum);
+      ids.push(idNum);
+    }
+    return ids;
+  }
+
+  function prependOpeningIds(baseIds, openingIds) {
+    const base = Array.isArray(baseIds) ? baseIds : [];
+    const opening = Array.isArray(openingIds) ? openingIds : [];
+    if (!opening.length) return base.slice();
+
+    const openingSet = new Set(opening);
+    return opening.concat(base.filter((id) => !openingSet.has(id)));
+  }
+
 
 
 
@@ -138,7 +192,7 @@
   //   (items are excluded once their latest interaction is a correct answer)
   // - order = most recent wrong first (lastWrongAt desc, id asc)
   // - size = exact active-mistake count, optionally capped by config.mistakesOnly.maxItems
-  function buildDeck({ items, statsByItem, mistakesOnly, config }) {
+  function buildDeck({ items, statsByItem, mistakesOnly, config, runStartNumber }) {
     const normalized = normalizePool(items);
     const poolAll = normalized.pool;
     const byId = normalized.byId;
@@ -193,6 +247,9 @@
     const antiRepetitionUntilExhaustion =
       (config && config.game && config.game.antiRepetitionUntilExhaustion) === true;
 
+    const openingIds = getCuratedFreeRunOpeningIds(config, byId, statsByItem, runStartNumber);
+    const lockFirst = Array.isArray(openingIds) ? openingIds.length : 0;
+
     if (antiRepetitionUntilExhaustion) {
       const unseen = [];
       for (const it of pool) {
@@ -203,24 +260,20 @@
         if (seenCount <= 0) unseen.push(idNum);
       }
 
+      const baseIds = unseen.length
+        ? shuffleCopy(unseen)
+        : shuffleCopy(pool.map((it) => safeIdNum(it && it.id)).filter((n) => n != null));
+
       return {
-        ids: declusterByAnswer(
-          unseen.length
-            ? shuffleCopy(unseen)
-            : shuffleCopy(pool.map((it) => safeIdNum(it && it.id)).filter((n) => n != null)),
-          byId,
-          3
-        ),
+        ids: declusterByAnswer(prependOpeningIds(baseIds, openingIds), byId, 3, lockFirst),
         byId
       };
     }
 
+    const baseIds = shuffleCopy(pool.map((it) => safeIdNum(it && it.id)).filter((n) => n != null));
+
     return {
-      ids: declusterByAnswer(
-        shuffleCopy(pool.map((it) => safeIdNum(it && it.id)).filter((n) => n != null)),
-        byId,
-        3
-      ),
+      ids: declusterByAnswer(prependOpeningIds(baseIds, openingIds), byId, 3, lockFirst),
       byId
     };
   }
@@ -362,9 +415,16 @@
         throw new Error("WT_Game.GameEngine.start(): config.game.maxChances must be a positive integer.");
       }
 
+      // Free RUN only: lets buildDeck prepend the curated opening for the first
+      // free runs. Null for premium and PRACTICE, so the deck stays normal.
+      const runStartNumberRaw = Number(p.runStartNumber);
+      const runStartNumber = (Number.isFinite(runStartNumberRaw) && Math.floor(runStartNumberRaw) === runStartNumberRaw && runStartNumberRaw >= 1)
+        ? runStartNumberRaw
+        : null;
+
       const deck = bonusMode
         ? buildSeenDeck({ items, statsByItem, config })
-        : buildDeck({ items, statsByItem, mistakesOnly, config });
+        : buildDeck({ items, statsByItem, mistakesOnly, config, runStartNumber });
 
       this.run = {
         mode: effectiveMode,

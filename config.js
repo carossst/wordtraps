@@ -44,7 +44,7 @@
   window.WT_CONFIG = {
 
     // Product version (UI display, logs)
-    version: "3.6.1",
+    version: "3.6.2",
 
     // Storage schema version (localStorage).
     // Change ONLY if you accept a migration/wipe.
@@ -94,6 +94,21 @@
     // ============================================
     limits: {
       freeRuns: 2
+    },
+
+    // Curated opening for the free runs (game.js: getCuratedFreeRunOpeningIds +
+    // prependOpeningIds). Design goal: run 1 = a welcoming hook (classic false
+    // friends + a few true friends, A1-B1), run 2 = a notch harder with the
+    // highest-value "aha" pairs and 2 hard B2 traps near the end. Ordered so
+    // true/false never repeats more than twice in a row and has no fixed rhythm.
+    // declusterByAnswer locks this prefix, then de-clusters the random tail.
+    curatedFreeRuns: {
+      enabled: true,
+      runCount: 2,
+      cardIdsByRun: {
+        1: [12, 61, 1, 46, 66, 102, 93, 50, 96, 109],
+        2: [9, 2, 76, 16, 100, 129, 48, 97, 3, 41, 335, 384]
+      }
     },
 
     // Progression levels
@@ -1584,6 +1599,37 @@ Thanks!`
     const freeRunsNum = (cfg.limits && Number.isFinite(Number(cfg.limits.freeRuns))) ? Number(cfg.limits.freeRuns) : null;
     if (freeRunsNum == null || Math.floor(freeRunsNum) !== freeRunsNum || freeRunsNum < 0 || freeRunsNum > 99) {
       warn("limits.freeRuns must be an integer in [0..99]");
+    }
+
+    // Curated free RUN openings (see game.js getCuratedFreeRunOpeningIds)
+    const cfr = (cfg.curatedFreeRuns && typeof cfg.curatedFreeRuns === "object") ? cfg.curatedFreeRuns : null;
+    if (cfr && cfr.enabled === true) {
+      const runCountNum = Number(cfr.runCount);
+      if (!Number.isFinite(runCountNum) || Math.floor(runCountNum) !== runCountNum || runCountNum < 1 || runCountNum > 99) {
+        warn("curatedFreeRuns.runCount must be an integer in [1..99]");
+      }
+      const byRun = (cfr.cardIdsByRun && typeof cfr.cardIdsByRun === "object") ? cfr.cardIdsByRun : null;
+      if (!byRun) {
+        warn("curatedFreeRuns.cardIdsByRun is required when curatedFreeRuns.enabled is true");
+      } else {
+        Object.keys(byRun).forEach((key) => {
+          const ids = byRun[key];
+          const runNum = Number(key);
+          if (!Number.isFinite(runNum) || Math.floor(runNum) !== runNum || runNum < 1) {
+            warn("curatedFreeRuns.cardIdsByRun keys must be positive integer run numbers", key);
+          }
+          if (!Array.isArray(ids) || !ids.length) {
+            warn("curatedFreeRuns.cardIdsByRun entries must be non-empty arrays", key);
+            return;
+          }
+          ids.forEach((id) => {
+            const n = Number(id);
+            if (!Number.isFinite(n) || Math.floor(n) !== n || n < 0) {
+              warn("curatedFreeRuns card IDs must be non-negative integers", key, id);
+            }
+          });
+        });
+      }
     }
 
 

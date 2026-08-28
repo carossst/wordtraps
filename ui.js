@@ -3535,6 +3535,7 @@ void function () {
     }
 
     // RUN economy gate (free runs) is enforced at run start.
+    let runStartNumber = null;
     if (mistakesOnly !== true && !premium) {
       if (!this.storage || typeof this.storage.consumeRunOrBlock !== "function") {
         this.setState(STATES.PAYWALL);
@@ -3548,6 +3549,14 @@ void function () {
         if (this._nav) this._nav.paywallFromState = this.state;
         this.setState(STATES.PAYWALL);
         return;
+      }
+
+      // Which free run this is (1-based), so game.js can prepend the curated
+      // opening for the first runs. Null for premium / PRACTICE.
+      if (typeof this.storage.getRunsUsed === "function") {
+        const used = Number(this.storage.getRunsUsed());
+        runStartNumber =
+          Number.isFinite(used) && Math.floor(used) === used && used >= 1 ? used : null;
       }
     }
 
@@ -3576,7 +3585,10 @@ void function () {
       config: cfg,
 
       // game.js contract: "RUN" | "PRACTICE" | "BONUS"
-      mode: (mistakesOnly === true) ? MODES.PRACTICE : MODES.RUN
+      mode: (mistakesOnly === true) ? MODES.PRACTICE : MODES.RUN,
+
+      // Free RUN only: curated opening for the first runs. Null otherwise.
+      runStartNumber
     });
 
 
