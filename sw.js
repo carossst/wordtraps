@@ -45,6 +45,7 @@ const ASSETS_TO_CACHE = [
   "./press.html",
   "./style.css",
   "./config.js",
+  "./analytics.js",
   "./storage.js",
   "./game.js",
   "./icons.js",
@@ -208,6 +209,7 @@ function isNetworkFirstAppShellRequest(req, url) {
   if (
     path === "/style.css" ||
     path === "/config.js" ||
+    path === "/analytics.js" ||
     path === "/storage.js" ||
     path === "/game.js" ||
     path === "/icons.js" ||

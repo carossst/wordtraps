@@ -44,7 +44,7 @@
   window.WT_CONFIG = {
 
     // Product version (UI display, logs)
-    version: "3.6.2",
+    version: "3.6.3",
 
     // Storage schema version (localStorage).
     // Change ONLY if you accept a migration/wipe.
@@ -507,33 +507,32 @@
       // Also used by storage.js tryRedeemPremiumCodeRemote (POST /redeem-code).
       apiBaseUrl: "https://wt-leaderboard.carolestromboni.workers.dev",
 
-      // Local-only UI test rows (trial names).
-      // Remove these before go-live if you want the honest empty state again.
-      // Includes varied nickname lengths to judge wrapping/truncation visually.
+      // Shown only until real scores come in (buildWindowRows falls back to
+      // these when the Worker returns an empty top list). Plausible names/scores.
       seedScores: {
         weekly: [
           { nickname: "Zoe", scoreFP: 21 },
           { nickname: "Lex", scoreFP: 19 },
           { nickname: "FauxAmi", scoreFP: 18 },
-          { nickname: "Two Word Alias", scoreFP: 17 },
+          { nickname: "CognateKid", scoreFP: 17 },
           { nickname: "TrapSpotter", scoreFP: 16 },
           { nickname: "LibrairieFan24", scoreFP: 15 },
-          { nickname: "ParisianBanditPro", scoreFP: 14 },
-          { nickname: "UntrappableJudge77", scoreFP: 13 },
-          { nickname: "NuanceArchitect", scoreFP: 12 },
-          { nickname: "RidiculouslyLongDisplayName12345", scoreFP: 11 }
+          { nickname: "Parisienne", scoreFP: 14 },
+          { nickname: "NotQuiteFluent77", scoreFP: 13 },
+          { nickname: "NuanceHunter", scoreFP: 12 },
+          { nickname: "BretonBella", scoreFP: 11 }
         ],
         all: [
           { nickname: "Zoe", scoreFP: 28 },
           { nickname: "Lex", scoreFP: 26 },
           { nickname: "FauxAmi", scoreFP: 25 },
-          { nickname: "Two Word Alias", scoreFP: 24 },
+          { nickname: "CognateKid", scoreFP: 24 },
           { nickname: "TrapSpotter", scoreFP: 23 },
           { nickname: "LibrairieFan24", scoreFP: 22 },
-          { nickname: "ParisianBanditPro", scoreFP: 21 },
-          { nickname: "UntrappableJudge77", scoreFP: 20 },
-          { nickname: "NuanceArchitect", scoreFP: 19 },
-          { nickname: "RidiculouslyLongDisplayName12345", scoreFP: 18 }
+          { nickname: "Parisienne", scoreFP: 21 },
+          { nickname: "NotQuiteFluent77", scoreFP: 20 },
+          { nickname: "NuanceHunter", scoreFP: 19 },
+          { nickname: "BretonBella", scoreFP: 18 }
         ]
       }
     },
