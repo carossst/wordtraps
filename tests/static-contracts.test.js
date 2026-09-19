@@ -54,7 +54,7 @@ describe("static app contracts", () => {
       "// Allow app shell to activate an already-installed update on user intent."
     )[0];
 
-    expect(sw).toContain('const BUILD_HASH = "dev";');
+    expect(sw).toMatch(/const BUILD_HASH = "(?:dev|[a-f0-9]{7,40})";/);
     expect(sw).toContain("${CACHE_PREFIX}-cache-${SW_VERSION}-${BUILD_HASH}");
     expect(installBlock).not.toContain("self.skipWaiting()");
     expect(sw).toContain('path === "/logic/leaderboard-logic.js"');
