@@ -49,14 +49,16 @@
                         feature states, and device-local premium activation data.
                     </p>
                     <p>
-                        Detailed per-word gameplay data stays on your device. Two limited exceptions are described
-                        separately below:
+                        Detailed gameplay data stays on your device by default. Limited data leaves your device in
+                        these cases:
                     </p>
                     <ul>
+                        <li>if you opt in to the public leaderboard, eligible runs are submitted to our Cloudflare
+                            service, including per-card answers and response times (Section 3)</li>
+                        <li>if you enter a device unlock code, the code and a device-generated identifier are sent
+                            to the same Cloudflare service for validation (Section 3)</li>
                         <li>limited app and funnel event metadata may be sent to GoatCounter for aggregate analytics
                             (Section 7)</li>
-                        <li>leaderboard nickname, device identifier, and unlock-code checks may be sent to our
-                            Cloudflare service (Section 3)</li>
                     </ul>
                     <p>
                         You can delete locally stored game data at any time by clearing your browser storage.
@@ -64,25 +66,34 @@
                     <p class="wt-muted">
                         Legal basis for local game storage: performance of the service (Article 6.1.b GDPR).
                     </p>
-                    <h2 class="wt-h2">3. Leaderboard nickname and device unlock codes</h2>
+
+                    <h2 class="wt-h2">3. Leaderboard and device unlock codes</h2>
                     <p>
-                        If you set a leaderboard nickname, Word Traps sends your nickname and a device-generated
-                        identifier to our leaderboard service, hosted on <strong>Cloudflare</strong> (Workers and a
-                        D1 database). Score submission to the public leaderboard is not yet active; setting a
-                        nickname alone does not publish your scores.
+                        If you opt in to the public leaderboard, Word Traps sends your nickname and a
+                        device-generated identifier to our leaderboard service, hosted on <strong>Cloudflare</strong>
+                        (Workers and a D1 database). After eligible runs, the app also sends a run identifier, run
+                        number, content version, duration, and each submitted answer: card identifier, your
+                        true/false answer, and response time.
+                    </p>
+                    <p>
+                        The service validates the submitted answers, calculates the score, and stores the run
+                        submission. The public leaderboard exposes the nickname and best score. Device identifiers
+                        and per-answer data are not included in the public leaderboard response.
                     </p>
                     <p>
                         Separately, if you enter a device unlock code (including trial codes we sometimes
                         distribute), the app sends the same device-generated identifier and the code you entered to
-                        the same Cloudflare service, to enforce a usage limit and prevent abuse. This happens
-                        whether or not you have set a leaderboard nickname.
+                        the Cloudflare service to validate the code, enforce usage limits, and prevent abuse. This
+                        happens whether or not you have opted in to the leaderboard.
                     </p>
                     <p>
                         Cloudflare also processes your IP address for these requests to prevent abuse and enforce
                         rate limits.
                     </p>
                     <p class="wt-muted">
-                        Legal basis: your consent (Article 6.1.a GDPR).<br>
+                        Leaderboard legal basis: your consent (Article 6.1.a GDPR).<br>
+                        Unlock-code validation: performance of the service (Article 6.1.b GDPR).<br>
+                        Abuse prevention and rate limiting: legitimate interests (Article 6.1.f GDPR).<br>
                         Cloudflare acts under its own privacy policy:
                         <a href="https://www.cloudflare.com/privacypolicy/" target="_blank" rel="noopener noreferrer">https://www.cloudflare.com/privacypolicy/</a>
                     </p>
@@ -122,8 +133,9 @@
                     <h2 class="wt-h2">6. Data retention</h2>
                     <p>
                         Game data stored in your browser remains until you delete it.
-                        Leaderboard nicknames and device-unlock-code redemption records (Section 3) are kept
-                        indefinitely; contact us to request deletion.
+                        Leaderboard profiles, score submissions (including submitted answer data), and
+                        device-unlock-code redemption records (Section 3) are kept indefinitely; contact us to
+                        request deletion.
                         Emails are kept only as long as necessary to handle your request.
                     </p>
 
