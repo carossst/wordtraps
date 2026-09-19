@@ -2542,6 +2542,8 @@ void function () {
   ${html}
 `;
 
+    this.modalEl.setAttribute("aria-labelledby", "wt-modal-title");
+
     // UX: always start at top (content is scrollable and scroll position can persist)
     // Safari/reflow edge cases: reset now + on next frame.
     try {
@@ -2578,7 +2580,6 @@ void function () {
 
         if (e.key !== "Tab") return;
         const focusables = self.modalEl.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
-        if (!focusables || focusables.length === 0) return;
         if (!focusables || focusables.length === 0) return;
 
         const firstEl = focusables[0];
@@ -2621,6 +2622,7 @@ void function () {
 
     this.modalEl.classList.add("wt-hidden");
     this.modalEl.setAttribute("aria-hidden", "true");
+    this.modalEl.removeAttribute("aria-labelledby");
     this.modalContentEl.innerHTML = "";
 
     // A11Y: re-enable main content
