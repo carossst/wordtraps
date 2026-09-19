@@ -1,6 +1,8 @@
 /* global self, caches */
 /* sw.js - Service Worker for Word Traps */
 /* Spec section 8: PWA / Offline / Service Worker */
+// Stamped on main by .github/workflows/stamp-sw.yml so every deploy gets a distinct cache.
+const BUILD_HASH = "dev";
 /**
  * Single source of truth for version:
  * - sw.js is registered with a query string ?v=<WT_CONFIG.version>
@@ -32,7 +34,7 @@ const APP_SCOPE = (() => {
 })();
 
 const CACHE_PREFIX = APP_SCOPE ? `wt-${APP_SCOPE}` : "";
-const CACHE_NAME = (SW_VERSION && CACHE_PREFIX) ? `${CACHE_PREFIX}-cache-${SW_VERSION}` : "";
+const CACHE_NAME = (SW_VERSION && CACHE_PREFIX) ? `${CACHE_PREFIX}-cache-${SW_VERSION}-${BUILD_HASH}` : "";
 
 // 8.1 Assets to cache (spec section 8.1)
 const ASSETS_TO_CACHE = [
@@ -83,18 +85,18 @@ const CRITICAL_ASSETS = [
   "./main.js",
   "./content.json"
 ];
-// Install event: cache app shell (resilient: one missing asset must not brick install)
+// Install event: cache app shell.
+// Critical precache failure rejects installation so the previous working SW stays active.
+// Updates remain waiting until the user chooses "Refresh app".
 self.addEventListener("install", (event) => {
   if (!CACHE_NAME) return;
 
   event.waitUntil(
     (async () => {
       const cache = await caches.open(CACHE_NAME);
-
-      // Bust HTTP cache on install: force fresh copies from server.
-      // Without this, GitHub Pages' aggressive caching serves stale files.
       const okByUrl = new Map();
 
+      // Bust HTTP cache on install: force fresh copies from server.
       for (const url of ASSETS_TO_CACHE) {
         try {
           const res = await fetch(url, { cache: "no-store" });
@@ -105,16 +107,14 @@ self.addEventListener("install", (event) => {
           okByUrl.set(url, false);
         }
       }
-      const criticalOk = CRITICAL_ASSETS.every((u) => okByUrl.get(u) === true);
-      if (criticalOk) {
-        await self.skipWaiting();
+
+      const failedCritical = CRITICAL_ASSETS.filter((url) => okByUrl.get(url) !== true);
+      if (failedCritical.length) {
+        throw new Error(`Critical precache failed: ${failedCritical.join(", ")}`);
       }
-    })().catch(() => {
-      // Fail-closed: don't block the existing SW.
-    })
+    })()
   );
 });
-
 
 // Allow app shell to activate an already-installed update on user intent.
 self.addEventListener("message", (event) => {
@@ -213,7 +213,9 @@ function isNetworkFirstAppShellRequest(req, url) {
     path === "/storage.js" ||
     path === "/game.js" ||
     path === "/icons.js" ||
+    path === "/logic/leaderboard-logic.js" ||
     path === "/ui.js" ||
+    path === "/ui-leaderboard.js" ||
     path === "/pwa.js" ||
     path === "/email.js" ||
     path === "/footer.js" ||

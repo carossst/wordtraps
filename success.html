@@ -483,71 +483,34 @@
         try {
           const card = document.getElementById("cheatsheet-card");
           const mount = document.getElementById("cheatsheet-ck");
-          const link = document.getElementById("cheatsheet-link");
-          const linkWrap = document.getElementById("cheatsheet-link-wrap");
-          if (!card || !mount || !link || !linkWrap) return;
+          if (!card || !mount) return;
 
           const ob = window.WT_CONFIG?.marketing?.cheatSheetOrderBump;
           const enabled = ob && ob.enabled === true;
-
           const uid = String(ob?.convertKitUid || "").trim();
-          const src = String(ob?.convertKitEmbedScriptSrc || "").trim();
-          const formId = String(ob?.convertKitFormId || "").trim();
-          const formAction = String(ob?.convertKitFormAction || "").trim();
-          const redirectUrl = String(ob?.convertKitRedirectUrl || "").trim();
-          const submitLabel = String(ob?.submitLabel || "").trim();
-          const formUrl = formId ? `https://app.kit.com/forms/${encodeURIComponent(formId)}` : "";
-          const showFallbackLink = () => {
-            if (!formUrl) return;
-            link.href = formUrl;
-            linkWrap.classList.remove("wt-hidden");
-          };
+          const src = String(ob?.convertKitScriptSrc || "").trim();
 
-          // Fail-closed: hide unless explicitly enabled + fully configured.
-          if (!enabled || !uid || !src || !formId || !formAction || !redirectUrl || !submitLabel || src.indexOf("REPLACE") !== -1) {
+          // Kit's hosted embed only needs its UID and script URL.
+          // Fail closed if the feature is disabled or incompletely configured.
+          if (!enabled || !uid || !src || src.includes("REPLACE")) {
             card.style.display = "none";
             return;
           }
 
-          mount.innerHTML = `
-            <form action="${formAction}" class="seva-form formkit-form" method="post"
-              data-sv-form="${formId}" data-uid="${uid}" data-format="inline" data-version="5"
-              data-options="{&quot;settings&quot;:{&quot;after_subscribe&quot;:{&quot;action&quot;:&quot;redirect&quot;,&quot;success_message&quot;:&quot;Success! Now check your email in 5 minutes. You will have the PDF. &quot;,&quot;redirect_url&quot;:&quot;${redirectUrl}&quot;},&quot;analytics&quot;:{&quot;google&quot;:null,&quot;fathom&quot;:null,&quot;facebook&quot;:null,&quot;segment&quot;:null,&quot;pinterest&quot;:null,&quot;sparkloop&quot;:null,&quot;googletagmanager&quot;:null},&quot;modal&quot;:{&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:5,&quot;devices&quot;:&quot;all&quot;,&quot;show_once_every&quot;:15},&quot;powered_by&quot;:{&quot;show&quot;:false,&quot;url&quot;:&quot;https://partners.kit.com/na5980p7joc3?utm_campaign=poweredby&amp;utm_content=form&quot;},&quot;recaptcha&quot;:{&quot;enabled&quot;:true},&quot;return_visitor&quot;:{&quot;action&quot;:&quot;hide&quot;,&quot;custom_content&quot;:&quot;&quot;},&quot;slide_in&quot;:{&quot;display_in&quot;:&quot;bottom_right&quot;,&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:5,&quot;devices&quot;:&quot;all&quot;,&quot;show_once_every&quot;:15},&quot;sticky_bar&quot;:{&quot;display_in&quot;:&quot;top&quot;,&quot;trigger&quot;:&quot;timer&quot;,&quot;scroll_percentage&quot;:null,&quot;timer&quot;:5,&quot;devices&quot;:&quot;all&quot;,&quot;show_once_every&quot;:15}},&quot;version&quot;:&quot;5&quot;}"
-              min-width="400 500 600 700 800">
-              <div data-style="clean">
-                <ul class="formkit-alert formkit-alert-error" data-element="errors" data-group="alert"></ul>
-                <div data-element="fields" data-stacked="false" class="seva-fields formkit-fields">
-                  <div class="formkit-field">
-                    <input class="formkit-input" name="email_address" aria-label="Email Address" placeholder="Email Address" required type="email">
-                  </div>
-                  <button data-element="submit" class="formkit-submit formkit-submit">
-                    <div class="formkit-spinner"><div></div><div></div><div></div></div>
-                    <span>${submitLabel}</span>
-                  </button>
-                </div>
-              </div>
-            </form>
-          `;
-
-          // Avoid duplicate injection
           if (document.querySelector('script[data-wt-ck="cheatsheet"]')) return;
 
-          const s = document.createElement("script");
-          s.async = true;
-          s.src = src;
-          s.setAttribute("data-uid", uid);
-          s.setAttribute("data-wt-ck", "cheatsheet");
-          s.addEventListener("error", showFallbackLink);
+          const script = document.createElement("script");
+          script.async = true;
+          script.src = src;
+          script.setAttribute("data-uid", uid);
+          script.setAttribute("data-wt-ck", "cheatsheet");
+          script.addEventListener("error", () => {
+            card.style.display = "none";
+          });
 
-          mount.appendChild(s);
-
-          window.setTimeout(() => {
-            const renderedForm = mount.querySelector("form.formkit-form");
-            if (!renderedForm) showFallbackLink();
-          }, 2500);
+          mount.replaceChildren(script);
         } catch (_) { }
       }
-
 
       document.addEventListener("DOMContentLoaded", () => {
         const code = getOrCreateCode();

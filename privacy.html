@@ -29,7 +29,7 @@
                     <div class="wt-divider"></div>
 
                     <p class="wt-muted">
-                        Effective date: 26 August 2026
+                        Effective date: 19 September 2026
                     </p>
 
                     <h2 class="wt-h2">1. Who we are</h2>
@@ -44,22 +44,25 @@
                     </p>
                     <h2 class="wt-h2">2. Data stored on your device</h2>
                     <p>
-                        Word Traps stores game data <strong>only in your browser's localStorage</strong> to make the
-                        game work.
-                        This includes game progress, scores, mistakes, learning statistics, run history,
+                        Word Traps stores detailed gameplay data in <strong>your browser's localStorage</strong> to make
+                        the game work. This includes progress, scores, mistakes, learning statistics, run history,
                         feature states, and device-local premium activation data.
                     </p>
                     <p>
-                        This data:
+                        Detailed per-word gameplay data stays on your device. Two limited exceptions are described
+                        separately below:
                     </p>
                     <ul>
-                        <li>never leaves your device automatically</li>
-                        <li>is not sent to our servers</li>
-                        <li>can be deleted at any time by clearing your browser storage</li>
+                        <li>limited app and funnel event metadata may be sent to GoatCounter for aggregate analytics
+                            (Section 7)</li>
+                        <li>leaderboard nickname, device identifier, and unlock-code checks may be sent to our
+                            Cloudflare service (Section 3)</li>
                     </ul>
+                    <p>
+                        You can delete locally stored game data at any time by clearing your browser storage.
+                    </p>
                     <p class="wt-muted">
-                        Legal basis: performance of the service (Article 6.1.b GDPR). This does not cover the
-                        optional leaderboard nickname or device unlock codes — see Section 3.
+                        Legal basis for local game storage: performance of the service (Article 6.1.b GDPR).
                     </p>
                     <h2 class="wt-h2">3. Leaderboard nickname and device unlock codes</h2>
                     <p>
@@ -124,17 +127,33 @@
                         Emails are kept only as long as necessary to handle your request.
                     </p>
 
-                    <h2 class="wt-h2">7. Cookies and tracking</h2>
+                    <h2 class="wt-h2">7. Cookies and analytics</h2>
                     <p>
-                        Word Traps does not use cookies, third-party analytics, or advertising trackers.
-                        Stripe may set cookies during checkout under its own responsibility.
+                        Word Traps does not use advertising trackers. It uses <strong>GoatCounter</strong> for
+                        privacy-friendly aggregate analytics and limited funnel events such as landing views, run
+                        starts and completions, paywall views, and checkout clicks.
+                    </p>
+                    <p>
+                        GoatCounter does not place cookies or use localStorage for visitor tracking. It does not store
+                        IP addresses or full User-Agent strings in its database. It may process the IP address and
+                        User-Agent temporarily in memory to distinguish visits, and stores aggregate information such
+                        as page or event path, browser, system, country, language, screen width, and referrer.
+                    </p>
+                    <p>
+                        Word Traps may also send limited event context such as game mode, free or premium status,
+                        number of free runs used, price option, and entry source. It does not send your per-word answer
+                        history or mistake list to GoatCounter.
+                    </p>
+                    <p>
+                        GoatCounter privacy information:
+                        <a href="https://www.goatcounter.com/help/privacy" target="_blank"
+                            rel="noopener noreferrer">https://www.goatcounter.com/help/privacy</a>
                     </p>
                     <p class="wt-muted">
-                        Our hosting provider may process standard server logs (such as IP address and timestamp) for
-                        security and
-                        reliability purposes only.
+                        Legal basis: legitimate interests in understanding aggregate product usage and improving the
+                        service (Article 6.1.f GDPR). Stripe and optional email providers may use their own cookies or
+                        similar technologies under their own policies.
                     </p>
-
 
                     <h2 class="wt-h2">8. Your rights</h2>
                     <p>
