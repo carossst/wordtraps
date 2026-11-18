@@ -419,6 +419,15 @@
     },
 
 
+    // Newsletter signup through a Kit (ConvertKit) form. Empty URL = feature off: no link
+    // is shown and nothing is sent. Paste the "action" URL found in the HTML embed code of the
+    // Kit form (https://app.kit.com/forms/<id>/subscriptions). Update privacy.html before enabling.
+    newsletter: {
+      formAction: { en: "" },
+      // Field names used by the Kit embed form; change only if the embed code differs.
+      fieldNames: { email: "email_address", firstName: "fields[first_name]" }
+    },
+
     // Waitlist
     waitlist: {
       enabled: true,
@@ -1164,11 +1173,11 @@
       // Keys must match UI mapping: none/start/building/strong/elite/legendary
       identityByVerdict: {
         none: "A few traps are still catching you.",
-        start: "",
-        building: "",
-        strong: "",
-        elite: "",
-        legendary: ""
+        start: "You're starting to see the traps.",
+        building: "You spot more traps than you miss.",
+        strong: "Most traps don't fool you anymore.",
+        elite: "You see through almost every trap.",
+        legendary: "Hardly a trap gets past you."
       },
       labelByVerdict: {
         none: "FALSE START",
@@ -1229,6 +1238,20 @@
       // Vars: {backlog}
       practiceCtaCountPremium: "Fix your {backlog} remaining mistakes",
       shareTitle: "Challenge a friend"
+    },
+
+    newsletter: {
+      link: "Get new word traps by email",
+      title: "New word traps by email",
+      intro: "Get new French word traps by email, each with the explanation.",
+      emailLabel: "Email",
+      firstNameLabel: "First name (optional)",
+      consent: "You will receive a confirmation email first. By subscribing you agree to receive emails from Test Your French. You can unsubscribe in one click from any email.",
+      privacyLink: "Privacy policy",
+      cta: "Subscribe",
+      thanks: "Almost done: check your inbox and confirm your email address.",
+      errorEmail: "Please enter a valid email address.",
+      errorNetwork: "Something went wrong. Please try again in a moment."
     },
 
     paywall: {

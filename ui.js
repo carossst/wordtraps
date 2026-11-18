@@ -1653,6 +1653,14 @@ void function () {
           self.closeModal();
           break;
 
+        case "open-newsletter":
+          if (window.WT_UI_Newsletter) window.WT_UI_Newsletter.open(self);
+          break;
+
+        case "confirm-newsletter":
+          if (window.WT_UI_Newsletter) window.WT_UI_Newsletter.submit(self);
+          break;
+
         case "copy-share":
           self.copyShareText();
           break;
@@ -7163,6 +7171,10 @@ void function () {
   </div>
 `;
 
+    // First visit (no run played yet): headline, one CTA and one muted line only.
+    // Leaderboard card and the second muted line appear after the first run.
+    const isFirstVisit = !(Number.isFinite(runPlays) && runPlays >= 1);
+
     return `
   <div class="wt-card wt-card--landing">
 
@@ -7279,11 +7291,11 @@ ${(() => {
 
     ${postCompletionHtml}
 
-    ${((window.WT_UI_Leaderboard && typeof window.WT_UI_Leaderboard.renderLandingCard === "function")
+    ${(!isFirstVisit && window.WT_UI_Leaderboard && typeof window.WT_UI_Leaderboard.renderLandingCard === "function")
       ? window.WT_UI_Leaderboard.renderLandingCard(this, { escapeHtml })
-      : ``)}
+      : ``}
 
-    ${microTrust ? `<p class="wt-sub wt-muted wt-mt-12">${escapeHtml(microTrust)}</p>` : ``}
+    ${(!isFirstVisit && microTrust) ? `<p class="wt-sub wt-muted wt-mt-12">${escapeHtml(microTrust)}</p>` : ``}
 
 </div>
 `;
@@ -8580,6 +8592,14 @@ ${(() => {
       runLensTpl
     });
 
+    // Email signup (Kit form). Off until WT_CONFIG.newsletter.formAction.en is set.
+    const newsletterLinkHtml = (() => {
+      const NL = window.WT_Newsletter;
+      const label = String(this.wording?.newsletter?.link || "").trim();
+      if (!isRun || !label || !NL || !NL.shouldOffer(cfg, "en")) return ``;
+      return `<p class="wt-m-0"><button type="button" class="wt-btn wt-btn--ghost" data-action="open-newsletter">${escapeHtml(label)}</button></p>`;
+    })();
+
     return `
 <div class="wt-card">
   ${endHeaderRowHtml}
@@ -8628,6 +8648,8 @@ ${(() => {
   ${mistakesRecapHtml}
 
   ${shouldPromoteShare ? `` : shareHtml}
+
+  ${newsletterLinkHtml}
 
   ${moreAccordionHtml}
 </div>

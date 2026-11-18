@@ -3,6 +3,9 @@
   "private": true,
   "scripts": {
     "generate:leaderboard-key": "node scripts/generate-leaderboard-content-key.mjs",
+    "generate:sitemap": "node scripts/generate-sitemap.mjs",
+    "generate:seo-pages": "node scripts/generate-seo-pages.mjs",
+    "publish:seo": "npm run generate:seo-pages && npm run generate:sitemap",
     "test": "vitest run",
     "test:watch": "vitest",
     "format:check": "prettier --check package.json vitest.config.cjs .prettierrc.json \"tests/**/*.js\"",
