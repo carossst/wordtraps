@@ -1,0 +1,16 @@
+{
+  "comment": "Channels used to build tracked links (npm run links). Edit this list freely: one lowercase slug per channel. The slug becomes ?wt-source=<slug> and shows up in GoatCounter event paths as src-<slug>.",
+  "baseUrl": "https://wordtraps.com/",
+  "channels": [
+    "instagram",
+    "facebook",
+    "pinterest",
+    "tiktok",
+    "youtube",
+    "linkedin",
+    "reddit",
+    "newsletter",
+    "email-signature",
+    "qr-code"
+  ]
+}
