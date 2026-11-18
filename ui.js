@@ -1657,6 +1657,22 @@ void function () {
           self.copyShareText();
           break;
 
+        case "share-card": {
+          const lastRunNow = self._runtime?.lastRun || {};
+          const outcomesNow = Array.isArray(lastRunNow.outcomes) ? lastRunNow.outcomes : [];
+          if (window.WT_ScoreCard) {
+            void window.WT_ScoreCard
+              .share({
+                score: lastRunNow.scoreFP,
+                correct: outcomesNow.length ? outcomesNow.filter(Boolean).length : undefined,
+                total: outcomesNow.length || undefined,
+                text: String(self._getShareText ? self._getShareText() : "")
+              })
+              .catch(() => {});
+          }
+          break;
+        }
+
         case "send-share-email":
           self.sendShareViaEmail();
           break;
@@ -7632,6 +7648,8 @@ ${(() => {
     const text = String(getShareText ? getShareText() : "").trim();
     const canCopy = !!(ctaLabel && text);
     const canEmail = !!(emailLabel && emailSubject && text);
+    const cardLabel = String(share.cardLabel || "").trim();
+    const canCard = !!(cardLabel && text);
 
     if (!title && !text) return "";
     if (!canCopy && !canEmail && !text) return "";
@@ -7645,8 +7663,14 @@ ${(() => {
         <div class="wt-accordion-content">
           ${text ? `<p class="wt-muted wt-text-wrap-anywhere">${escapeHtml(text)}</p>` : ``}
 
-          ${(canCopy || canEmail) ? `
+          ${(canCopy || canEmail || canCard) ? `
             <div class="wt-actions">
+              ${canCard ? `
+                <button type="button" class="wt-btn wt-btn--primary" data-action="share-card">
+                  ${escapeHtml(cardLabel)}
+                </button>
+              ` : ``}
+
               ${canCopy ? `
                 <button type="button" class="wt-btn wt-btn--secondary" data-action="copy-share">
                   ${escapeHtml(ctaLabel)}
