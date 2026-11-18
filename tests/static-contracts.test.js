@@ -89,4 +89,11 @@ describe("static app contracts", () => {
     expect(config).toMatch(/newsletter: \{\s*formAction: \{ en: "" \}/);
     expect(read("ui.js")).toContain('case "confirm-newsletter"');
   });
+
+  test("keeps the first-visit landing light (leaderboard card and second muted line wait for a first run)", () => {
+    const ui = read("ui.js");
+    expect(ui).toContain("const isFirstVisit =");
+    expect(ui).toMatch(/!isFirstVisit && window\.WT_UI_Leaderboard/);
+    expect(ui).toMatch(/!isFirstVisit && microTrust/);
+  });
 });

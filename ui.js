@@ -7155,6 +7155,10 @@ void function () {
   </div>
 `;
 
+    // First visit (no run played yet): headline, one CTA and one muted line only.
+    // Leaderboard card and the second muted line appear after the first run.
+    const isFirstVisit = !(Number.isFinite(runPlays) && runPlays >= 1);
+
     return `
   <div class="wt-card wt-card--landing">
 
@@ -7271,11 +7275,11 @@ ${(() => {
 
     ${postCompletionHtml}
 
-    ${((window.WT_UI_Leaderboard && typeof window.WT_UI_Leaderboard.renderLandingCard === "function")
+    ${(!isFirstVisit && window.WT_UI_Leaderboard && typeof window.WT_UI_Leaderboard.renderLandingCard === "function")
       ? window.WT_UI_Leaderboard.renderLandingCard(this, { escapeHtml })
-      : ``)}
+      : ``}
 
-    ${microTrust ? `<p class="wt-sub wt-muted wt-mt-12">${escapeHtml(microTrust)}</p>` : ``}
+    ${(!isFirstVisit && microTrust) ? `<p class="wt-sub wt-muted wt-mt-12">${escapeHtml(microTrust)}</p>` : ``}
 
 </div>
 `;

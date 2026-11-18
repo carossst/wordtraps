@@ -1,0 +1,59 @@
+{
+  "version": "2026-11-17",
+  "comment": "Single source of truth for the static SEO layer. Page bodies are built ONLY from content.json (termFr, termEn, explanationShort, level): nothing is written from memory. sitemap.xml and /quiz/ pages are generated from this file, never hand-edited. Statuses: draft (not generated), ready (generated, NOT in sitemap, awaiting owner review), live (generated and in sitemap).",
+  "defaults": {
+    "baseUrl": "https://wordtraps.com",
+    "minWordCount": 450,
+    "ctaTarget": "/",
+    "statuses": ["draft", "ready", "live"],
+    "urlPatterns": { "theme": "/quiz/{slug}/" },
+    "fixedPageLastmod": {
+      "/": "2026-09-19",
+      "/privacy.html": "2026-09-19",
+      "/terms.html": "2026-09-19",
+      "/press.html": "2026-09-19"
+    }
+  },
+  "themes": [
+    {
+      "slug": "french-false-friends-everyday-life",
+      "title": "French False Friends: Everyday Life Words | Word Traps",
+      "h1": "French False Friends: Everyday Life",
+      "metaDescription": "French words that look like English but mean something else, for everyday life. Meaning in French vs English, pair by pair, from the Word Traps quiz.",
+      "filter": { "tag": "false_friend", "category": "Vie quotidienne" },
+      "lead": "These French words look like English words but do not mean the same thing. Each pair below shows what the French word means, what the English word means, and the one-line contrast that explains the trap.",
+      "status": "ready",
+      "lastmod": "2026-11-17"
+    },
+    {
+      "slug": "french-false-friends-business",
+      "title": "French False Friends: Business Words | Word Traps",
+      "h1": "French False Friends: Business",
+      "metaDescription": "French business words that look like English but mean something else. Meaning in French vs English, pair by pair, from the Word Traps quiz.",
+      "filter": { "tag": "false_friend", "category": "Business" },
+      "lead": "These French business words look like English words but do not mean the same thing. Each pair below shows what the French word means, what the English word means, and the one-line contrast that explains the trap.",
+      "status": "ready",
+      "lastmod": "2026-11-17"
+    },
+    {
+      "slug": "french-true-friends-everyday-life",
+      "title": "French True Friends: Everyday Life Words | Word Traps",
+      "h1": "French True Friends: Everyday Life",
+      "metaDescription": "French words that really do match their English look-alikes, for everyday life. Pair by pair, from the Word Traps quiz.",
+      "filter": { "tag": "true_friend", "category": "Vie quotidienne" },
+      "lead": "These French words really do match their English look-alikes, so you can trust them. Each pair below shows both meanings and the small differences worth knowing.",
+      "status": "ready",
+      "lastmod": "2026-11-17"
+    },
+    {
+      "slug": "french-true-friends-business",
+      "title": "French True Friends: Business Words | Word Traps",
+      "h1": "French True Friends: Business",
+      "metaDescription": "French business words that really do match their English look-alikes. Pair by pair, from the Word Traps quiz.",
+      "filter": { "tag": "true_friend", "category": "Business" },
+      "lead": "These French business words really do match their English look-alikes, so you can trust them. Each pair below shows both meanings and the small differences worth knowing.",
+      "status": "ready",
+      "lastmod": "2026-11-17"
+    }
+  ]
+}
