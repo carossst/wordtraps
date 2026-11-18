@@ -1290,6 +1290,7 @@ void function () {
       runStartedAt: 0,
       currentQuestionShownAt: 0,
       runAnswerLog: [],
+      runOutcomes: [],
       runItemIds: [],
       runMistakeIds: [],
       runMode: "",
@@ -3634,6 +3635,7 @@ void function () {
     this._runtime.runStartedAt = Date.now();
     this._runtime.currentQuestionShownAt = this._runtime.runStartedAt;
     this._runtime.runAnswerLog = [];
+    this._runtime.runOutcomes = [];
     this._runtime.lastAnswer = null;
     this._runtime.feedbackPending = false;
     this._runtime.feedbackReveal = true;
@@ -3901,6 +3903,7 @@ void function () {
     this._runtime.runStartedAt = Date.now();
     this._runtime.currentQuestionShownAt = this._runtime.runStartedAt;
     this._runtime.runAnswerLog = [];
+    this._runtime.runOutcomes = [];
     this._runtime.lastAnswer = null;
     this._runtime.feedbackPending = false;
     this._runtime.feedbackReveal = true;
@@ -4335,6 +4338,7 @@ void function () {
           ms: answerMs
         });
       }
+      if (Array.isArray(this._runtime.runOutcomes)) this._runtime.runOutcomes.push(res.isCorrect === true);
 
       // Track per-run mistakes for END recap (dedup)
       if (res.isCorrect !== true) {
@@ -4964,6 +4968,7 @@ void function () {
       answerLog: Array.isArray(this._runtime.runAnswerLog)
         ? this._runtime.runAnswerLog.slice()
         : [],
+      outcomes: Array.isArray(this._runtime.runOutcomes) ? this._runtime.runOutcomes.slice() : [],
       poolCompleteCelebration: !!this._runtime?.poolCompleteCelebrationPending,
       levelProgress
     };
@@ -8290,6 +8295,26 @@ ${(() => {
     const displayScoreHeading = (scoreHeading && scoreFP >= 0) ? scoreHeading : "";
     const displayScoreValue = (scoreHeading && scoreFP >= 0) ? String(scoreFP) : "";
 
+    // End flourish (RUN only): answer pips, confetti and score count-up. Pure decoration:
+    // all data comes from the run that just ended; WT_EndFx only animates what is rendered here.
+    const fxOutcomes = (isRun && Array.isArray(lastRun.outcomes)) ? lastRun.outcomes : [];
+    const fxCorrect = fxOutcomes.filter(Boolean).length;
+    const fxTier = (fxOutcomes.length > 0 && window.WT_EndFx && typeof window.WT_EndFx.tier === "function")
+      ? window.WT_EndFx.tier(fxCorrect, fxOutcomes.length, scoreFP)
+      : "";
+    const fxAriaLine = fxOutcomes.length > 0
+      ? fillTemplate(String(end.correctAnswersLine || "").trim(), { correct: fxCorrect, total: fxOutcomes.length })
+      : "";
+    const fxPipsHtml = fxOutcomes.length > 0
+      ? `<div class="wt-end-pips" role="img" aria-label="${escapeHtml(fxAriaLine)}">${fxOutcomes.map((ok, i) => `<span class="wt-end-pip ${ok ? "wt-end-pip--ok" : "wt-end-pip--ko"}" style="--i:${i}">${ok ? "\u2713" : "\u2715"}</span>`).join("")}</div>`
+      : "";
+    const fxConfettiHtml = (fxTier === "perfect" || fxTier === "good")
+      ? `<div class="wt-end-confetti" aria-hidden="true">${Array.from({ length: 14 }, (_, i) => `<i style="--i:${i}"></i>`).join("")}</div>`
+      : "";
+    const fxCountAttrs = (isRun && displayScoreValue)
+      ? ` data-count="${scoreFP}" data-tier="${escapeHtml(fxTier)}"`
+      : ``;
+
     const pbLineTpl = String(end.personalBestLine || "").trim();
     const nearBestTpl = String(end.nearBestLine || "").trim();
     const pbPremiumHintTpl = String(end.personalBestPremiumHint || "").trim();
@@ -8582,11 +8607,13 @@ ${(() => {
 
   ${endTitle ? `<p class="wt-h1">${escapeHtml(endTitle)}</p>` : ``}
 
+  ${fxConfettiHtml}
+
   ${displayScoreLine ? `
     <div class="wt-end-score${newBest ? " wt-end-score--newbest" : ""}" role="group" aria-label="${escapeHtml(displayScoreLine)}">
       <div class="wt-end-score__headline">
         ${displayScoreHeading ? `<span class="wt-end-score__eyebrow">${escapeHtml(displayScoreHeading)}</span>` : ``}
-        <span class="wt-end-score__value">
+        <span class="wt-end-score__value"${fxCountAttrs}>
           ${escapeHtml(displayScoreValue || displayScoreLine)}
         </span>
       </div>
@@ -8607,6 +8634,7 @@ ${(() => {
   ${levelUnlockHtml}
 
   <div class="wt-end-summary">
+    ${fxPipsHtml}
     ${microLinesHtml}
     ${endCopyHtml}
   </div>

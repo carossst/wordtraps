@@ -54,6 +54,8 @@ const ASSETS_TO_CACHE = [
   "./logic/leaderboard-logic.js",
   "./ui.js",
   "./ui-leaderboard.js",
+  "./sfx.js",
+  "./end-fx.js",
   "./newsletter.js",
   "./ui-newsletter.js",
   "./pwa.js",
@@ -218,6 +220,8 @@ function isNetworkFirstAppShellRequest(req, url) {
     path === "/logic/leaderboard-logic.js" ||
     path === "/ui.js" ||
     path === "/ui-leaderboard.js" ||
+    path === "/sfx.js" ||
+    path === "/end-fx.js" ||
     path === "/newsletter.js" ||
     path === "/ui-newsletter.js" ||
     path === "/pwa.js" ||

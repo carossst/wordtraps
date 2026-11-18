@@ -78,6 +78,19 @@ describe("static app contracts", () => {
     );
   });
 
+  test("wires the end-screen flourish (pips, count-up, optional sound)", () => {
+    expect(read("index.html")).toContain('src="./end-fx.js"');
+    expect(read("index.html")).toContain('src="./sfx.js"');
+    expect(read("sw.js")).toContain('path === "/end-fx.js"');
+    expect(read("sw.js")).toContain('path === "/sfx.js"');
+    const ui = read("ui.js");
+    expect(ui).toContain(
+      "this._runtime.runOutcomes.push(res.isCorrect === true)"
+    );
+    expect(ui).toContain("wt-end-pips");
+    expect(read("style.css")).toContain("prefers-reduced-motion");
+  });
+
   test("wires the newsletter modules (off until a Kit form URL is configured)", () => {
     const index = read("index.html");
     const sw = read("sw.js");
