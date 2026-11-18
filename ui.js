@@ -1653,6 +1653,14 @@ void function () {
           self.closeModal();
           break;
 
+        case "open-newsletter":
+          if (window.WT_UI_Newsletter) window.WT_UI_Newsletter.open(self);
+          break;
+
+        case "confirm-newsletter":
+          if (window.WT_UI_Newsletter) window.WT_UI_Newsletter.submit(self);
+          break;
+
         case "copy-share":
           self.copyShareText();
           break;
@@ -8560,6 +8568,14 @@ ${(() => {
       runLensTpl
     });
 
+    // Email signup (Kit form). Off until WT_CONFIG.newsletter.formAction.en is set.
+    const newsletterLinkHtml = (() => {
+      const NL = window.WT_Newsletter;
+      const label = String(this.wording?.newsletter?.link || "").trim();
+      if (!isRun || !label || !NL || !NL.shouldOffer(cfg, "en")) return ``;
+      return `<p class="wt-m-0"><button type="button" class="wt-btn wt-btn--ghost" data-action="open-newsletter">${escapeHtml(label)}</button></p>`;
+    })();
+
     return `
 <div class="wt-card">
   ${endHeaderRowHtml}
@@ -8608,6 +8624,8 @@ ${(() => {
   ${mistakesRecapHtml}
 
   ${shouldPromoteShare ? `` : shareHtml}
+
+  ${newsletterLinkHtml}
 
   ${moreAccordionHtml}
 </div>

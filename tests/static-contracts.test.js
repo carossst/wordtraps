@@ -78,6 +78,18 @@ describe("static app contracts", () => {
     );
   });
 
+  test("wires the newsletter modules (off until a Kit form URL is configured)", () => {
+    const index = read("index.html");
+    const sw = read("sw.js");
+    const config = read("config.js");
+    expect(index).toContain('src="./newsletter.js"');
+    expect(index).toContain('src="./ui-newsletter.js"');
+    expect(sw).toContain('"./newsletter.js"');
+    expect(sw).toContain('path === "/ui-newsletter.js"');
+    expect(config).toMatch(/newsletter: \{\s*formAction: \{ en: "" \}/);
+    expect(read("ui.js")).toContain('case "confirm-newsletter"');
+  });
+
   test("keeps the first-visit landing light (leaderboard card and second muted line wait for a first run)", () => {
     const ui = read("ui.js");
     expect(ui).toContain("const isFirstVisit =");
