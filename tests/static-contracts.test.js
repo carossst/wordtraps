@@ -78,6 +78,13 @@ describe("static app contracts", () => {
     );
   });
 
+  test("wires the score card share action", () => {
+    expect(read("index.html")).toContain('src="./score-card.js"');
+    expect(read("sw.js")).toContain('path === "/score-card.js"');
+    expect(read("ui.js")).toContain('case "share-card"');
+    expect(read("config.js")).toContain('cardLabel: "Share score card"');
+  });
+
   test("wires the end-screen flourish (pips, count-up, optional sound)", () => {
     expect(read("index.html")).toContain('src="./end-fx.js"');
     expect(read("index.html")).toContain('src="./sfx.js"');

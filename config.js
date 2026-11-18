@@ -1432,6 +1432,7 @@ Thanks!`
 
 
     share: {
+      cardLabel: "Share score card",
       ctaLabel: "Copy challenge text",
       emailLabel: "Email challenge",
       emailSubject: "Word Traps",
