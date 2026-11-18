@@ -52,13 +52,28 @@
     return "en";
   }
 
+  const SOURCE_KEY = "wt-entry-source";
+
+  // The channel of the visit: ?wt-source=<channel> (or utm_source). Kept for the browser
+  // session so a reload or a trip to another page of the site does not turn it into "direct".
   function getEntrySource() {
     try {
       const params = new URLSearchParams(window.location.search);
-      const wtSource = slugify(params.get("wt-source"));
-      if (wtSource) return wtSource;
-      const utmSource = slugify(params.get("utm_source"));
-      if (utmSource) return utmSource;
+      const fromUrl = slugify(params.get("wt-source")) || slugify(params.get("utm_source"));
+      if (fromUrl) {
+        try {
+          window.sessionStorage.setItem(SOURCE_KEY, fromUrl);
+        } catch (_) {
+          /* private mode: the URL still carries it */
+        }
+        return fromUrl;
+      }
+      try {
+        const stored = slugify(window.sessionStorage.getItem(SOURCE_KEY));
+        if (stored) return stored;
+      } catch (_) {
+        /* ignore */
+      }
     } catch (_) {
       /* ignore */
     }

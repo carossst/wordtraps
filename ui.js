@@ -5220,6 +5220,20 @@ void function () {
   // (deleted) legacy share-clicked event removed per spec
 
   // Single source of truth for share text (used by preview + copy)
+  // Adds ?wt-source=<channel> to a link (keeps any existing query). Used to measure channels.
+  function withSource(url, source) {
+    const base = String(url || "").trim();
+    const src = String(source || "").trim();
+    if (!base || !src) return base;
+    try {
+      const u = new URL(base);
+      if (!u.searchParams.has("wt-source")) u.searchParams.set("wt-source", src);
+      return u.toString();
+    } catch (_) {
+      return base;
+    }
+  }
+
   UI.prototype._getShareText = function () {
     const cfg = this.config || {};
     const shareCfg = cfg.share || {};
@@ -5230,7 +5244,7 @@ void function () {
 
     const identity = cfg.identity || {};
     const appName = String(identity.appName || "").trim();
-    const url = String(identity.appUrl || "").trim();
+    const url = withSource(String(identity.appUrl || "").trim(), "share");
 
     const poolSize = clampInt(cfg?.game?.poolSize, 1, 9999);
     const maxChances = clampInt(cfg?.game?.maxChances, 1, 99);
@@ -7885,7 +7899,7 @@ ${(() => {
             ` : ``}
 
             ${canOpenFull && ctaFull ? `
-              <a class="wt-btn wt-btn--primary" href="${escapeHtml(String((cfg?.houseAd?.url) || "").trim())}" target="_blank" rel="noopener">
+              <a class="wt-btn wt-btn--primary" href="${escapeHtml(withSource(String((cfg?.houseAd?.url) || "").trim(), "wordtraps"))}" target="_blank" rel="noopener">
                 ${escapeHtml(ctaFull)}
               </a>
             ` : ``}
