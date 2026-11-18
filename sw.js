@@ -2,7 +2,7 @@
 /* sw.js - Service Worker for Word Traps */
 /* Spec section 8: PWA / Offline / Service Worker */
 // Stamped on main by .github/workflows/stamp-sw.yml so every deploy gets a distinct cache.
-const BUILD_HASH = "7849c5f";
+const BUILD_HASH = "ab4aa0b";
 /**
  * Single source of truth for version:
  * - sw.js is registered with a query string ?v=<WT_CONFIG.version>
@@ -56,6 +56,8 @@ const ASSETS_TO_CACHE = [
   "./ui-leaderboard.js",
   "./sfx.js",
   "./end-fx.js",
+  "./newsletter.js",
+  "./ui-newsletter.js",
   "./pwa.js",
   "./email.js",
   "./footer.js",
@@ -220,6 +222,8 @@ function isNetworkFirstAppShellRequest(req, url) {
     path === "/ui-leaderboard.js" ||
     path === "/sfx.js" ||
     path === "/end-fx.js" ||
+    path === "/newsletter.js" ||
+    path === "/ui-newsletter.js" ||
     path === "/pwa.js" ||
     path === "/email.js" ||
     path === "/footer.js" ||
