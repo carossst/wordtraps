@@ -77,4 +77,11 @@ describe("static app contracts", () => {
       'rel="canonical" href="https://wordtraps.com/press.html"'
     );
   });
+
+  test("keeps the first-visit landing light (leaderboard card and second muted line wait for a first run)", () => {
+    const ui = read("ui.js");
+    expect(ui).toContain("const isFirstVisit =");
+    expect(ui).toMatch(/!isFirstVisit && window\.WT_UI_Leaderboard/);
+    expect(ui).toMatch(/!isFirstVisit && microTrust/);
+  });
 });
