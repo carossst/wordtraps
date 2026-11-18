@@ -2,7 +2,7 @@
 /* sw.js - Service Worker for Word Traps */
 /* Spec section 8: PWA / Offline / Service Worker */
 // Stamped on main by .github/workflows/stamp-sw.yml so every deploy gets a distinct cache.
-const BUILD_HASH = "a753eb1";
+const BUILD_HASH = "cf75eb1";
 /**
  * Single source of truth for version:
  * - sw.js is registered with a query string ?v=<WT_CONFIG.version>
