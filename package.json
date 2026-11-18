@@ -9,7 +9,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "format:check": "prettier --check package.json vitest.config.cjs .prettierrc.json \"tests/**/*.js\"",
-    "format:write": "prettier --write package.json vitest.config.cjs .prettierrc.json \"tests/**/*.js\""
+    "format:write": "prettier --write package.json vitest.config.cjs .prettierrc.json \"tests/**/*.js\"",
+    "links": "node scripts/build-tracked-links.mjs"
   },
   "devDependencies": {
     "prettier": "^3.8.3",
