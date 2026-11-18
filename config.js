@@ -1155,6 +1155,7 @@
 
       // No redundancy: do not mention chances on END (player already knows).
       endLine: "",
+      correctAnswersLine: "{correct}/{total} correct answers",
       endStatsLine: "You got {score} out of {total} right. You've now seen {seen}/{poolSize} words.",
 
 
